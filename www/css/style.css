@@ -35,3 +35,8 @@ body {
 .button.ng-hide{
   display:none;
 }
+
+.intro-logo {
+	width: 15em;
+	height: auto;
+}

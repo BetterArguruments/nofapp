@@ -23,7 +23,7 @@
   </head>
   <body ng-app="nofApp">
 
-    <ion-nav-bar class="bar-light">
+    <ion-nav-bar class="bar-royal" align-title="center">
         <ion-nav-back-button>
         </ion-nav-back-button>
     </ion-nav-bar>
@@ -34,9 +34,8 @@
 	
 	
       <ion-view>
-	  <ion-nav-title>
-	       asdasdasd
-	     </ion-nav-title>
+	  <ion-nav-title>NofAPP</ion-nav-title>
+   	  
         <!--
 			Don't need left nav buttons, commented in case we need them in future.
 			
@@ -68,16 +67,10 @@
 		   -->
         <ion-slide-box on-slide-changed="slideChanged(index)">
           <ion-slide>
-            <h3>Thank you for choosing the Awesome App!</h3>
             <div id="logo">
-              <img src="http://code.ionicframework.com/assets/img/app_icon.png">
+              <img class="intro-logo" src="img/fapstronaut-beta.png">
             </div>
-            <p>
-              We've worked super hard to make you happy.
-            </p>
-            <p>
-              But if you are angry, too bad.
-            </p>
+		      <h3>Welcome, Fapstronaut</h3>
           </ion-slide>
           <ion-slide>
             <h3>Using Awesome</h3>
