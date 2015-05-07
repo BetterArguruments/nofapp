@@ -47,8 +47,8 @@ angular.module('nofApp', ['ionic'])
   
   $scope.toIntro = function(){
     $state.go('intro');
-  }
-});s
+  };
+})
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
