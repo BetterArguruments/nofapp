@@ -25,6 +25,36 @@ angular.module('nofApp', ['ionic'])
 
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate) {
  
+  $scope.userState = {
+    mood: 3,
+    energy: 3,
+    hadSex: false
+  };
+  
+  $scope.setMood = function(i) {
+    $scope.userState.mood = i;
+  };
+  
+  $scope.isCurrentMood = function(i) {
+    if ($scope.userState.mood === i) {
+      return 'active';
+    };
+  };
+  
+  $scope.setEnergy = function(i) {
+    $scope.userState.energy = i;
+  };
+  
+  $scope.isCurrentEnergy = function(i) {
+    if ($scope.userState.energy === i) {
+      return 'active';
+    };
+  };
+  
+  $scope.debug = function() {
+    console.log($scope.userState);
+  }
+  
   // Called to navigate to the main app
   $scope.startApp = function() {
     $state.go('main');
@@ -40,10 +70,6 @@ angular.module('nofApp', ['ionic'])
   $scope.slideChanged = function(index) {
     $scope.slideIndex = index;
   };
-  
-  $scope.isLastSlide = function(index) {
-    console.log($ionicSlideBoxDelegate);
-  }
 })
 
 .controller('MainCtrl', function($scope, $state) {

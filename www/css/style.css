@@ -19,7 +19,7 @@ body {
 }
 
 #list {
-  width: 170px;
+  width: 250px;
   margin: 30px auto;
   font-size: 20px;
 }
@@ -39,4 +39,16 @@ body {
 .intro-logo {
 	width: 15em;
 	height: auto;
+}
+
+.slider-pager-page.active {
+  color: #886aea;
+}
+
+.no-left-padding {
+  padding-left: 0px;
+}
+
+.no-right-padding {
+  padding-right: 0px;
 }
