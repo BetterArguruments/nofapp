@@ -40,6 +40,10 @@ angular.module('nofApp', ['ionic'])
   $scope.slideChanged = function(index) {
     $scope.slideIndex = index;
   };
+  
+  $scope.isLastSlide = function(index) {
+    console.log($ionicSlideBoxDelegate);
+  }
 })
 
 .controller('MainCtrl', function($scope, $state) {
