@@ -39,15 +39,10 @@ angular.module('nofApp', ['ionic'])
   // Called each time the slide changes
   $scope.slideChanged = function(index) {
     $scope.slideIndex = index;
-	console.log("Scope changed, index is " + index);
-	if (index === 2) {
-		$scope.startApp();
-	}
   };
 })
 
 .controller('MainCtrl', function($scope, $state) {
-  console.log('MainCtrl');
   
   $scope.toIntro = function(){
     $state.go('intro');
