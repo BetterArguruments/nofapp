@@ -1,15 +1,13 @@
-// Ionic Starter App
-
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('nofApp', ['ionic','ionic.utils'])
+angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
   .state('intro', {
-    url: '/',
+    url: '/intro',
     templateUrl: 'templates/intro.html',
     controller: 'IntroCtrl'
   })
@@ -19,12 +17,25 @@ angular.module('nofApp', ['ionic','ionic.utils'])
     controller: 'MainCtrl'
   });
 
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/main");
 
 })
 
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate) {
- 
+// Intro Controller
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $db_query, $ionicHistory) {
+  // Check if it is first run, then go to Main
+  if (!$db_query.getFirstRun()) {
+	$ionicHistory.currentView($ionicHistory.backView());
+  	$state.go('main');
+  }
+  
+  // Buttons click when intro is done
+  $scope.firstRunDone = function() {
+	  $db_query.setFirstRun(false);
+	  $ionicHistory.currentView($ionicHistory.backView());
+	  $state.go('main');
+  }
+   
   $scope.userState = {
     mood: 3,
     energy: 3,
@@ -56,6 +67,7 @@ angular.module('nofApp', ['ionic','ionic.utils'])
   }
   
   // Called to navigate to the main app
+  // Deprecated! See firstRunDone
   $scope.startApp = function() {
     $state.go('main');
   };
@@ -72,98 +84,23 @@ angular.module('nofApp', ['ionic','ionic.utils'])
   };
 })
 
-.controller('MainCtrl', function($scope, $state) {
+// Main App Controller
+.controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory) {
+  // Check if first run, then go to Intro
+	if ($db_query.getFirstRun()) {
+		$ionicHistory.currentView($ionicHistory.backView());
+		$state.go('intro');
+	}
   
-  $scope.toIntro = function(){
-    $state.go('intro');
+  // Reset first run (back to Intro)
+  $scope.firstRunReset = function(){
+	  $db_query.setFirstRun(true);
+	  $ionicHistory.currentView($ionicHistory.backView());
+      $state.go('intro');
   };
 })
 
-.controller('DbCtrl', function($localstorage, $scope) {
-	
-	/*
-	*  Function to write mood, energy und had sex to the database.
-	*  Mood and energy should be int, hadsex should be bool
-	*/
-	$scope.addEventsToDb = function(mood, energy) {
-		var timestamp = Math.floor(Date.now() / 1000);
-		console.log("Reading Database...");
-		var structDb = $localstorage.getObject('struct');
-		// Check if Database is empty and initialize
-		if (isEmpty(structDb)) {
-			console.log("structDb is empty. Initializing.")
-			structDb = getInitialDataset();
-			console.log("Wrote initial Dataset.");
-		}
-		// Write to struct
-		structDb.mood.ts.push(timestamp);
-		structDb.mood.val.push(mood);
-		structDb.energy.ts.push(timestamp);
-		structDb.energy.val.push(energy);
-		
-		// Write to DB
-		$localstorage.setObject("struct", structDb);
-		console.log("Wrote Dataset to DB.");
-	};
-	
-	$scope.addSexToDb = function(last_sex_time) {
-		var timestamp = Math.floor(Date.now() / 1000);
-		// Overload: Check if last_sex_time is set, otherwise use now as time
-		var last_sex_time = (typeof last_sex_time === "undefined") ? timestamp : last_sex_time;
-		
-		console.log("Reading Database...");
-		var structDb = $localstorage.getObject('struct');
-		// Check if Database is empty and initialize
-		if (isEmpty(structDb)) {
-			console.log("structDb is empty. Initializing.");
-			structDb = getInitialDataset();
-		}
-		// Write to struct
-		structDb.had_sex.ts.push(last_sex_time);
-		
-		// Write to DB
-		$localstorage.setObject("struct", structDb);
-		console.log("Wrote Dataset to DB.");
-	}
-	
-	$scope.addRelapseToDb = function(relapse_time) {
-		var timestamp = Math.floor(Date.now() / 1000);
-		// Overload: Relapse Time is undefined, therefore use now as time
-		var relapse_time = (typeof relapse_time === "undefined") ? timestamp : relapse_time;
-		
-		// Write to DB
-		console.log("Reading Database...");
-		var structDb = $localstorage.getObject('struct');
-		
-		if (isEmpty(relapseDb)) {
-			console.log("structDb is empty. Initializing.");
-			structDb = getInitialDataset();
-		}
-		// Write to Struct
-		structDb.relapse.push(timestamp);
-		
-		// Write to DB
-		$localstorage.setObject("struct", structDb);
-		console.log("Wrote Relapse to DB. Duh");
-	}
-})
-
-.run(function($ionicPlatform) {
-  $ionicPlatform.ready(function() {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
-    if(window.cordova && window.cordova.plugins.Keyboard) {
-      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-    }
-    if(window.StatusBar) {
-      StatusBar.styleDefault();
-    }
-  });
-})
-
-/*
-*  Angular Module for saving and retrieving Data into localStorage
-*/
+// Angular Module for saving and retrieving Data into localStorage
 
 angular.module('ionic.utils', [])
 
@@ -182,7 +119,111 @@ angular.module('ionic.utils', [])
       return JSON.parse($window.localStorage[key] || '{}');
     }
   }
-}]);
+}])
+
+// Angular Module for entering data into the database
+// The most awesome DB Manager!
+
+angular.module('dbManager', ['ionic.utils'])
+
+.service('$db_query', function($localstorage) {
+	return {
+	// Function to write mood and energy to the database.
+	// Mood and energy should be int
+	addEventsToDb: function(mood, energy) {
+		var timestamp = Math.floor(Date.now() / 1000);
+		console.log("Reading Database...");
+		var structDb = $localstorage.getObject('struct');
+		// Check if Database is empty and initialize
+		if (isEmpty(structDb)) {
+			console.log("structDb is empty. Initializing.")
+			structDb = getInitialDataset();
+			console.log("Wrote initial Dataset.");
+		}
+		// Write to struct
+		structDb.mood.ts.push(timestamp);
+		structDb.mood.val.push(mood);
+		structDb.energy.ts.push(timestamp);
+		structDb.energy.val.push(energy);
+		
+		// Write to DB
+		$localstorage.setObject("struct", structDb);
+		console.log("Wrote Dataset to DB.");
+	},
+	
+	addSexToDb: function(last_sex_time) {
+		var timestamp = Math.floor(Date.now() / 1000);
+		// Overload: Check if last_sex_time is set, otherwise use now as time
+		var last_sex_time = (typeof last_sex_time === "undefined") ? timestamp : last_sex_time;
+		
+		console.log("Reading Database...");
+		var structDb = $localstorage.getObject('struct');
+		// Check if Database is empty and initialize
+		if (isEmpty(structDb)) {
+			console.log("structDb is empty. Initializing.");
+			structDb = getInitialDataset();
+		}
+		// Write to struct
+		structDb.had_sex.ts.push(last_sex_time);
+		
+		// Write to DB
+		$localstorage.setObject("struct", structDb);
+		console.log("Wrote Dataset to DB.");
+	},
+	
+	addRelapseToDb: function(relapse_time) {
+		var timestamp = Math.floor(Date.now() / 1000);
+		// Overload: Relapse Time is undefined, therefore use now as time
+		var relapse_time = (typeof relapse_time === "undefined") ? timestamp : relapse_time;
+		
+		// Write to DB
+		console.log("Reading Database...");
+		var structDb = $localstorage.getObject('struct');
+		
+		if (isEmpty(relapseDb)) {
+			console.log("structDb is empty. Initializing.");
+			structDb = getInitialDataset();
+		}
+		// Write to Struct
+		structDb.relapse.push(timestamp);
+		
+		// Write to DB
+		$localstorage.setObject("struct", structDb);
+		console.log("Wrote Relapse to DB. Duh");
+	},
+	
+	resetDb: function() {
+		var structDb = getInitialDataset();
+		$localstorage.setObject("struct", structDb);
+		console.log("Database reset.");
+	},
+	
+	getFirstRun: function () {
+		var firstRun = isEmpty($localstorage.get('firstRunDone')) ? true : $localstorage.get('firstRunDone');
+		console.log("firstRun checked, result = " + firstRun);
+		return firstRun;
+	},
+	
+	setFirstRun: function(val) {
+		// val = boolean
+		$localstorage.set("firstRun", val);
+		console.log("firstRun set to " + $localstorage.get("firstRun"));
+	}
+}
+})
+
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+    // for form inputs)
+    if(window.cordova && window.cordova.plugins.Keyboard) {
+      cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+    }
+    if(window.StatusBar) {
+      StatusBar.styleDefault();
+    }
+  });
+});
 
 
 function isEmpty(obj) {
