@@ -110,19 +110,41 @@
             <br>
             <div class="row no-left-padding no-right-padding">
               <div class="col no-left-padding">
-                <button class="button button-block padding-right">Last sex</button>
+                <button class="button button-block padding-right" ng-click="openLastSex()">Last sex</button>
               </div>
               <div class="col no-right-padding">
-                <button class="button button-block padding-left">Last fap</button>
+                <button class="button button-block padding-left" ng-click="openLastFap()">Last fap</button>
               </div>
             </div>
-            <button class="button button-block button-balanced" ng-click="startApp()">
+            <button class="button button-block button-balanced" ng-click="debug()">
               Keep me from having sex with my hands!
             </button>
           </div>
           </ion-slide>
         </ion-slide-box>
       </ion-view>
+    </script>
+    
+    <script id="popups/last-sex.html" type="text/ng-template">
+      <div class="button-bar">
+        <button class="button" ng-click="userState.decSexDaysAgo()" ng-disabled="userState.isMinSexDays()">-</button>
+        <div class="button in-days-ago">
+          <span>{{userState.values.sexDaysAgo}}</span>
+          <span>&nbsp;days ago</span>
+        </div>
+        <button class="button" ng-click="userState.incSexDaysAgo()" ng-disabled="userState.isMaxSexDays()">+</button>
+      </div>
+    </script>
+    
+    <script id="popups/last-fap.html" type="text/ng-template">
+      <div class="button-bar">
+        <button class="button" ng-click="userState.decFapDaysAgo()" ng-disabled="userState.isMinFapDays()">-</button>
+        <div class="button in-days-ago">
+          <span>{{userState.values.fapDaysAgo}}</span>
+          <span>&nbsp;days ago</span>
+        </div>
+        <button class="button" ng-click="userState.incFapDaysAgo()" ng-disabled="userState.isMaxFapDays()">+</button>
+      </div>
     </script>
 
  <script id="templates/main.html" type="text/ng-template">

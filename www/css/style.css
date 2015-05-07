@@ -45,6 +45,10 @@ body {
   color: #886aea;
 }
 
+.in-days-ago {
+  min-width: 120px;
+}
+
 .no-left-padding {
   padding-left: 0px;
 }

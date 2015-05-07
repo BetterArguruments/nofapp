@@ -23,30 +23,41 @@ angular.module('nofApp', ['ionic','ionic.utils'])
 
 })
 
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $timeout) {
  
   $scope.userState = {
-    mood: 3,
-    energy: 3,
-    hadSex: false
+    values: {
+      mood: 3,
+      energy: 3,
+      fapDaysAgo: 0,
+      sexDaysAgo: 0
+    },
+    incFapDaysAgo: function() {this.values.fapDaysAgo++},
+    decFapDaysAgo: function() {this.values.fapDaysAgo--},
+    isMinFapDays: function() {return this.values.fapDaysAgo <= 0},
+    isMaxFapDays: function() {return this.values.fapDaysAgo >= 30},
+    incSexDaysAgo: function() {this.values.sexDaysAgo++},
+    decSexDaysAgo: function() {this.values.sexDaysAgo--},
+    isMinSexDays: function() {return this.values.sexDaysAgo <= 0},
+    isMaxSexDays: function() {return this.values.sexDaysAgo >= 30}
   };
   
   $scope.setMood = function(i) {
-    $scope.userState.mood = i;
+    $scope.userState.values.mood = i;
   };
   
   $scope.isCurrentMood = function(i) {
-    if ($scope.userState.mood === i) {
+    if ($scope.userState.values.mood === i) {
       return 'active';
     };
   };
   
   $scope.setEnergy = function(i) {
-    $scope.userState.energy = i;
+    $scope.userState.values.energy = i;
   };
   
   $scope.isCurrentEnergy = function(i) {
-    if ($scope.userState.energy === i) {
+    if ($scope.userState.values.energy === i) {
       return 'active';
     };
   };
@@ -70,6 +81,36 @@ angular.module('nofApp', ['ionic','ionic.utils'])
   $scope.slideChanged = function(index) {
     $scope.slideIndex = index;
   };
+  
+  $scope.openLastFap = function() {
+    $ionicPopup.show({
+      templateUrl: 'popups/last-fap.html',
+      title: 'Be honest!',
+      subTitle: 'When did you last fap?',
+      scope: $scope,
+      buttons: [
+        {
+          text: 'Save',
+          type: 'button-balanced'
+        }
+      ]
+    });
+  };
+  
+  $scope.openLastSex = function() {
+    $ionicPopup.show({
+      templateUrl: 'popups/last-sex.html',
+      title: 'Make us proud!',
+      subTitle: 'When did you last have sex?',
+      scope: $scope,
+      buttons: [
+        {
+          text: 'Save',
+          type: 'button-balanced'
+        }
+      ]
+    });
+  };
 })
 
 .controller('MainCtrl', function($scope, $state) {
@@ -78,6 +119,7 @@ angular.module('nofApp', ['ionic','ionic.utils'])
     $state.go('intro');
   };
 })
+
 
 .controller('DbCtrl', function($localstorage, $scope) {
 	
