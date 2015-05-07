@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('nofApp', ['ionic'])
+angular.module('nofApp', ['ionic','ionic.utils'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -79,6 +79,75 @@ angular.module('nofApp', ['ionic'])
   };
 })
 
+.controller('DbCtrl', function($localstorage, $scope) {
+	
+	/*
+	*  Function to write mood, energy und had sex to the database.
+	*  Mood and energy should be int, hadsex should be bool
+	*/
+	$scope.addEventsToDb = function(mood, energy) {
+		var timestamp = Math.floor(Date.now() / 1000);
+		console.log("Reading Database...");
+		var structDb = $localstorage.getObject('struct');
+		// Check if Database is empty and initialize
+		if (isEmpty(structDb)) {
+			console.log("structDb is empty. Initializing.")
+			structDb = getInitialDataset();
+			console.log("Wrote initial Dataset.");
+		}
+		// Write to struct
+		structDb.mood.ts.push(timestamp);
+		structDb.mood.val.push(mood);
+		structDb.energy.ts.push(timestamp);
+		structDb.energy.val.push(energy);
+		
+		// Write to DB
+		$localstorage.setObject("struct", structDb);
+		console.log("Wrote Dataset to DB.");
+	};
+	
+	$scope.addSexToDb = function(last_sex_time) {
+		var timestamp = Math.floor(Date.now() / 1000);
+		// Overload: Check if last_sex_time is set, otherwise use now as time
+		var last_sex_time = (typeof last_sex_time === "undefined") ? timestamp : last_sex_time;
+		
+		console.log("Reading Database...");
+		var structDb = $localstorage.getObject('struct');
+		// Check if Database is empty and initialize
+		if (isEmpty(structDb)) {
+			console.log("structDb is empty. Initializing.");
+			structDb = getInitialDataset();
+		}
+		// Write to struct
+		structDb.had_sex.ts.push(last_sex_time);
+		
+		// Write to DB
+		$localstorage.setObject("struct", structDb);
+		console.log("Wrote Dataset to DB.");
+	}
+	
+	$scope.addRelapseToDb = function(relapse_time) {
+		var timestamp = Math.floor(Date.now() / 1000);
+		// Overload: Relapse Time is undefined, therefore use now as time
+		var relapse_time = (typeof relapse_time === "undefined") ? timestamp : relapse_time;
+		
+		// Write to DB
+		console.log("Reading Database...");
+		var structDb = $localstorage.getObject('struct');
+		
+		if (isEmpty(relapseDb)) {
+			console.log("structDb is empty. Initializing.");
+			structDb = getInitialDataset();
+		}
+		// Write to Struct
+		structDb.relapse.push(timestamp);
+		
+		// Write to DB
+		$localstorage.setObject("struct", structDb);
+		console.log("Wrote Relapse to DB. Duh");
+	}
+})
+
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -91,3 +160,50 @@ angular.module('nofApp', ['ionic'])
     }
   });
 })
+
+/*
+*  Angular Module for saving and retrieving Data into localStorage
+*/
+
+angular.module('ionic.utils', [])
+
+.factory('$localstorage', ['$window', function($window) {
+  return {
+    set: function(key, value) {
+      $window.localStorage[key] = value;
+    },
+    get: function(key, defaultValue) {
+      return $window.localStorage[key] || defaultValue;
+    },
+    setObject: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getObject: function(key) {
+      return JSON.parse($window.localStorage[key] || '{}');
+    }
+  }
+}]);
+
+
+function isEmpty(obj) {
+	return Object.keys(obj).length === 0;
+};
+
+/*
+*   Initial Dataset for localStorage Database.
+*/
+
+function getInitialDataset() {
+	return {
+				mood: {
+					ts: [],
+					val: []
+				},
+				energy: {
+					ts: [],
+					val: []
+				},
+				had_sex: [],
+				relapse: []
+			};
+};
