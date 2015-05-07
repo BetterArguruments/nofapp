@@ -22,12 +22,7 @@ angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
 })
 
 // Intro Controller
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $db_query, $ionicHistory) {
-  // Check if it is first run, then go to Main
-  if (!$db_query.getFirstRun()) {
-	$ionicHistory.currentView($ionicHistory.backView());
-  	$state.go('main');
-  }
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $db_query, $ionicHistory, $location) {
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
@@ -86,11 +81,6 @@ angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
 
 // Main App Controller
 .controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory) {
-  // Check if first run, then go to Intro
-	if ($db_query.getFirstRun()) {
-		$ionicHistory.currentView($ionicHistory.backView());
-		$state.go('intro');
-	}
   
   // Reset first run (back to Intro)
   $scope.firstRunReset = function(){
@@ -212,7 +202,7 @@ angular.module('dbManager', ['ionic.utils'])
 }
 })
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $location, $db_query) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -223,6 +213,10 @@ angular.module('dbManager', ['ionic.utils'])
       StatusBar.styleDefault();
     }
   });
+  
+  if ($db_query.getFirstRun) {
+	  $location.path('/intro');
+  }
 });
 
 
