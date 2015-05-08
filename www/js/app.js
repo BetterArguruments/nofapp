@@ -82,7 +82,11 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 // Stats Controller
 .controller('StatsCtrl', function($scope, $state, $db_query) {
-
+    $scope.createSampleData = function () {
+        $db_query.createSampleDataset();
+        console.log("Sample Data Created:");
+        console.log($db_query.getStructDb());
+    };
 })
 
 // Enter Data Controller
@@ -408,6 +412,23 @@ angular.module('nofapp.utils', ['ionic.utils'])
       relapse: []
     };
   };
+  
+  // Create Sample Data for Debugging
+  this.createSampleDataset = function() {
+      sampleData = {
+          mood: {
+            ts: [1430751262,1430837662,1430895262,1430906062,1430988862,1431075262,1431093262,1431107662],
+            val: [1,2,2,5,3,3,1,4]
+          },
+          energy: {
+            ts: [1430751262,1430837662,1430895262,1430906062,1430988862,1431075262,1431093262,1431107662],
+            val: [1,1,4,4,3,2,1,5]
+          },
+          had_sex: [1430772862],
+          relapse: [1430664862,1430988862]
+        };
+     $localstorage.setObject("struct", sampleData);
+  }
   
   // Read Database
   this.getStructDb = function() {

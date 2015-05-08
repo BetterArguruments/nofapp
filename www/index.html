@@ -15,8 +15,10 @@
     <script src="cordova.js"></script>
 
     <!-- dependencies: angles.js and chart.js-->
-    <script src="lib/angles/js/angles.js"></script>
     <script src="lib/chart/js/chart.js"></script>
+    <script src="lib/angular-chart/js/angular-chart.min.js"></script>
+	<link href="lib/angular-chart/css/angular-chart.css" rel="stylesheet">
+
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
@@ -71,14 +73,13 @@
     <script id="templates/stats.html" type="text/ng-template">
       <ion-view hide-back-button="true" view-title="Your Stats">
         <ion-content class="padding">
-          <h1>STATS</h1>
-          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
+          <a href="#" ng-click="createSampleData()">Create some Sample Data</a>
         </ion-content>
       </ion-view>
     </script>
 
     <script id="templates/enterdata.html" type="text/ng-template">
-      <ion-view hide-back-button="true" view-title="Enter some Data">
+      <ion-view hide-back-button="true" view-title="Enter your Data">
         <ion-content class="padding">
           <h1>Enter moar Data</h1>
           <button class="button button-large button-balanced" ng-click="justHadSex()">
@@ -92,7 +93,7 @@
     </script>
 
     <script id="templates/history.html" type="text/ng-template">
-      <ion-view hide-back-button="true" view-title="History">
+      <ion-view hide-back-button="true" view-title="Your History">
         <ion-content class="padding">
           <h1>History, Yo</h1>
           <div class="list card">
