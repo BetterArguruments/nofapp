@@ -394,7 +394,6 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
       $location.path('/tab/main');
     };
     $rootScope.$apply();
-    console.log($rootScope.$apply);
   });
 });
 
