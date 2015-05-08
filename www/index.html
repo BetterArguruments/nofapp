@@ -35,22 +35,109 @@
     <ion-nav-view></ion-nav-view>
 
     <script id="templates/tabs.html" type="text/ng-template">
-      <ion-tabs class="tabs-icon-top tabs-positive">
+      <ion-tabs class="tabs-icon-top tabs-striped tabs-royal tabs-color-light">
 
-        <ion-tab title="Home" icon="ion-home" href="#/tab/home">
-          <ion-nav-view name="home-tab"></ion-nav-view>
+        <ion-tab title="Overview" icon="ion-stats-bars" href="#/tab/main">
+          <ion-nav-view name="main-tab"></ion-nav-view>
         </ion-tab>
 
-        <ion-tab title="About" icon="ion-ios-information" href="#/tab/about">
-          <ion-nav-view name="about-tab"></ion-nav-view>
+        <ion-tab title="Stats" icon="ion-pie-graph" href="#/tab/stats">
+          <ion-nav-view name="stats-tab"></ion-nav-view>
         </ion-tab>
 
-        <ion-tab title="Contact" icon="ion-ios-world" ui-sref="tabs.contact">
-          <ion-nav-view name="contact-tab"></ion-nav-view>
+        <ion-tab title="Sex" icon="ion-heart" href="#/tab/sex">
+          <ion-nav-view name="sex-tab"></ion-nav-view>
+        </ion-tab>
+		
+        <ion-tab title="Relapse" icon="ion-flash" href="#/tab/relapse">
+          <ion-nav-view name="relapse-tab"></ion-nav-view>
+        </ion-tab>
+		
+        <ion-tab title="Settings" icon="ion-gear-b" href="#/tab/settings">
+          <ion-nav-view name="settings-tab"></ion-nav-view>
         </ion-tab>
 
       </ion-tabs>
     </script>
+
+<script id="templates/main.html" type="text/ng-template">
+  <ion-view hide-back-button="true" view-title="NofAPP">
+    <ion-content class="padding">
+	<center><h3>3</h3><br>Days</center>
+      
+		  
+		  <div class="row">
+		    <div class="col col-33 col-offset-33">.col</div>
+		    <div class="col">.col</div>
+		  </div>
+	  <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/stats.html" type="text/ng-template">
+  <ion-view hide-back-button="true" view-title="Stats">
+    <ion-content class="padding">
+      <h1>STATS</h1>
+      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/sex.html" type="text/ng-template">
+  <ion-view hide-back-button="true" view-title="Sex">
+    <ion-content class="padding">
+      <h1>SEX</h1>
+      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/relapse.html" type="text/ng-template">
+  <ion-view hide-back-button="true" view-title="Relapse?!">
+    <ion-content class="padding">
+      <h1>Relapse</h1>
+      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/settings.html" type="text/ng-template">
+  <ion-view hide-back-button="true" view-title="Settings">
+    <ion-content class="padding">
+      
+	  <div class="list">
+
+      <div class="item item-divider">
+          Notifications
+        </div>
+	      
+		<ion-toggle toggle-class="toggle-royal">Enable Notifications</ion-toggle>
+
+      <div class="item item-divider">
+          Reset
+        </div>
+		
+	    <a class="item item-icon-left" href="#" ng-click="showConfirmResetApp()">
+	      <i class="icon ion-trash-a"></i>
+	      Reset App (Delete Everything)
+	    </a>
+
+      <div class="item item-divider">
+          About
+        </div>
+
+	    <a class="item item-icon-left" href="#">
+	      <i class="icon ion-information-circled"></i>
+	      About NofAPP
+	    </a>
+
+	  </div>
+	  
+    </ion-content>
+  </ion-view>
+</script>
+
 
 <script id="templates/intro.html" type="text/ng-template"> 
 	
@@ -68,6 +155,10 @@
           <button class="button button-royal" ng-click="nextSlide()">
             Swipe right to begin
           </button>
+		  
+		  <p class="text-center">
+		                <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
+		              </p>
           </ion-slide>
           <ion-slide>
             <h3>Using NofAPP</h3>
@@ -81,7 +172,7 @@
 
 			  <a href="#" class="item item-icon-left">
 			    <i class="icon ion-pie-graph"></i>
-			    Get awesome reports and analytics
+			    Get awesome analytics
 			  </a>
 
 			  <a href="#" class="item item-icon-left">
@@ -143,7 +234,7 @@
                 <button class="button button-block padding-left" ng-click="openLastFap()">Last fap</button>
               </div>
             </div>
-            <button class="button button-block button-balanced" ng-click="firstRunDone()">
+            <button class="button button-block button-balanced" ng-click="submitForm()">
               Keep me from having sex with my hands!
             </button>
           </div>
@@ -172,15 +263,6 @@
         </div>
         <button class="button" ng-click="userState.incFapDaysAgo()" ng-disabled="userState.isMaxFapDays()">+</button>
       </div>
-    </script>
-
- <script id="templates/main.html" type="text/ng-template">
-      <ion-view hide-back-button="true" view-title="Awesome">
-        <ion-content class="padding">
-          <h1>Main app here</h1>
-          <button class="button" ng-click="firstRunReset()">Do Tutorial Again</button>
-        </ion-content>
-      </ion-view>
     </script>
   </body>
 </html>
