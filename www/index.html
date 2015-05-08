@@ -14,13 +14,19 @@
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
-    <!-- dependencies: angles.js and chart.js-->
-    <script src="lib/chart/js/Chart.min.js"></script>
-	<script src="lib/chart/js/Chart.Scatter.min.js"></script>
-    <script src="lib/angular-chart/js/angular-chart.min.js"></script>
-	<link href="lib/angular-chart/css/angular-chart.css" rel="stylesheet">
+	<!-- more angular? -->
+	<!--<script src="lib/angular/angular.min.js"></script>-->
+	<script src="lib/angular-animate/angular-animate.min.js"></script>
+	<script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
+	<script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
 
-
+    <!-- dependencies: chartist and angular-chartist -->
+	<script src="lib/chartist/dist/chartist.min.js"></script>
+	<link rel="stylesheet" href="lib/chartist/dist/chartist.min.css">
+	<script src="lib/angular-chartist.js/dist/angular-chartist.min.js"></script>
+	
+	
+	
     <!-- your app's js -->
     <script src="js/app.js"></script>
   </head>
@@ -75,6 +81,10 @@
       <ion-view hide-back-button="true" view-title="Your Stats">
         <ion-content class="padding">
           <a href="#" ng-click="createSampleData()">Create some Sample Data</a>
+		  
+<chartist class="ct-chart" chartist-data="barData" chartist-chart-type="Bar"></chartist>
+
+		 
         </ion-content>
       </ion-view>
     </script>
@@ -96,7 +106,6 @@
     <script id="templates/history.html" type="text/ng-template">
       <ion-view hide-back-button="true" view-title="Your History">
         <ion-content class="padding">
-          <h1>History, Yo</h1>
           <div class="list card">
             <div class="list">
               <div ng-repeat="history in historySorted">
