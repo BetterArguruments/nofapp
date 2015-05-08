@@ -18,18 +18,8 @@ body {
   margin: 30px 0px;
 }
 
-#list {
-  width: 250px;
-  margin: 30px auto;
-  font-size: 20px;
-}
-#list ol {
-  margin-top: 30px;
-}
-#list ol li {
-  text-align: left;
-  list-style: decimal;
-  margin: 10px 0px;
+.slider-slide .list {
+text-align: left;
 }
 
 .button.ng-hide{

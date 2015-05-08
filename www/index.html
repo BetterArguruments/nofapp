@@ -27,7 +27,7 @@
   </head>
   <body ng-app="nofApp">
 
-    <ion-nav-bar class="bar-royal" align-title="center">
+    <ion-nav-bar class="bar-royal">
         <ion-nav-back-button>
         </ion-nav-back-button>
     </ion-nav-bar>
@@ -65,14 +65,47 @@
             </div>
 		      <h3>Welcome, Fapstronaut</h3>
           <br>
-          <button class="button button-royal" ng-click="firstRunDone()">
-            Skip this intro
+          <button class="button button-royal" ng-click="nextSlide()">
+            Swipe right to begin
           </button>
           </ion-slide>
           <ion-slide>
             <h3>Using NofAPP</h3>
             
-            <div id="list">
+			<div class="list card">
+
+			  <a href="#" class="item item-icon-left">
+			    <i class="icon ion-stats-bars"></i>
+			    Track your progress
+			  </a>
+
+			  <a href="#" class="item item-icon-left">
+			    <i class="icon ion-pie-graph"></i>
+			    Get awesome reports and analytics
+			  </a>
+
+			  <a href="#" class="item item-icon-left">
+			    <i class="icon ion-heart"></i>
+			    Have Sex!
+			  </a>
+
+			  <!--<a href="#" class="item item-icon-left">
+			    <i class="icon ion-earth"></i>
+			    Contribute to the Nofap Community
+			  </a>-->
+				  
+			<div class="item item-divider">	  
+				
+			</div>
+			<a class="item item-icon-left royal" href="#">
+				<!--<i class="icon ion-help"></i>-->
+				    More Information on Nofap
+		    </a>
+
+			</div>
+			
+            <!-- Old Content
+				<div id="list">
               <h5>Just three steps:</h5>
               <ol>
                 <li>Track your efforts as often as you like</li>
@@ -80,6 +113,7 @@
                 <li>Challenge your friends, maybe?</li>
               </ol>
             </div>
+				-->
           </ion-slide>
           <ion-slide class="padding">
             <h3>For starters, set your current mood and energy to begin.</h3>

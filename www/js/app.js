@@ -73,6 +73,11 @@ angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
     $scope.slideIndex = index;
   };
   
+  // Slide Box Control
+  $scope.nextSlide = function() {
+      $ionicSlideBoxDelegate.next();
+  }
+  
   $scope.openLastFap = function() {
     $ionicPopup.show({
       templateUrl: 'popups/last-fap.html',
