@@ -103,7 +103,39 @@
   <ion-view hide-back-button="true" view-title="History">
     <ion-content class="padding">
       <h1>History, Yo</h1>
-      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+	  <div class="list card">
+				<div class="list">
+				<div ng-repeat="history in historySorted">
+				  <a class="item item-icon-left" href="#" ng-if="history[0] == 'mood'">
+				    <i class="icon ion-arrow-graph-up-right"></i>
+				    Mood
+					<span class="badge badge-royal">{{history[2]}}</span>
+				  </a>
+
+				  <a class="item item-icon-left item-icon-right" href="#" ng-if="history[0] == 'energy'">
+				    <i class="icon ion-flash"></i>
+				    Energy
+					<span class="badge badge-royal">{{history[2]}}</span>
+				  </a>
+
+				  <a class="item item-icon-left balanced" href="#" ng-if="history[0] == 'had_sex'">
+				    <i class="icon ion-heart"></i>
+				    Had Sex!
+				    <span class="item-note">
+				     {{history[1]}}
+				    </span>
+				  </a>
+
+				  <a class="item item-icon-left assertive" href="#" ng-if="history[0] == 'relapsed'">
+				    <i class="icon ion-alert-circled"></i>
+				    Relapsed
+				    <span class="item-note">
+				     {{history[1]}}
+				    </span>
+				  </a>
+				</div>
+	    </div>
+	</div>
     </ion-content>
   </ion-view>
 </script>
