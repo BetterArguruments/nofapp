@@ -1,7 +1,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
+angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist','ngAnimate','ngSanitize','ui.router'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -82,8 +82,20 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 // Stats Controller
 .controller('StatsCtrl', function($scope, $state, $db_query) {
-
+    // Sample Data Creator via Click
+    $scope.createSampleData = function () {
+        $db_query.createSampleDataset();
+        console.log("Sample Data Created:");
+        console.log($db_query.getStructDb());
+    };
+    
+    $scope.barData = {
+        labels: ['Ad', 'B', 'C', 'Dd'],
+        series: [[1, 2, 3, 4]]
+    };
+    
 })
+
 
 // Enter Data Controller
 .controller('EnterDataCtrl', function($scope, $state, $db_query, $ionicPopup) {
@@ -457,6 +469,23 @@ angular.module('nofapp.utils', ['ionic.utils'])
       relapse: []
     };
   };
+  
+  // Create Sample Data for Debugging
+  this.createSampleDataset = function() {
+      sampleData = {
+          mood: {
+            ts: [1430751262,1430837662,1430895262,1430906062,1430988862,1431075262,1431093262,1431107662],
+            val: [1,2,2,5,3,3,1,4]
+          },
+          energy: {
+            ts: [1430751262,1430837662,1430895262,1430906062,1430988862,1431075262,1431093262,1431107662],
+            val: [1,1,4,4,3,2,1,5]
+          },
+          had_sex: [1430772862],
+          relapse: [1430664862,1430988862]
+        };
+     $localstorage.setObject("struct", sampleData);
+  }
   
   // Read Database
   this.getStructDb = function() {

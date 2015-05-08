@@ -14,10 +14,26 @@
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js?ionicCachebuster=588"></script>
 
+<<<<<<< HEAD
     <!-- dependencies: angles.js and chart.js-->
     <script src="lib/angles/js/angles.js?ionicCachebuster=588"></script>
     <script src="lib/chart/js/chart.js?ionicCachebuster=588"></script>
 
+=======
+	<!-- more angular? -->
+	<!--<script src="lib/angular/angular.min.js"></script>-->
+	<script src="lib/angular-animate/angular-animate.min.js"></script>
+	<script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
+	<script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+
+    <!-- dependencies: chartist and angular-chartist -->
+	<script src="lib/chartist/dist/chartist.min.js"></script>
+	<link rel="stylesheet" href="lib/chartist/dist/chartist.min.css">
+	<script src="lib/angular-chartist.js/dist/angular-chartist.min.js"></script>
+	
+	
+	
+>>>>>>> 6f7980e28b4ae59287dcb1a5b9b9000c0eba636b
     <!-- your app's js -->
     <script src="js/app.js?ionicCachebuster=588"></script>
   </head>
@@ -71,14 +87,17 @@
     <script id="templates/stats.html" type="text/ng-template">
       <ion-view hide-back-button="true" view-title="Your Metrics">
         <ion-content class="padding">
-          <h1>STATS</h1>
-          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
+          <a href="#" ng-click="createSampleData()">Create some Sample Data</a>
+		  
+<chartist class="ct-chart" chartist-data="barData" chartist-chart-type="Bar"></chartist>
+
+		 
         </ion-content>
       </ion-view>
     </script>
 
     <script id="templates/enterdata.html" type="text/ng-template">
-      <ion-view hide-back-button="true" view-title="Track your psyche">
+      <ion-view hide-back-button="true" view-title="Enter your Data">
         <ion-content class="padding">
           <h4>My current mood</h4>
           <div class="button-bar">
@@ -113,9 +132,8 @@
     </script>
 
     <script id="templates/history.html" type="text/ng-template">
-      <ion-view hide-back-button="true" view-title="History">
+      <ion-view hide-back-button="true" view-title="Your History">
         <ion-content class="padding">
-          <h1>History, Yo</h1>
           <div class="list card">
             <div class="list">
               <div ng-repeat="history in historySorted">
