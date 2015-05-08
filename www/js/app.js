@@ -18,57 +18,57 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
     })
   .state('tabs.main', {
     url: '/main',
-	views: {
-	          'main-tab': {
-	            templateUrl: 'templates/main.html',
-	            controller: 'MainCtrl'
-	          }
-		  }
+  views: {
+            'main-tab': {
+              templateUrl: 'templates/main.html',
+              controller: 'MainCtrl'
+            }
+      }
   })
   .state('tabs.stats', {
     url: '/stats',
-	views: {
-	          'stats-tab': {
-	            templateUrl: 'templates/stats.html',
-	            controller: 'StatsCtrl'
-	          }
-		  }
+  views: {
+            'stats-tab': {
+              templateUrl: 'templates/stats.html',
+              controller: 'StatsCtrl'
+            }
+      }
   })
   .state('tabs.enterdata', {
     url: '/enterdata',
-	views: {
-	          'enterdata-tab': {
-	            templateUrl: 'templates/enterdata.html',
-	            controller: 'EnterDataCtrl'
-	          }
-		  }
+  views: {
+            'enterdata-tab': {
+              templateUrl: 'templates/enterdata.html',
+              controller: 'EnterDataCtrl'
+            }
+      }
   })
   .state('tabs.sex', {
     url: '/sex',
-	views: {
-	          'sex-tab': {
-	            templateUrl: 'templates/sex.html',
-	            controller: 'SexCtrl'
-	          }
-		  }
+  views: {
+            'sex-tab': {
+              templateUrl: 'templates/sex.html',
+              controller: 'SexCtrl'
+            }
+      }
   })
   .state('tabs.relapse', {
     url: '/relapse',
-	views: {
-	          'relapse-tab': {
-	            templateUrl: 'templates/relapse.html',
-	            controller: 'RelapseCtrl'
-	          }
-		  }
+  views: {
+            'relapse-tab': {
+              templateUrl: 'templates/relapse.html',
+              controller: 'RelapseCtrl'
+            }
+      }
   })
   .state('tabs.settings', {
     url: '/settings',
-	views: {
-	          'settings-tab': {
-	            templateUrl: 'templates/settings.html',
-	            controller: 'SettingsCtrl'
-	          }
-		  }
+  views: {
+            'settings-tab': {
+              templateUrl: 'templates/settings.html',
+              controller: 'SettingsCtrl'
+            }
+      }
   });
 
   $urlRouterProvider.otherwise("/tab/main");
@@ -79,11 +79,11 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 .controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory) {
   
   // Debug DB
-	$scope.isThisFirstRun = $db_query.getFirstRun();
+  $scope.isThisFirstRun = $db_query.getFirstRun();
   
-	//if($db_query.getFirstRun()) {
-	//	$state.go('intro');
-	//}
+  //if($db_query.getFirstRun()) {
+  //  $state.go('intro');
+  //}
   
   // DEBUG: Reset first run (back to Intro)
   $scope.firstRunReset = function(){
@@ -117,28 +117,28 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 // Settings Controller
 .controller('SettingsCtrl', function($scope, $state, $db_query, $ionicHistory, $ionicPopup) {
-	
-	// Reset App
-	$scope.resetApp = function() {
-		$db_query.resetDb();
-	    $db_query.setFirstRun(true);
-	    $ionicHistory.currentView($ionicHistory.backView());
-		$state.go('intro');
-	}
-	
-	$scope.showConfirmResetApp = function() {
-	   var confirmPopup = $ionicPopup.confirm({
-	     title: 'Are You Sure, Fapstronaut?',
-	     template: 'Are you sure you want to reset NofAPP? All data and fapping will be lost.',
-		 okType: 'button-assertive'
-	   });
-	   confirmPopup.then(function(res) {
-	     if(res) {
-			 $scope.resetApp();
-	     }
-	   });
-	 };
-	
+  
+  // Reset App
+  $scope.resetApp = function() {
+    $db_query.resetDb();
+      $db_query.setFirstRun(true);
+      $ionicHistory.currentView($ionicHistory.backView());
+    $state.go('intro');
+  }
+  
+  $scope.showConfirmResetApp = function() {
+     var confirmPopup = $ionicPopup.confirm({
+       title: 'Are You Sure, Fapstronaut?',
+       template: 'Are you sure you want to reset NofAPP? All data and fapping will be lost.',
+     okType: 'button-assertive'
+     });
+     confirmPopup.then(function(res) {
+       if(res) {
+       $scope.resetApp();
+       }
+     });
+   };
+  
 })
 
 
@@ -146,7 +146,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location) {
   
   // Debug DB
-	$scope.isThisFirstRun = $db_query.getFirstRun();
+  $scope.isThisFirstRun = $db_query.getFirstRun();
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
@@ -170,46 +170,43 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
     decSexDaysAgo: function() {this.values.sexDaysAgo--},
     isMinSexDays: function() {return this.values.sexDaysAgo <= 0},
     isMaxSexDays: function() {return this.values.sexDaysAgo >= 30},
-    sexDaysInWords: function() {
-      return NofappHelpers
-        .verbalizeWords(this.values.sexDaysAgo, ['today', 'yesterday', '%d days ago'])
-    },
-    sexDaysInWords: function() {
-      return NofappHelpers
-        .verbalizeWords(this.values.fapDaysAgo, ['today', 'yesterday', '%d days ago'])
+    pastDaysInWords: function(day) {
+      var words = NofappHelpers
+      .verbalizeNumber(day, ['today', 'yesterday', '%d days ago']);
+      return words;
     }
   };
   
   // Tests whether the user has clicked all fields.
   // He shouldnt submit the form without editing some (all) data.
   $scope.userHasInteractedCompletely = function(whatHasHeDone) {
-	  // Initial Declaration
-	  if (typeof clicked_mood === "undefined") {
-     	  clicked_mood = false,
-     	    clicked_energy = false,
-     	    clicked_sex = false,
-     	    clicked_fap = false;
-		}
-	    
-	  switch (whatHasHeDone) {
-		  case "clicked_mood": clicked_mood = true; break;
-		  case "clicked_energy": clicked_energy = true; break;
-		  case "clicked_sex": clicked_sex = true; break;
-		  case "clicked_fap": clicked_fap = true; break;
-	  }
-	  
-	  // Debug
-	  if (clicked_mood && clicked_energy && clicked_sex && clicked_fap) {
-	  	console.log("First User Interaction complete.")
-	  }
-	  
-	  // Return true if all fields have been clicked
-	  return clicked_mood && clicked_energy && clicked_sex && clicked_fap;
+    // Initial Declaration
+    if (typeof clicked_mood === "undefined") {
+        clicked_mood = false,
+          clicked_energy = false,
+          clicked_sex = false,
+          clicked_fap = false;
+    }
+      
+    switch (whatHasHeDone) {
+      case "clicked_mood": clicked_mood = true; break;
+      case "clicked_energy": clicked_energy = true; break;
+      case "clicked_sex": clicked_sex = true; break;
+      case "clicked_fap": clicked_fap = true; break;
+    }
+    
+    // Debug
+    if (clicked_mood && clicked_energy && clicked_sex && clicked_fap) {
+      console.log("First User Interaction complete.")
+    }
+    
+    // Return true if all fields have been clicked
+    return clicked_mood && clicked_energy && clicked_sex && clicked_fap;
   }
   
   $scope.setMood = function(i) {
     $scope.userState.values.mood = i;
-	$scope.userHasInteractedCompletely("clicked_mood");
+  $scope.userHasInteractedCompletely("clicked_mood");
   };
   
   $scope.isCurrentMood = function(i) {
@@ -220,7 +217,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   
   $scope.setEnergy = function(i) {
     $scope.userState.values.energy = i;
-	$scope.userHasInteractedCompletely("clicked_energy");
+  $scope.userHasInteractedCompletely("clicked_energy");
   };
   
   $scope.isCurrentEnergy = function(i) {
@@ -240,7 +237,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   }
   
   $scope.openLastFap = function() {
-	$scope.userHasInteractedCompletely("clicked_fap");
+  $scope.userHasInteractedCompletely("clicked_fap");
     $ionicPopup.show({
       templateUrl: 'popups/last-fap.html',
       title: 'Be honest!',
@@ -256,7 +253,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   };
   
   $scope.openLastSex = function() {
-	$scope.userHasInteractedCompletely("clicked_sex");
+  $scope.userHasInteractedCompletely("clicked_sex");
     $ionicPopup.show({
       templateUrl: 'popups/last-sex.html',
       title: 'Make us proud!',
@@ -272,44 +269,44 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   };
   
   $scope.submitForm = function() {
-	  if (!$scope.userHasInteractedCompletely()) {
-		  console.log("User has not interacted completely!");
-		  var alertPopup = $ionicPopup.alert({
-		       title: "Not so fast, Fapstronaut!",
-		       template: "Make sure to enter your data, including last sex and last fap.",
-			   okType: "button-royal"
-		     });
-		  return false;
-	  }
-	  else {
-		  console.log("Writing first Dataset to DB.");
+    if (!$scope.userHasInteractedCompletely()) {
+      console.log("User has not interacted completely!");
+      var alertPopup = $ionicPopup.alert({
+           title: "Not so fast, Fapstronaut!",
+           template: "Make sure to enter your data, including last sex and last fap.",
+         okType: "button-royal"
+         });
+      return false;
+    }
+    else {
+      console.log("Writing first Dataset to DB.");
           
-		  // Calculate Timestamp (Past) for last fap and last sex
-		  var timestamp = Math.floor(Date.now() / 1000);
-		  var timestamp_lastSex = timestamp - (60*60*24*$scope.userState.values.sexDaysAgo);
-		  var timestamp_lastFap = timestamp - (60*60*24*$scope.userState.values.fapDaysAgo);
-		  
-		  console.log("Mood: " + $scope.userState.values.mood + " Energy: " + $scope.userState.values.energy + " FapDaysAgo: " + $scope.userState.values.fapDaysAgo + " SexDaysAgo: " + $scope.userState.values.sexDaysAgo + " Fap Timestamp: " + timestamp_lastFap + " Sex Timestamp: " + timestamp_lastSex);
-		  
-		  
-		  // Write Mood and Energy to DB, Timestamp is added automatically (now)
-		  $db_query.addEventsToDb($scope.userState.values.mood, $scope.userState.values.energy);
-		  
-		  // Write Sex and Fap to DB
-		  $db_query.addSexToDb(timestamp_lastSex);
-		  $db_query.addRelapseToDb(timestamp_lastFap);
-		  
-		  // Alert User
-		  var alertPopup = $ionicPopup.alert({
-		       title: "Awesome!",
-		       template: "Way to get it started!",
-			   okType: "button-royal"
-		     });
-		  
-		  // Set firstRun = false and Redirect to Main 
-		  alertPopup.then($scope.firstRunDone());
-		  
-	  }
+      // Calculate Timestamp (Past) for last fap and last sex
+      var timestamp = Math.floor(Date.now() / 1000);
+      var timestamp_lastSex = timestamp - (60*60*24*$scope.userState.values.sexDaysAgo);
+      var timestamp_lastFap = timestamp - (60*60*24*$scope.userState.values.fapDaysAgo);
+      
+      console.log("Mood: " + $scope.userState.values.mood + " Energy: " + $scope.userState.values.energy + " FapDaysAgo: " + $scope.userState.values.fapDaysAgo + " SexDaysAgo: " + $scope.userState.values.sexDaysAgo + " Fap Timestamp: " + timestamp_lastFap + " Sex Timestamp: " + timestamp_lastSex);
+      
+      
+      // Write Mood and Energy to DB, Timestamp is added automatically (now)
+      $db_query.addEventsToDb($scope.userState.values.mood, $scope.userState.values.energy);
+      
+      // Write Sex and Fap to DB
+      $db_query.addSexToDb(timestamp_lastSex);
+      $db_query.addRelapseToDb(timestamp_lastFap);
+      
+      // Alert User
+      var alertPopup = $ionicPopup.alert({
+           title: "Awesome!",
+           template: "Way to get it started!",
+         okType: "button-royal"
+         });
+      
+      // Set firstRun = false and Redirect to Main 
+      alertPopup.then($scope.firstRunDone());
+      
+    }
   }
 })
 
@@ -323,24 +320,24 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
-	
-	// Watch out, Jedi! localStorage can only save strings,
-	// therefore we need the === operator!
+  
+  // Watch out, Jedi! localStorage can only save strings,
+  // therefore we need the === operator!
     if ($db_query.getFirstRun() === "true") {
       $location.path('/intro');
     } else {
-		$location.path('/tab/main');
+    $location.path('/tab/main');
     };
-	$rootScope.$apply();
+  $rootScope.$apply();
   });
   
 
 });
 
 var NofappHelpers = {
-	isEmpty: function(obj) {
-	  return Object.keys(obj).length === 0;
-	},
+  isEmpty: function(obj) {
+    return Object.keys(obj).length === 0;
+  },
 
   verbalizeNumber: function(i, words) {
     if (i < words.length - 1) {
@@ -379,34 +376,34 @@ angular.module('ionic.utils', [])
 angular.module('nofapp.utils', ['ionic.utils'])
 
 .service('$db_query', function($localstorage, $rootScope) {
-	// Initial Dataset for localStorage Database.
-	this.getInitialDataset = function() {
-		return {
-					mood: {
-						ts: [],
-						val: []
-					},
-					energy: {
-						ts: [],
-						val: []
-					},
-					had_sex: [],
-					relapse: []
-				};
-	};
-	
+  // Initial Dataset for localStorage Database.
+  this.getInitialDataset = function() {
+    return {
+          mood: {
+            ts: [],
+            val: []
+          },
+          energy: {
+            ts: [],
+            val: []
+          },
+          had_sex: [],
+          relapse: []
+        };
+  };
+  
   // Read Database
   this.getEventsDb = function() {
-  	console.log("Reading Database...");
-	var structDb = $localstorage.getObject('struct');
-	// Check for empty DB. Actually, this shouldn't happen
-	// as the user should have entered some data already at this point
+    console.log("Reading Database...");
+  var structDb = $localstorage.getObject('struct');
+  // Check for empty DB. Actually, this shouldn't happen
+  // as the user should have entered some data already at this point
     if (NofappHelpers.isEmpty(structDb)) {
       console.log("structDb is empty. Initializing. This shouldn't have happened.")
       structDb = this.getInitialDataset();
       console.log("Wrote initial Dataset.");
     }
-	return structDb;
+  return structDb;
   };
 // Function to write mood and energy to the database.
   // Mood and energy should be int
@@ -481,17 +478,16 @@ angular.module('nofapp.utils', ['ionic.utils'])
   this.getFirstRun = function () {
     //var firstRun = NofappHelpers.isEmpty($localstorage.get('firstRun')) ? true : $localstorage.get('firstRun');
     //console.log("firstRun checked, result = " + firstRun);
-	var firstRun = $localstorage.get("firstRun", "true");
+  var firstRun = $localstorage.get("firstRun", "true");
     return firstRun;
   };
   
   this.setFirstRun = function(val) {
     // val = boolean, well not really, actually it's a string which is
-	// either true or false, DUH
+  // either true or false, DUH
     $localstorage.set("firstRun", val);
     console.log("firstRun set to " + $localstorage.get("firstRun"));
   }
-}
 })
 
 /*

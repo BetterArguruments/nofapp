@@ -263,23 +263,21 @@
     
     <script id="popups/last-sex.html" type="text/ng-template">
       <div class="button-bar">
-        <button class="button" ng-click="userState.decSexDaysAgo()" ng-disabled="userState.isMinSexDays()">-</button>
-        <div class="button flex-contain">
-          <span>{{userState.values.sexDaysAgo}}</span>
-          <span>&nbsp;days ago</span>
+        <button class="button flex-none" ng-click="userState.decSexDaysAgo()" ng-disabled="userState.isMinSexDays()">-</button>
+        <div class="button">
+          {{userState.pastDaysInWords(userState.values.sexDaysAgo)}}
         </div>
-        <button class="button" ng-click="userState.incSexDaysAgo()" ng-disabled="userState.isMaxSexDays()">+</button>
+        <button class="button flex-none" ng-click="userState.incSexDaysAgo()" ng-disabled="userState.isMaxSexDays()">+</button>
       </div>
     </script>
     
     <script id="popups/last-fap.html" type="text/ng-template">
       <div class="button-bar">
-        <button class="button" ng-click="userState.decFapDaysAgo()" ng-disabled="userState.isMinFapDays()">-</button>
-        <div class="button flex-contain">
-          <span>{{userState.values.fapDaysAgo}}</span>
-          <span>&nbsp;days ago</span>
+        <button class="button flex-none" ng-click="userState.decFapDaysAgo()" ng-disabled="userState.isMinFapDays()">-</button>
+        <div class="button">
+          {{userState.pastDaysInWords(userState.values.fapDaysAgo)}}
         </div>
-        <button class="button" ng-click="userState.incFapDaysAgo()" ng-disabled="userState.isMaxFapDays()">+</button>
+        <button class="button flex-none" ng-click="userState.incFapDaysAgo()" ng-disabled="userState.isMaxFapDays()">+</button>
       </div>
     </script>
   </body>

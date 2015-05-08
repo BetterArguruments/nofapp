@@ -42,6 +42,10 @@ text-align: left;
   
 }
 
+.button-bar > .flex-none {
+  flex: none;
+}
+
 .no-left-padding {
   padding-left: 0px;
 }
