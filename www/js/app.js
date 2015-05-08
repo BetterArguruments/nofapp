@@ -162,7 +162,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
       mood: 3,
       energy: 3,
       fapDaysAgo: 0,
-      sexDaysAgo: 0
+      sexDaysAgo: -1
     },
     incFapDaysAgo: function() {this.values.fapDaysAgo++},
     decFapDaysAgo: function() {this.values.fapDaysAgo--},
@@ -170,11 +170,11 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
     isMaxFapDays: function() {return this.values.fapDaysAgo >= 30},
     incSexDaysAgo: function() {this.values.sexDaysAgo++},
     decSexDaysAgo: function() {this.values.sexDaysAgo--},
-    isMinSexDays: function() {return this.values.sexDaysAgo <= 0},
+    isMinSexDays: function() {return this.values.sexDaysAgo <= -1},
     isMaxSexDays: function() {return this.values.sexDaysAgo >= 30},
     pastDaysInWords: function(day) {
       var words = NofappHelpers
-      .verbalizeNumber(day, ['today', 'yesterday', '%d days ago']);
+      .verbalizeNumber(day, ['never', 'today', 'yesterday', '%d days ago'], true);
       return words;
     }
   };
@@ -332,12 +332,14 @@ var NofappHelpers = {
     return Object.keys(obj).length === 0;
   },
 
-  verbalizeNumber: function(i, words) {
+  verbalizeNumber: function(i, words, has_infinite) {
+    if (typeof(has_infinite) === 'undefined') {has_infinite = false};
+    if (has_infinite) {i++};
     if (i < words.length - 1) {
       return words[i];
     } else {
       return words[words.length - 1].replace("%d", i);
-    }
+    };
   }
 };
 
