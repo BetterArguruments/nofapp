@@ -277,16 +277,16 @@ function isEmpty(obj) {
 */
 
 function getInitialDataset() {
-  return {
-        mood: {
-          ts: [],
-          val: []
-        },
-        energy: {
-          ts: [],
-          val: []
-        },
-        had_sex: [],
-        relapse: []
-      };
+	return {
+				mood: {
+					ts: [],
+					val: []
+				},
+				energy: {
+					ts: [],
+					val: []
+				},
+				had_sex: [],
+				relapse: []
+			};
 };
