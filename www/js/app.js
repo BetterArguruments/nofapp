@@ -34,6 +34,15 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 	          }
 		  }
   })
+  .state('tabs.enterdata', {
+    url: '/enterdata',
+	views: {
+	          'enterdata-tab': {
+	            templateUrl: 'templates/enterdata.html',
+	            controller: 'EnterDataCtrl'
+	          }
+		  }
+  })
   .state('tabs.sex', {
     url: '/sex',
 	views: {
@@ -88,6 +97,11 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 // Stats Controller
 .controller('StatsCtrl', function($scope, $state, $db_query) {
+
+})
+
+// Sex Controller
+.controller('EnterDataCtrl', function($scope, $state, $db_query) {
 
 })
 

@@ -44,6 +44,10 @@
         <ion-tab title="Stats" icon="ion-pie-graph" href="#/tab/stats">
           <ion-nav-view name="stats-tab"></ion-nav-view>
         </ion-tab>
+		
+        <ion-tab title="Data" icon="ion-calculator" href="#/tab/enterdata">
+          <ion-nav-view name="enterdata-tab"></ion-nav-view>
+        </ion-tab>
 
         <ion-tab title="Sex" icon="ion-heart" href="#/tab/sex">
           <ion-nav-view name="sex-tab"></ion-nav-view>
@@ -80,6 +84,15 @@
   <ion-view hide-back-button="true" view-title="Stats">
     <ion-content class="padding">
       <h1>STATS</h1>
+      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+    </ion-content>
+  </ion-view>
+</script>
+
+<script id="templates/enterdata.html" type="text/ng-template">
+  <ion-view hide-back-button="true" view-title="Sex">
+    <ion-content class="padding">
+      <h1>Enter moar Data</h1>
       <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
     </ion-content>
   </ion-view>
@@ -195,7 +208,7 @@
 			</div>
 			<a class="item item-icon-left royal" href="#">
 				<!--<i class="icon ion-help"></i>-->
-				    More Information on Nofap
+				    What is Nofap?
 		    </a>
 
 			</div>
