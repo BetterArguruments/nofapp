@@ -348,10 +348,11 @@ var NofappHelpers = {
   },
 
   verbalizeNumber: function(i, words, has_infinite) {
+    var k = i;
     if (typeof(has_infinite) === 'undefined') {has_infinite = false};
-    if (has_infinite) {i++};
-    if (i < words.length - 1) {
-      return words[i];
+    if (has_infinite) {k++};
+    if (k < words.length - 1) {
+      return words[k];
     } else {
       return words[words.length - 1].replace("%d", i);
     };
