@@ -35,13 +35,6 @@ text-align: left;
   color: #886aea;
 }
 
-.button-bar > .flex-contain {
-  flex: none;
-  width: auto;
-  white-space: nowrap;
-  
-}
-
 .button-bar > .flex-none {
   flex: none;
 }

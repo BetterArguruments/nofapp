@@ -18,9 +18,9 @@
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
-	<!-- dependencies: angles.js and chart.js-->
-	<script src="lib/angles/js/angles.js"></script>
-	<script src="lib/chart/js/chart.js"></script>
+    <!-- dependencies: angles.js and chart.js-->
+    <script src="lib/angles/js/angles.js"></script>
+    <script src="lib/chart/js/chart.js"></script>
 
     <!-- your app's js -->
     <script src="js/app.js"></script>
@@ -28,15 +28,14 @@
   <body ng-app="nofApp">
 
     <ion-nav-bar class="bar-royal">
-        <ion-nav-back-button>
-        </ion-nav-back-button>
+      <ion-nav-back-button>
+      </ion-nav-back-button>
     </ion-nav-bar>
 
     <ion-nav-view></ion-nav-view>
 
     <script id="templates/tabs.html" type="text/ng-template">
       <ion-tabs class="tabs-icon-top tabs-striped tabs-royal tabs-color-light">
-
         <ion-tab title="Overview" icon="ion-stats-bars" href="#/tab/main">
           <ion-nav-view name="main-tab"></ion-nav-view>
         </ion-tab>
@@ -44,186 +43,160 @@
         <ion-tab title="Stats" icon="ion-pie-graph" href="#/tab/stats">
           <ion-nav-view name="stats-tab"></ion-nav-view>
         </ion-tab>
-		
+    
         <ion-tab title="Data" icon="ion-calculator" href="#/tab/enterdata">
           <ion-nav-view name="enterdata-tab"></ion-nav-view>
         </ion-tab>
-		
+    
         <ion-tab title="History" icon="ion-clock" href="#/tab/history">
           <ion-nav-view name="history-tab"></ion-nav-view>
         </ion-tab>
-		
+    
         <ion-tab title="Settings" icon="ion-gear-b" href="#/tab/settings">
           <ion-nav-view name="settings-tab"></ion-nav-view>
         </ion-tab>
-
       </ion-tabs>
     </script>
 
-<script id="templates/main.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Overview">
-    <ion-content class="padding">
-	<center><h3>3</h3><br>Days</center>
-      
-		  
-		  <div class="row">
-		    <div class="col col-33 col-offset-33">.col</div>
-		    <div class="col">.col</div>
-		  </div>
-	  <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
-	  <p>{{isThisFirstRun}}</p>
-    </ion-content>
-  </ion-view>
-</script>
+    <script id="templates/main.html" type="text/ng-template">
+      <ion-view hide-back-button="true" view-title="Overview">
+        <ion-content class="padding">
+          <center><h3>3</h3><br>Days</center>
+          <div class="row">
+            <div class="col col-33 col-offset-33">.col</div>
+            <div class="col">.col</div>
+          </div>
+          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
+          <p>{{isThisFirstRun}}</p>
+        </ion-content>
+      </ion-view>
+    </script>
 
-<script id="templates/stats.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Your Stats">
-    <ion-content class="padding">
-      <h1>STATS</h1>
-      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
-    </ion-content>
-  </ion-view>
-</script>
+  <script id="templates/stats.html" type="text/ng-template">
+    <ion-view hide-back-button="true" view-title="Your Stats">
+        <ion-content class="padding">
+          <h1>STATS</h1>
+          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+        </ion-content>
+      </ion-view>
+    </script>
 
-<script id="templates/enterdata.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Enter some Data">
-    <ion-content class="padding">
-      <h1>Enter moar Data</h1>
-	  <button class="button button-large button-balanced" ng-click="justHadSex()">
-		  I JUST HAD SEX!
-	  </button>
-	  <button class="button button-large button-assertive" ng-click="justRelapsed()">
-		  I relapsed.
-	  </button>
-    </ion-content>
-  </ion-view>
-</script>
+    <script id="templates/enterdata.html" type="text/ng-template">
+      <ion-view hide-back-button="true" view-title="Enter some Data">
+        <ion-content class="padding">
+          <h1>Enter moar Data</h1>
+        <button class="button button-large button-balanced" ng-click="justHadSex()">
+          I JUST HAD SEX!
+        </button>
+        <button class="button button-large button-assertive" ng-click="justRelapsed()">
+          I relapsed.
+        </button>
+        </ion-content>
+      </ion-view>
+    </script>
 
-<script id="templates/history.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="History">
-    <ion-content class="padding">
-      <h1>History, Yo</h1>
-      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
-    </ion-content>
-  </ion-view>
-</script>
+    <script id="templates/history.html" type="text/ng-template">
+      <ion-view hide-back-button="true" view-title="History">
+        <ion-content class="padding">
+          <h1>History, Yo</h1>
+          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+        </ion-content>
+      </ion-view>
+    </script>
 
-<script id="templates/settings.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Settings">
-    <ion-content class="padding">
-      
-	  <div class="list">
+    <script id="templates/settings.html" type="text/ng-template">
+      <ion-view hide-back-button="true" view-title="Settings">
+        <ion-content class="padding">
+        <div class="list">
+          <div class="item item-divider">
+            General
+          </div>
+          <ion-toggle toggle-class="toggle-royal">Notifications</ion-toggle>
+          <!-- NofAPP Cloud may come later
+            <ion-toggle toggle-class="toggle-royal">NofAPP Cloud</ion-toggle>
+          -->
+          <div class="item item-divider">
+            Reset
+          </div>
+    
+          <a class="item item-icon-left" href="#" ng-click="showConfirmResetApp()">
+            <i class="icon ion-trash-a"></i>
+            Reset App (Delete Everything)
+          </a>
 
-      <div class="item item-divider">
-          General
+          <div class="item item-divider">
+            About
+          </div>
+
+          <a class="item item-icon-left" href="#">
+            <i class="icon ion-information-circled"></i>
+            About NofAPP
+          </a>
+          <a class="item item-icon-left" href="#">
+            <i class="icon ion-android-favorite-outline"></i>
+            Buy me a beer!
+          </a>
+
         </div>
-	      
-		<ion-toggle toggle-class="toggle-royal">Notifications</ion-toggle>
-		<!-- NofAPP Cloud may come later
-			<ion-toggle toggle-class="toggle-royal">NofAPP Cloud</ion-toggle>
-			-->
-
-      <div class="item item-divider">
-          Reset
-        </div>
-		
-	    <a class="item item-icon-left" href="#" ng-click="showConfirmResetApp()">
-	      <i class="icon ion-trash-a"></i>
-	      Reset App (Delete Everything)
-	    </a>
-
-      <div class="item item-divider">
-          About
-        </div>
-
-	    <a class="item item-icon-left" href="#">
-	      <i class="icon ion-information-circled"></i>
-	      About NofAPP
-	    </a>
-      <a class="item item-icon-left" href="#">
-        <i class="icon ion-android-favorite-outline"></i>
-        Buy me a beer!
-      </a>
-
-	  </div>
-	  
-    </ion-content>
-  </ion-view>
-</script>
+        </ion-content>
+      </ion-view>
+    </script>
 
 
-<script id="templates/intro.html" type="text/ng-template"> 
-	
-	
-      <ion-view>
-	  <ion-nav-title>NofAPP</ion-nav-title>
-   	  
+    <script id="templates/intro.html" type="text/ng-template"> 
+      <ion-view view-title="NofAPP">
         <ion-slide-box on-slide-changed="slideChanged(index)">
           <ion-slide>
             <div id="logo">
               <img class="intro-logo" src="img/fapstronaut-beta.png">
             </div>
-		      <h3>Welcome, Fapstronaut</h3>
-          <br>
-          <button class="button button-royal" ng-click="nextSlide()">
-            Swipe right to begin
-          </button>
-		  
-		  <p class="text-center">
-		                <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
-		              </p>
-		<p class="text-center">
-			{{isThisFirstRun}}
-		</p>
+            <h3>Welcome, Fapstronaut</h3>
+            <br>
+            <button class="button button-royal" ng-click="nextSlide()">
+              Swipe right to begin
+            </button>
+      
+            <p class="text-center">
+              <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
+            </p>
+            <p class="text-center">
+              {{isThisFirstRun}}
+            </p>
           </ion-slide>
+          
           <ion-slide>
             <h3>Using NofAPP</h3>
-            
-			<div class="list card">
+            <div class="list card">
+              <a href="#" class="item item-icon-left">
+                <i class="icon ion-stats-bars"></i>
+                Track your progress
+              </a>
 
-			  <a href="#" class="item item-icon-left">
-			    <i class="icon ion-stats-bars"></i>
-			    Track your progress
-			  </a>
+              <a href="#" class="item item-icon-left">
+                <i class="icon ion-pie-graph"></i>
+                Get awesome analytics
+              </a>
 
-			  <a href="#" class="item item-icon-left">
-			    <i class="icon ion-pie-graph"></i>
-			    Get awesome analytics
-			  </a>
+              <a href="#" class="item item-icon-left">
+                <i class="icon ion-heart"></i>
+                Have Sex!
+              </a>
 
-			  <a href="#" class="item item-icon-left">
-			    <i class="icon ion-heart"></i>
-			    Have Sex!
-			  </a>
-
-			  <!--<a href="#" class="item item-icon-left">
-			    <i class="icon ion-earth"></i>
-			    Contribute to the Nofap Community
-			  </a>-->
-				  
-			<div class="item item-divider">	  
-				
-			</div>
-			<a class="item item-icon-left royal" href="#">
-				<!--<i class="icon ion-help"></i>-->
-				    What is Nofap?
-		    </a>
-
-			</div>
-			
-            <!-- Old Content
-				<div id="list">
-              <h5>Just three steps:</h5>
-              <ol>
-                <li>Track your efforts as often as you like</li>
-                <li>Get awesome statistics</li>
-                <li>Challenge your friends, maybe?</li>
-              </ol>
+              <!--<a href="#" class="item item-icon-left">
+                <i class="icon ion-earth"></i>
+                Contribute to the Nofap Community
+              </a>-->
+          
+              <div class="item item-divider"></div>
+              <a class="item item-icon-left royal" href="#">
+                <!--<i class="icon ion-help"></i>-->
+                What is Nofap?
+              </a>
             </div>
-				-->
           </ion-slide>
+          
           <ion-slide class="padding">
-            <h3>For starters, set your current mood and energy to begin.</h3>
+            <h4>Track your mood and sex drive as often as you like</h4>
             <br>
             <h4>Mood</h4>
             <div class="button-bar">
@@ -233,7 +206,7 @@
               <a class="button button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">2</a>
               <a class="button button-assertive" ng-class="isCurrentMood(1)" ng-click="setMood(1)">1</a>
             </div>
-            <h4>Overall energy</h4>
+            <h4>Libido</h4>
             <div class="button-bar">
               <a class="button button-balanced" ng-class="isCurrentEnergy(5)" ng-click="setEnergy(5)">5</a>
               <a class="button button-royal" ng-class="isCurrentEnergy(4)" ng-click="setEnergy(4)">4</a>
@@ -242,16 +215,17 @@
               <a class="button button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
             </div>
             <br>
+            <h4>When did you last...?</h4>
             <div class="row no-left-padding no-right-padding">
               <div class="col no-left-padding">
-                <button class="button button-block padding-right" ng-click="openLastSex()">Last sex</button>
+                <button class="button button-block padding-right" ng-click="openLastSex()">have sex</button>
               </div>
               <div class="col no-right-padding">
-                <button class="button button-block padding-left" ng-click="openLastFap()">Last fap</button>
+                <button class="button button-block padding-left" ng-click="openLastFap()">take a wank</button>
               </div>
             </div>
             <button class="button button-block button-balanced" ng-click="submitForm()">
-              Keep me from having sex with my hands!
+              Alright, got it!
             </button>
           </div>
           </ion-slide>

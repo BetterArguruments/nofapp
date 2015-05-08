@@ -7,59 +7,59 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
   $stateProvider
   .state('intro', {
-      url: '/intro',
-      templateUrl: 'templates/intro.html',
-      controller: 'IntroCtrl'
-    })
+    url: '/intro',
+    templateUrl: 'templates/intro.html',
+    controller: 'IntroCtrl'
+  })
   .state('tabs', {
-      url: "/tab",
-      abstract: true,
-      templateUrl: "templates/tabs.html"
-    })
+    url: "/tab",
+    abstract: true,
+    templateUrl: "templates/tabs.html"
+  })
   .state('tabs.main', {
     url: '/main',
-  views: {
-            'main-tab': {
-              templateUrl: 'templates/main.html',
-              controller: 'MainCtrl'
-            }
+    views: {
+      'main-tab': {
+        templateUrl: 'templates/main.html',
+        controller: 'MainCtrl'
       }
+    }
   })
   .state('tabs.stats', {
     url: '/stats',
-  views: {
-            'stats-tab': {
-              templateUrl: 'templates/stats.html',
-              controller: 'StatsCtrl'
-            }
+    views: {
+      'stats-tab': {
+        templateUrl: 'templates/stats.html',
+        controller: 'StatsCtrl'
       }
+    }
   })
   .state('tabs.enterdata', {
     url: '/enterdata',
-  views: {
-            'enterdata-tab': {
-              templateUrl: 'templates/enterdata.html',
-              controller: 'EnterDataCtrl'
-            }
+    views: {
+      'enterdata-tab': {
+        templateUrl: 'templates/enterdata.html',
+        controller: 'EnterDataCtrl'
       }
+    }
   })
   .state('tabs.history', {
     url: '/history',
-  views: {
-            'history-tab': {
-              templateUrl: 'templates/history.html',
-              controller: 'HistoryCtrl'
-            }
+    views: {
+      'history-tab': {
+        templateUrl: 'templates/history.html',
+        controller: 'HistoryCtrl'
       }
+    }
   })
   .state('tabs.settings', {
     url: '/settings',
-  views: {
-            'settings-tab': {
-              templateUrl: 'templates/settings.html',
-              controller: 'SettingsCtrl'
-            }
+    views: {
+      'settings-tab': {
+        templateUrl: 'templates/settings.html',
+        controller: 'SettingsCtrl'
       }
+    }
   });
 
   $urlRouterProvider.otherwise("/tab/main");
@@ -72,18 +72,12 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   // Debug DB
   $scope.isThisFirstRun = $db_query.getFirstRun();
   
-  //if($db_query.getFirstRun()) {
-  //  $state.go('intro');
-  //}
-  
   // DEBUG: Reset first run (back to Intro)
   $scope.firstRunReset = function(){
     $db_query.setFirstRun(true);
     $ionicHistory.currentView($ionicHistory.backView());
-      $state.go('intro');
+    $state.go('intro');
   };
-  
-  
 })
 
 // Stats Controller
@@ -93,38 +87,35 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 // Enter Data Controller
 .controller('EnterDataCtrl', function($scope, $state, $db_query, $ionicPopup) {
-	$scope.justHadSex = function() {
-	    var confirmPopup = $ionicPopup.confirm({
-	      title: 'Are You Serious?',
-	      template: 'Please confirm!',
-	    okType: 'button-balanced'
-	    });
-	    confirmPopup.then(function(res) {
-	       if(res) {
-			   $db_query.addSexToDb(Math.floor(Date.now() / 1000));
-			   console.log("Sex added to Db.");
-	       }
-	    });
-	}
-	
-	$scope.justRelapsed = function() {
-	    var confirmPopup = $ionicPopup.confirm({
-	      title: 'Relapsed?',
-	      template: 'Please confirm!',
-	    okType: 'button-assertive'
-	    });
-	    confirmPopup.then(function(res) {
-	       if(res) {
-			   $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
-			   console.log("Relapse added to DB. Oh noes!");
-	       }
-	    });
-	}
+  $scope.justHadSex = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Are You Serious?',
+      template: 'Please confirm!',
+    okType: 'button-balanced'
+    }).then(function(res) {
+      if(res) {
+        $db_query.addSexToDb(Math.floor(Date.now() / 1000));
+        console.log("Sex added to Db.");
+      }
+    });
+  }
+  
+  $scope.justRelapsed = function() {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Relapsed?',
+      template: 'Please confirm!',
+      okType: 'button-assertive'
+    }).then(function(res) {
+      if(res) {
+        $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
+        console.log("Relapse added to DB. Oh noes!");
+      }
+    });
+  }
 })
 
 // History Controller
 .controller('HistoryCtrl', function($scope, $state, $db_query) {
-
 
 })
 
@@ -134,24 +125,22 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   // Reset App
   $scope.resetApp = function() {
     $db_query.resetDb();
-      $db_query.setFirstRun(true);
-      $ionicHistory.currentView($ionicHistory.backView());
+    $db_query.setFirstRun(true);
+    $ionicHistory.currentView($ionicHistory.backView());
     $state.go('intro');
   }
   
   $scope.showConfirmResetApp = function() {
-     var confirmPopup = $ionicPopup.confirm({
-       title: 'Are You Sure, Fapstronaut?',
-       template: 'Are you sure you want to reset NofAPP? All data and fapping will be lost.',
-     okType: 'button-assertive'
-     });
-     confirmPopup.then(function(res) {
-       if(res) {
-       $scope.resetApp();
-       }
-     });
-   };
-  
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Are You Sure, Fapstronaut?',
+      template: 'Are you sure you want to reset NofAPP? All data and fapping will be lost.',
+      okType: 'button-assertive'
+    }).then(function(res) {
+      if(res) {
+        $scope.resetApp();
+      }
+    });
+  };
 })
 
 
@@ -239,7 +228,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   
   // Slide Box Control
   $scope.nextSlide = function() {
-      $ionicSlideBoxDelegate.next();
+    $ionicSlideBoxDelegate.next();
   };
   
   $scope.openLastFap = function() {
@@ -254,14 +243,12 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
           type: 'button-balanced'
         }
       ]
-    })
-    .then(function() {
+    }).then(function() {
       $scope.userHasInteractedCompletely("clicked_fap");
     });
   };
   
   $scope.openLastSex = function() {
-  $scope.userHasInteractedCompletely("clicked_sex");
     $ionicPopup.show({
       templateUrl: 'popups/last-sex.html',
       title: 'Make us proud!',
@@ -273,8 +260,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
           type: 'button-balanced'
         }
       ]
-    })
-    .then(function() {
+    }).then(function() {
       $scope.userHasInteractedCompletely("clicked_sex");
     });
   };
@@ -283,15 +269,14 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
     if (!$scope.userHasInteractedCompletely()) {
       console.log("User has not interacted completely!");
       var alertPopup = $ionicPopup.alert({
-           title: "Not so fast, Fapstronaut!",
-           template: "Make sure to enter your data, including last sex and last fap.",
-         okType: "button-royal"
-         });
+        title: "Not so fast, Fapstronaut!",
+        template: "Make sure to enter your data, including last sex and last fap.",
+        okType: "button-royal"
+      });
       return false;
-    }
-    else {
+    } else {
       console.log("Writing first Dataset to DB.");
-          
+
       // Calculate Timestamp (Past) for last fap and last sex
       var timestamp = Math.floor(Date.now() / 1000);
       var timestamp_lastSex = timestamp - (60*60*24*$scope.userState.values.sexDaysAgo);
@@ -309,14 +294,13 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
       
       // Alert User
       var alertPopup = $ionicPopup.alert({
-           title: "Awesome!",
-           template: "Way to get it started!",
-         okType: "button-royal"
-         });
+        title: "Awesome!",
+        template: "Way to get it started!",
+        okType: "button-royal"
+      });
       
       // Set firstRun = false and Redirect to Main 
       alertPopup.then($scope.firstRunDone());
-      
     }
   }
 })
@@ -332,17 +316,15 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
       StatusBar.styleDefault();
     }
   
-  // Watch out, Jedi! localStorage can only save strings,
-  // therefore we need the === operator!
+    // Watch out, Jedi! localStorage can only save strings,
+    // therefore we need the === operator!
     if ($db_query.getFirstRun() === "true") {
       $location.path('/intro');
     } else {
-    $location.path('/tab/main');
+      $location.path('/tab/main');
     };
-  $rootScope.$apply();
+    $rootScope.$apply();
   });
-  
-
 });
 
 var NofappHelpers = {
@@ -359,9 +341,7 @@ var NofappHelpers = {
   }
 };
 
-
 // Angular Module for saving and retrieving Data into localStorage
-
 angular.module('ionic.utils', [])
 
 .factory('$localstorage', ['$window', function($window) {
@@ -383,40 +363,40 @@ angular.module('ionic.utils', [])
 
 // Angular Module for entering data into the database
 // The most awesome DB Manager!
-
 angular.module('nofapp.utils', ['ionic.utils'])
 
-.service('$db_query', function($localstorage, $rootScope) {
+.service('$db_query', function($localstorage) {
   // Initial Dataset for localStorage Database.
   this.getInitialDataset = function() {
     return {
-          mood: {
-            ts: [],
-            val: []
-          },
-          energy: {
-            ts: [],
-            val: []
-          },
-          had_sex: [],
-          relapse: []
-        };
+      mood: {
+        ts: [],
+        val: []
+      },
+      energy: {
+        ts: [],
+        val: []
+      },
+      had_sex: [],
+      relapse: []
+    };
   };
   
   // Read Database
   this.getEventsDb = function() {
     console.log("Reading Database...");
-  var structDb = $localstorage.getObject('struct');
-  // Check for empty DB. Actually, this shouldn't happen
-  // as the user should have entered some data already at this point
+    var structDb = $localstorage.getObject('struct');
+    // Check for empty DB. Actually, this shouldn't happen
+    // as the user should have entered some data already at this point
     if (NofappHelpers.isEmpty(structDb)) {
       console.log("structDb is empty. Initializing. This shouldn't have happened.")
       structDb = this.getInitialDataset();
       console.log("Wrote initial Dataset.");
-    }
-  return structDb;
+    };
+    return structDb;
   };
-// Function to write mood and energy to the database.
+
+  // Function to write mood and energy to the database.
   // Mood and energy should be int
   this.addEventsToDb = function(mood, energy) {
     var timestamp = Math.floor(Date.now() / 1000);
@@ -427,7 +407,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
       console.log("structDb is empty. Initializing.")
       structDb = this.getInitialDataset();
       console.log("Wrote initial Dataset.");
-    }
+    };
     // Write to struct
     structDb.mood.ts.push(timestamp);
     structDb.mood.val.push(mood);
@@ -450,7 +430,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
     if (NofappHelpers.isEmpty(structDb)) {
       console.log("structDb is empty. Initializing.");
       structDb = this.getInitialDataset();
-    }
+    };
     // Write to struct
     structDb.had_sex.push(sex_time);
     
@@ -471,7 +451,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
     if (NofappHelpers.isEmpty(structDb)) {
       console.log("structDb is empty. Initializing.");
       structDb = this.getInitialDataset();
-    }
+    };
     // Write to Struct
     structDb.relapse.push(timestamp);
     
@@ -489,7 +469,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
   this.getFirstRun = function () {
     //var firstRun = NofappHelpers.isEmpty($localstorage.get('firstRun')) ? true : $localstorage.get('firstRun');
     //console.log("firstRun checked, result = " + firstRun);
-  var firstRun = $localstorage.get("firstRun", "true");
+    var firstRun = $localstorage.get("firstRun", "true");
     return firstRun;
   };
   
@@ -498,7 +478,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
   // either true or false, DUH
     $localstorage.set("firstRun", val);
     console.log("firstRun set to " + $localstorage.get("firstRun"));
-  }
+  };
 })
 
 /*
