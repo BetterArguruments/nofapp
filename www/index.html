@@ -5,21 +5,21 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    <link href="css/ionic.app.css" rel="stylesheet">
-    <link href="css/app.css" rel="stylesheet">
+    <link href="css/ionic.app.css?ionicCachebuster=588" rel="stylesheet">
+    <link href="css/app.css?ionicCachebuster=588" rel="stylesheet">
 
     <!-- ionic/angularjs js -->
-    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic/js/ionic.bundle.js?ionicCachebuster=588"></script>
 
     <!-- cordova script (this will be a 404 during development) -->
-    <script src="cordova.js"></script>
+    <script src="cordova.js?ionicCachebuster=588"></script>
 
     <!-- dependencies: angles.js and chart.js-->
-    <script src="lib/angles/js/angles.js"></script>
-    <script src="lib/chart/js/chart.js"></script>
+    <script src="lib/angles/js/angles.js?ionicCachebuster=588"></script>
+    <script src="lib/chart/js/chart.js?ionicCachebuster=588"></script>
 
     <!-- your app's js -->
-    <script src="js/app.js"></script>
+    <script src="js/app.js?ionicCachebuster=588"></script>
   </head>
   <body ng-app="nofApp">
 
@@ -31,12 +31,12 @@
     <ion-nav-view></ion-nav-view>
 
     <script id="templates/tabs.html" type="text/ng-template">
-      <ion-tabs class="tabs-icon-top tabs-striped tabs-royal tabs-color-light">
+      <ion-tabs class="tabs-icon-only tabs-striped tabs-royal tabs-color-light">
         <ion-tab title="Overview" icon="ion-stats-bars" href="#/tab/main">
           <ion-nav-view name="main-tab"></ion-nav-view>
         </ion-tab>
 
-        <ion-tab title="Stats" icon="ion-pie-graph" href="#/tab/stats">
+        <ion-tab icon="ion-pie-graph" href="#/tab/stats">
           <ion-nav-view name="stats-tab"></ion-nav-view>
         </ion-tab>
 
@@ -69,7 +69,7 @@
     </script>
 
     <script id="templates/stats.html" type="text/ng-template">
-      <ion-view hide-back-button="true" view-title="Your Stats">
+      <ion-view hide-back-button="true" view-title="Your Metrics">
         <ion-content class="padding">
           <h1>STATS</h1>
           <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
@@ -78,14 +78,35 @@
     </script>
 
     <script id="templates/enterdata.html" type="text/ng-template">
-      <ion-view hide-back-button="true" view-title="Enter some Data">
+      <ion-view hide-back-button="true" view-title="Track your psyche">
         <ion-content class="padding">
-          <h1>Enter moar Data</h1>
-          <button class="button button-large button-balanced" ng-click="justHadSex()">
+          <h4>My current mood</h4>
+          <div class="button-bar">
+            <a class="button button-balanced" ng-class="isCurrentMood(5)" ng-click="setMood(5)">5</a>
+            <a class="button button-royal" ng-class="isCurrentMood(4)" ng-click="setMood(4)">4</a>
+            <a class="button button-royal" ng-class="isCurrentMood(3)" ng-click="setMood(3)">3</a>
+            <a class="button button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">2</a>
+            <a class="button button-assertive" ng-class="isCurrentMood(1)" ng-click="setMood(1)">1</a>
+          </div>
+          <h4>My current libido</h4>
+          <div class="button-bar">
+            <a class="button button-balanced" ng-class="isCurrentEnergy(5)" ng-click="setEnergy(5)">5</a>
+            <a class="button button-royal" ng-class="isCurrentEnergy(4)" ng-click="setEnergy(4)">4</a>
+            <a class="button button-royal" ng-class="isCurrentEnergy(3)" ng-click="setEnergy(3)">3</a>
+            <a class="button button-royal" ng-class="isCurrentEnergy(2)" ng-click="setEnergy(2)">2</a>
+            <a class="button button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
+          </div>
+          <div class="list list-inset">
+            <label class="item item-input">
+              <input type="text" placeholder="Leave a note" ng-model="userState.note">
+            </label>
+          </div>
+          <button class="button button-block button-balanced" ng-click="addDataset()">Save</button>
+          <button class="button button-block button-large button-royal" ng-click="justHadSex()">
             I JUST HAD SEX!
           </button>
-          <button class="button button-large button-assertive" ng-click="justRelapsed()">
-            I relapsed.
+          <button class="button button-block button-small button-assertive" ng-click="justRelapsed()">
+            I relapsed
           </button>
         </ion-content>
       </ion-view>
@@ -243,13 +264,13 @@
               <a class="button button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
             </div>
             <br>
-            <h4>When did you last...?</h4>
+            <h4>When did you last...</h4>
             <div class="row no-left-padding no-right-padding">
               <div class="col no-left-padding">
-                <button class="button button-block padding-right" ng-click="openLastSex()">have sex</button>
+                <button class="button button-block padding-right" ng-click="openLastSex()">have sex?</button>
               </div>
               <div class="col no-right-padding">
-                <button class="button button-block padding-left" ng-click="openLastFap()">take a wank</button>
+                <button class="button button-block padding-left" ng-click="openLastFap()">take a wank?</button>
               </div>
             </div>
             <button class="button button-block button-balanced" ng-click="submitForm()">

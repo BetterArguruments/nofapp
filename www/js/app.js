@@ -87,6 +87,52 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 // Enter Data Controller
 .controller('EnterDataCtrl', function($scope, $state, $db_query, $ionicPopup) {
+
+  // set initial values for a new state
+  // TODO: read values from db if last dataset < x minutes ago
+  $scope.userState = {
+    mood: 3,
+    energy: 3,
+    note: "",
+    reset: function() {
+      this.mood = 3;
+      this.energy = 3;
+      this.note = "";
+    }
+  };
+  
+  $scope.setMood = function(i) {
+    if (1 <= i && i <= 5) {
+      $scope.userState.mood = i;
+    };
+  };
+  
+  $scope.isCurrentMood = function(i) {
+    if ($scope.userState.mood === i) {
+      return 'active';
+    };
+  };
+  
+  $scope.setEnergy = function(i) {
+    if (1 <= i && i <= 5) {
+      $scope.userState.energy = i;
+    };
+  };
+  
+  $scope.isCurrentEnergy = function(i) {
+    if ($scope.userState.energy === i) {
+      return 'active';
+    };
+  };
+  
+  
+  // Submit the mood/energy form and write new entries
+  $scope.addDataset = function() {
+    console.log($scope.userState);
+    $db_query.addEventsToDb($scope.userState.mood, $scope.userState.energy);
+    $scope.userState.reset();
+  };
+  
   $scope.justHadSex = function() {
     var confirmPopup = $ionicPopup.confirm({
       title: 'Are You Serious?',
@@ -185,7 +231,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
     isMaxSexDays: function() {return this.values.sexDaysAgo >= 30},
     pastDaysInWords: function(day) {
       var words = NofappHelpers
-      .verbalizeNumber(day, ['never', 'today', 'yesterday', '%d days ago'], true);
+      .verbalizeNumber(day, ['decades ago', 'today', 'yesterday', '%d days ago'], true);
       return words;
     }
   };
@@ -304,6 +350,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
       $db_query.addRelapseToDb(timestamp_lastFap);
       
       // Alert User
+      // TODO: make toast
       var alertPopup = $ionicPopup.alert({
         title: "Awesome!",
         template: "Way to get it started!",
@@ -335,6 +382,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
       $location.path('/tab/main');
     };
     $rootScope.$apply();
+    console.log($rootScope.$apply);
   });
 });
 
