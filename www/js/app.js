@@ -1,7 +1,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
+angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -62,12 +62,19 @@ angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
 		  }
   });
 
-  $urlRouterProvider.otherwise("/tabs.main");
+  $urlRouterProvider.otherwise("/tab/main");
 
 })
 
 // Main App Controller
 .controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory) {
+  
+  // Debug DB
+	$scope.isThisFirstRun = $db_query.getFirstRun();
+  
+	//if($db_query.getFirstRun()) {
+	//	$state.go('intro');
+	//}
   
   // DEBUG: Reset first run (back to Intro)
   $scope.firstRunReset = function(){
@@ -123,6 +130,9 @@ angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
 
 // Intro Controller
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location) {
+  
+  // Debug DB
+	$scope.isThisFirstRun = $db_query.getFirstRun();
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
@@ -281,132 +291,7 @@ angular.module('nofApp', ['ionic','ionic.utils','dbManager'])
   }
 })
 
-// Angular Module for saving and retrieving Data into localStorage
-
-angular.module('ionic.utils', [])
-
-.factory('$localstorage', ['$window', function($window) {
-  return {
-    set: function(key, value) {
-      $window.localStorage[key] = value;
-    },
-    get: function(key, defaultValue) {
-      return $window.localStorage[key] || defaultValue;
-    },
-    setObject: function(key, value) {
-      $window.localStorage[key] = JSON.stringify(value);
-    },
-    getObject: function(key) {
-      return JSON.parse($window.localStorage[key] || '{}');
-    }
-  }
-}])
-
-// Angular Module for entering data into the database
-// The most awesome DB Manager!
-
-angular.module('dbManager', ['ionic.utils'])
-
-.service('$db_query', function($localstorage) {
-  return {
-	  // Read Database
-	  getEventsDb: function() {
-	  	console.log("Reading Database...");
-		var structDb = $localstorage.getObject('struct');
-		// Check for empty DB. Actually, this shouldn't happen
-		// as the user should have entered some data already at this point
-	    if (isEmpty(structDb)) {
-	      console.log("structDb is empty. Initializing. This shouldn't have happened.")
-	      structDb = getInitialDataset();
-	      console.log("Wrote initial Dataset.");
-	    }
-		return structDb;
-	  },
-  // Function to write mood and energy to the database.
-  // Mood and energy should be int
-  addEventsToDb: function(mood, energy) {
-    var timestamp = Math.floor(Date.now() / 1000);
-    console.log("Reading Database...");
-    var structDb = $localstorage.getObject('struct');
-    // Check if Database is empty and initialize
-    if (isEmpty(structDb)) {
-      console.log("structDb is empty. Initializing.")
-      structDb = getInitialDataset();
-      console.log("Wrote initial Dataset.");
-    }
-    // Write to struct
-    structDb.mood.ts.push(timestamp);
-    structDb.mood.val.push(mood);
-    structDb.energy.ts.push(timestamp);
-    structDb.energy.val.push(energy);
-    
-    // Write to DB
-    $localstorage.setObject("struct", structDb);
-    console.log("Wrote Events to DB.");
-  },
-  
-  addSexToDb: function(sex_time) {
-    var timestamp = Math.floor(Date.now() / 1000);
-    // Overload: Check if sex_time is set, otherwise use now as time
-    var sex_time = (typeof sex_time === "undefined") ? timestamp : sex_time;
-    
-    console.log("Reading Database...");
-    var structDb = $localstorage.getObject('struct');
-    // Check if Database is empty and initialize
-    if (isEmpty(structDb)) {
-      console.log("structDb is empty. Initializing.");
-      structDb = getInitialDataset();
-    }
-    // Write to struct
-    structDb.had_sex.push(sex_time);
-    
-    // Write to DB
-    $localstorage.setObject("struct", structDb);
-    console.log("Wrote Sex to DB.");
-  },
-  
-  addRelapseToDb: function(relapse_time) {
-    var timestamp = Math.floor(Date.now() / 1000);
-    // Overload: Relapse Time is undefined, therefore use now as time
-    var relapse_time = (typeof relapse_time === "undefined") ? timestamp : relapse_time;
-    
-    // Write to DB
-    console.log("Reading Database...");
-    var structDb = $localstorage.getObject('struct');
-    
-    if (isEmpty(structDb)) {
-      console.log("structDb is empty. Initializing.");
-      structDb = getInitialDataset();
-    }
-    // Write to Struct
-    structDb.relapse.push(timestamp);
-    
-    // Write to DB
-    $localstorage.setObject("struct", structDb);
-    console.log("Wrote Relapse to DB. Duh");
-  },
-  
-  resetDb: function() {
-    var structDb = getInitialDataset();
-    $localstorage.setObject("struct", structDb);
-    console.log("Database reset.");
-  },
-  
-  getFirstRun: function () {
-    var firstRun = isEmpty($localstorage.get('firstRunDone')) ? true : $localstorage.get('firstRunDone');
-    console.log("firstRun checked, result = " + firstRun);
-    return firstRun;
-  },
-  
-  setFirstRun: function(val) {
-    // val = boolean
-    $localstorage.set("firstRun", val);
-    console.log("firstRun set to " + $localstorage.get("firstRun"));
-  }
-}
-})
-
-.run(function($ionicPlatform, $location, $db_query) {
+.run(function($ionicPlatform, $location, $db_query, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -416,16 +301,28 @@ angular.module('dbManager', ['ionic.utils'])
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
+	
+	// Watch out, Jedi! localStorage can only save strings,
+	// therefore we need the === operator!
+    if ($db_query.getFirstRun() === "true") {
+      $location.path('/intro');
+    } else {
+		$location.path('/tab/main');
+    };
+	$rootScope.$apply();
   });
   
-  if ($db_query.getFirstRun) {
-    $location.path('/intro');
-  }
-})
 
-/*
-*  Angular Module for saving and retrieving Data into localStorage
-*/
+});
+
+var NofappHelpers = {
+	isEmpty: function(obj) {
+	  return Object.keys(obj).length === 0;
+	}
+};
+
+
+// Angular Module for saving and retrieving Data into localStorage
 
 angular.module('ionic.utils', [])
 
@@ -446,26 +343,122 @@ angular.module('ionic.utils', [])
   }
 }]);
 
+// Angular Module for entering data into the database
+// The most awesome DB Manager!
 
-function isEmpty(obj) {
-  return Object.keys(obj).length === 0;
-};
+angular.module('nofapp.utils', ['ionic.utils'])
 
-/*
-*   Initial Dataset for localStorage Database.
-*/
-
-function getInitialDataset() {
-	return {
-				mood: {
-					ts: [],
-					val: []
-				},
-				energy: {
-					ts: [],
-					val: []
-				},
-				had_sex: [],
-				relapse: []
-			};
-};
+.service('$db_query', function($localstorage, $rootScope) {
+	// Initial Dataset for localStorage Database.
+	this.getInitialDataset = function() {
+		return {
+					mood: {
+						ts: [],
+						val: []
+					},
+					energy: {
+						ts: [],
+						val: []
+					},
+					had_sex: [],
+					relapse: []
+				};
+	};
+	
+  // Read Database
+  this.getEventsDb = function() {
+  	console.log("Reading Database...");
+	var structDb = $localstorage.getObject('struct');
+	// Check for empty DB. Actually, this shouldn't happen
+	// as the user should have entered some data already at this point
+    if (NofappHelpers.isEmpty(structDb)) {
+      console.log("structDb is empty. Initializing. This shouldn't have happened.")
+      structDb = this.getInitialDataset();
+      console.log("Wrote initial Dataset.");
+    }
+	return structDb;
+  };
+// Function to write mood and energy to the database.
+  // Mood and energy should be int
+  this.addEventsToDb = function(mood, energy) {
+    var timestamp = Math.floor(Date.now() / 1000);
+    console.log("Reading Database...");
+    var structDb = $localstorage.getObject('struct');
+    // Check if Database is empty and initialize
+    if (NofappHelpers.isEmpty(structDb)) {
+      console.log("structDb is empty. Initializing.")
+      structDb = this.getInitialDataset();
+      console.log("Wrote initial Dataset.");
+    }
+    // Write to struct
+    structDb.mood.ts.push(timestamp);
+    structDb.mood.val.push(mood);
+    structDb.energy.ts.push(timestamp);
+    structDb.energy.val.push(energy);
+    
+    // Write to DB
+    $localstorage.setObject("struct", structDb);
+    console.log("Wrote Events to DB.");
+  };
+  
+  this.addSexToDb = function(sex_time) {
+    var timestamp = Math.floor(Date.now() / 1000);
+    // Overload: Check if sex_time is set, otherwise use now as time
+    var sex_time = (typeof sex_time === "undefined") ? timestamp : sex_time;
+    
+    console.log("Reading Database...");
+    var structDb = $localstorage.getObject('struct');
+    // Check if Database is empty and initialize
+    if (NofappHelpers.isEmpty(structDb)) {
+      console.log("structDb is empty. Initializing.");
+      structDb = this.getInitialDataset();
+    }
+    // Write to struct
+    structDb.had_sex.push(sex_time);
+    
+    // Write to DB
+    $localstorage.setObject("struct", structDb);
+    console.log("Wrote Sex to DB.");
+  };
+  
+  this.addRelapseToDb = function(relapse_time) {
+    var timestamp = Math.floor(Date.now() / 1000);
+    // Overload: Relapse Time is undefined, therefore use now as time
+    var relapse_time = (typeof relapse_time === "undefined") ? timestamp : relapse_time;
+    
+    // Write to DB
+    console.log("Reading Database...");
+    var structDb = $localstorage.getObject('struct');
+    
+    if (NofappHelpers.isEmpty(structDb)) {
+      console.log("structDb is empty. Initializing.");
+      structDb = this.getInitialDataset();
+    }
+    // Write to Struct
+    structDb.relapse.push(timestamp);
+    
+    // Write to DB
+    $localstorage.setObject("struct", structDb);
+    console.log("Wrote Relapse to DB. Duh");
+  };
+  
+  this.resetDb = function() {
+    var structDb = this.getInitialDataset();
+    $localstorage.setObject("struct", structDb);
+    console.log("Database reset.");
+  };
+  
+  this.getFirstRun = function () {
+    //var firstRun = NofappHelpers.isEmpty($localstorage.get('firstRun')) ? true : $localstorage.get('firstRun');
+    //console.log("firstRun checked, result = " + firstRun);
+	var firstRun = $localstorage.get("firstRun", "true");
+    return firstRun;
+  };
+  
+  this.setFirstRun = function(val) {
+    // val = boolean, well not really, actually it's a string which is
+	// either true or false, DUH
+    $localstorage.set("firstRun", val);
+    console.log("firstRun set to " + $localstorage.get("firstRun"));
+  };
+});

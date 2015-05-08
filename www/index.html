@@ -71,6 +71,7 @@
 		    <div class="col">.col</div>
 		  </div>
 	  <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
+	  <p>{{isThisFirstRun}}</p>
     </ion-content>
   </ion-view>
 </script>
@@ -109,10 +110,11 @@
 	  <div class="list">
 
       <div class="item item-divider">
-          Notifications
+          General
         </div>
 	      
-		<ion-toggle toggle-class="toggle-royal">Enable Notifications</ion-toggle>
+		<ion-toggle toggle-class="toggle-royal">Notifications</ion-toggle>
+		<ion-toggle toggle-class="toggle-royal">NofAPP Cloud</ion-toggle>
 
       <div class="item item-divider">
           Reset
@@ -159,6 +161,9 @@
 		  <p class="text-center">
 		                <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
 		              </p>
+		<p class="text-center">
+			{{isThisFirstRun}}
+		</p>
           </ion-slide>
           <ion-slide>
             <h3>Using NofAPP</h3>
