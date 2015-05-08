@@ -116,7 +116,18 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 // History Controller
 .controller('HistoryCtrl', function($scope, $state, $db_query) {
-
+  
+  $scope.isHistoryEmpty = function() {
+    return NofappHelpers.isEmpty($db_query.getStructDb());
+  };
+  
+  $scope.fetchHistory = function() {
+    console.log($db_query.getStructDb());
+    console.log($db_query.getStructDbAndMelt());
+    return $db_query.getStructDbAndMelt();
+  };
+  
+  $scope.historySorted = $db_query.getStructDbAndMelt();
 })
 
 // Settings Controller
@@ -340,6 +351,20 @@ var NofappHelpers = {
     } else {
       return words[words.length - 1].replace("%d", i);
     };
+  },
+  
+  timestampConverter: function (UNIX_timestamp) {
+    var a = new Date(UNIX_timestamp*1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    //var time = date + ',' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    var time = date + '. ' + month;
+    return time;
   }
 };
 
@@ -385,7 +410,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
   };
   
   // Read Database
-  this.getEventsDb = function() {
+  this.getStructDb = function() {
     console.log("Reading Database...");
     var structDb = $localstorage.getObject('struct');
     // Check for empty DB. Actually, this shouldn't happen
@@ -397,7 +422,37 @@ angular.module('nofapp.utils', ['ionic.utils'])
     };
     return structDb;
   };
-
+  
+  // Read Database, create array and Sort
+  this.getStructDbAndMelt = function() {
+    var structDb = this.getStructDb();
+    var structDbMelted = []
+    
+    // Get Mood and Energy
+    for (i = 0; i < structDb.mood.ts.length; i++) {
+    structDbMelted.push(["mood", structDb.mood.ts[i], structDb.mood.val[i]]);
+    structDbMelted.push(["energy", structDb.energy.ts[i], structDb.energy.val[i]]);
+    }
+    
+    // Get Sex
+    for (i = 0; i < structDb.had_sex.length; i++) {;
+    structDbMelted.push(["had_sex", structDb.had_sex[i]]);
+    }
+    
+    // Get Fap
+    for (i = 0; i < structDb.had_sex.length; i++) {;
+    structDbMelted.push(["relapsed", structDb.relapse[i]]);
+    }
+    
+    structDbMelted.sort(function(a, b) {return b[1] - a[1]})
+    
+    for (i = 0; i < structDbMelted.length; i++) {
+      structDbMelted[i][1] = NofappHelpers.timestampConverter(structDbMelted[i][1]);
+    }
+    
+    return structDbMelted;
+  };
+  
   // Function to write mood and energy to the database.
   // Mood and energy should be int
   this.addEventsToDb = function(mood, energy) {
