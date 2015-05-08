@@ -181,32 +181,24 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   // He shouldnt submit the form without editing some (all) data.
   $scope.userHasInteractedCompletely = function(whatHasHeDone) {
     // Initial Declaration
-    if (typeof clicked_mood === "undefined") {
-        clicked_mood = false,
-          clicked_energy = false,
-          clicked_sex = false,
-          clicked_fap = false;
-    }
+    if (typeof clicked_sex === "undefined") {
+      clicked_sex = false,
+      clicked_fap = false;
+    };
       
     switch (whatHasHeDone) {
-      case "clicked_mood": clicked_mood = true; break;
-      case "clicked_energy": clicked_energy = true; break;
       case "clicked_sex": clicked_sex = true; break;
       case "clicked_fap": clicked_fap = true; break;
-    }
-    
-    // Debug
-    if (clicked_mood && clicked_energy && clicked_sex && clicked_fap) {
-      console.log("First User Interaction complete.")
-    }
+    };
     
     // Return true if all fields have been clicked
-    return clicked_mood && clicked_energy && clicked_sex && clicked_fap;
+    return clicked_sex && clicked_fap;
   }
   
   $scope.setMood = function(i) {
-    $scope.userState.values.mood = i;
-  $scope.userHasInteractedCompletely("clicked_mood");
+    if (1 <= i && i <= 5) {
+      $scope.userState.values.mood = i;
+    };
   };
   
   $scope.isCurrentMood = function(i) {
@@ -216,8 +208,9 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   };
   
   $scope.setEnergy = function(i) {
-    $scope.userState.values.energy = i;
-  $scope.userHasInteractedCompletely("clicked_energy");
+    if (1 <= i && i <= 5) {
+      $scope.userState.values.energy = i;
+    };
   };
   
   $scope.isCurrentEnergy = function(i) {
@@ -234,10 +227,9 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
   // Slide Box Control
   $scope.nextSlide = function() {
       $ionicSlideBoxDelegate.next();
-  }
+  };
   
   $scope.openLastFap = function() {
-  $scope.userHasInteractedCompletely("clicked_fap");
     $ionicPopup.show({
       templateUrl: 'popups/last-fap.html',
       title: 'Be honest!',
@@ -249,6 +241,9 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
           type: 'button-balanced'
         }
       ]
+    })
+    .then(function() {
+      $scope.userHasInteractedCompletely("clicked_fap");
     });
   };
   
@@ -265,6 +260,9 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
           type: 'button-balanced'
         }
       ]
+    })
+    .then(function() {
+      $scope.userHasInteractedCompletely("clicked_sex");
     });
   };
   
