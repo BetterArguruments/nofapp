@@ -5,12 +5,8 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title></title>
 
-    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-
-    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
-    -->
+    <link href="css/style.css" rel="stylesheet">
 
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
@@ -43,15 +39,15 @@
         <ion-tab title="Stats" icon="ion-pie-graph" href="#/tab/stats">
           <ion-nav-view name="stats-tab"></ion-nav-view>
         </ion-tab>
-    
+
         <ion-tab title="Data" icon="ion-calculator" href="#/tab/enterdata">
           <ion-nav-view name="enterdata-tab"></ion-nav-view>
         </ion-tab>
-    
+
         <ion-tab title="History" icon="ion-clock" href="#/tab/history">
           <ion-nav-view name="history-tab"></ion-nav-view>
         </ion-tab>
-    
+
         <ion-tab title="Settings" icon="ion-gear-b" href="#/tab/settings">
           <ion-nav-view name="settings-tab"></ion-nav-view>
         </ion-tab>
@@ -72,11 +68,11 @@
       </ion-view>
     </script>
 
-  <script id="templates/stats.html" type="text/ng-template">
-    <ion-view hide-back-button="true" view-title="Your Stats">
+    <script id="templates/stats.html" type="text/ng-template">
+      <ion-view hide-back-button="true" view-title="Your Stats">
         <ion-content class="padding">
           <h1>STATS</h1>
-          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
         </ion-content>
       </ion-view>
     </script>
@@ -85,67 +81,56 @@
       <ion-view hide-back-button="true" view-title="Enter some Data">
         <ion-content class="padding">
           <h1>Enter moar Data</h1>
-        <button class="button button-large button-balanced" ng-click="justHadSex()">
-          I JUST HAD SEX!
-        </button>
-        <button class="button button-large button-assertive" ng-click="justRelapsed()">
-          I relapsed.
-        </button>
+          <button class="button button-large button-balanced" ng-click="justHadSex()">
+            I JUST HAD SEX!
+          </button>
+          <button class="button button-large button-assertive" ng-click="justRelapsed()">
+            I relapsed.
+          </button>
         </ion-content>
       </ion-view>
     </script>
 
-<<<<<<< HEAD
     <script id="templates/history.html" type="text/ng-template">
       <ion-view hide-back-button="true" view-title="History">
         <ion-content class="padding">
           <h1>History, Yo</h1>
-          <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+          <div class="list card">
+            <div class="list">
+              <div ng-repeat="history in historySorted">
+                <a class="item item-icon-left" href="#" ng-if="history[0] == 'mood'">
+                  <i class="icon ion-arrow-graph-up-right"></i>
+                  Mood
+                <span class="badge badge-royal">{{history[2]}}</span>
+                </a>
+
+                <a class="item item-icon-left item-icon-right" href="#" ng-if="history[0] == 'energy'">
+                  <i class="icon ion-flash"></i>
+                  Energy
+                <span class="badge badge-royal">{{history[2]}}</span>
+                </a>
+
+                <a class="item item-icon-left balanced" href="#" ng-if="history[0] == 'had_sex'">
+                  <i class="icon ion-heart"></i>
+                  Had Sex!
+                  <span class="item-note">
+                   {{history[1]}}
+                  </span>
+                </a>
+
+                <a class="item item-icon-left assertive" href="#" ng-if="history[0] == 'relapsed'">
+                  <i class="icon ion-alert-circled"></i>
+                  Relapsed
+                  <span class="item-note">
+                   {{history[1]}}
+                  </span>
+                </a>
+              </div>
+            </div>
+          </div>
         </ion-content>
       </ion-view>
     </script>
-=======
-<script id="templates/history.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="History">
-    <ion-content class="padding">
-      <h1>History, Yo</h1>
-	  <div class="list card">
-				<div class="list">
-				<div ng-repeat="history in historySorted">
-				  <a class="item item-icon-left" href="#" ng-if="history[0] == 'mood'">
-				    <i class="icon ion-arrow-graph-up-right"></i>
-				    Mood
-					<span class="badge badge-royal">{{history[2]}}</span>
-				  </a>
-
-				  <a class="item item-icon-left item-icon-right" href="#" ng-if="history[0] == 'energy'">
-				    <i class="icon ion-flash"></i>
-				    Energy
-					<span class="badge badge-royal">{{history[2]}}</span>
-				  </a>
-
-				  <a class="item item-icon-left balanced" href="#" ng-if="history[0] == 'had_sex'">
-				    <i class="icon ion-heart"></i>
-				    Had Sex!
-				    <span class="item-note">
-				     {{history[1]}}
-				    </span>
-				  </a>
-
-				  <a class="item item-icon-left assertive" href="#" ng-if="history[0] == 'relapsed'">
-				    <i class="icon ion-alert-circled"></i>
-				    Relapsed
-				    <span class="item-note">
-				     {{history[1]}}
-				    </span>
-				  </a>
-				</div>
-	    </div>
-	</div>
-    </ion-content>
-  </ion-view>
-</script>
->>>>>>> refs/remotes/origin/master
 
     <script id="templates/settings.html" type="text/ng-template">
       <ion-view hide-back-button="true" view-title="Settings">
@@ -161,7 +146,7 @@
           <div class="item item-divider">
             Reset
           </div>
-    
+
           <a class="item item-icon-left" href="#" ng-click="showConfirmResetApp()">
             <i class="icon ion-trash-a"></i>
             Reset App (Delete Everything)
@@ -186,7 +171,7 @@
     </script>
 
 
-    <script id="templates/intro.html" type="text/ng-template"> 
+    <script id="templates/intro.html" type="text/ng-template">
       <ion-view view-title="NofAPP">
         <ion-slide-box on-slide-changed="slideChanged(index)">
           <ion-slide>
@@ -198,7 +183,7 @@
             <button class="button button-royal" ng-click="nextSlide()">
               Swipe right to begin
             </button>
-      
+
             <p class="text-center">
               <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
             </p>
@@ -206,7 +191,7 @@
               {{isThisFirstRun}}
             </p>
           </ion-slide>
-          
+
           <ion-slide>
             <h3>Using NofAPP</h3>
             <div class="list card">
@@ -229,7 +214,7 @@
                 <i class="icon ion-earth"></i>
                 Contribute to the Nofap Community
               </a>-->
-          
+
               <div class="item item-divider"></div>
               <a class="item item-icon-left royal" href="#">
                 <!--<i class="icon ion-help"></i>-->
@@ -237,7 +222,7 @@
               </a>
             </div>
           </ion-slide>
-          
+
           <ion-slide class="padding">
             <h4>Track your mood and sex drive as often as you like</h4>
             <br>
@@ -275,7 +260,7 @@
         </ion-slide-box>
       </ion-view>
     </script>
-    
+
     <script id="popups/last-sex.html" type="text/ng-template">
       <div class="button-bar">
         <button class="button flex-none" ng-click="userState.decSexDaysAgo()" ng-disabled="userState.isMinSexDays()">-</button>
@@ -285,7 +270,7 @@
         <button class="button flex-none" ng-click="userState.incSexDaysAgo()" ng-disabled="userState.isMaxSexDays()">+</button>
       </div>
     </script>
-    
+
     <script id="popups/last-fap.html" type="text/ng-template">
       <div class="button-bar">
         <button class="button flex-none" ng-click="userState.decFapDaysAgo()" ng-disabled="userState.isMinFapDays()">-</button>
