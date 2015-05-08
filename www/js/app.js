@@ -106,6 +106,20 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 	       }
 	    });
 	}
+	
+	$scope.justRelapsed = function() {
+	    var confirmPopup = $ionicPopup.confirm({
+	      title: 'Relapsed?',
+	      template: 'Please confirm!',
+	    okType: 'button-assertive'
+	    });
+	    confirmPopup.then(function(res) {
+	       if(res) {
+			   $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
+			   console.log("Relapse added to DB. Oh noes!");
+	       }
+	    });
+	}
 })
 
 // History Controller
