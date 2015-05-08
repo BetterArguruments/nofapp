@@ -1,7 +1,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
+angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','chart.js'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -81,6 +81,15 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 })
 
 // Stats Controller
+.controller('StatsCtrl', function($scope, $state, $db_query) {
+    $scope.createSampleData = function () {
+        $db_query.createSampleDataset();
+        console.log("Sample Data Created:");
+        console.log($db_query.getStructDb());
+    };
+})
+
+// Stats "Sub"-Controller für Line Plot
 .controller('StatsCtrl', function($scope, $state, $db_query) {
     $scope.createSampleData = function () {
         $db_query.createSampleDataset();
