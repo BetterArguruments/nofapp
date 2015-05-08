@@ -48,13 +48,9 @@
         <ion-tab title="Data" icon="ion-calculator" href="#/tab/enterdata">
           <ion-nav-view name="enterdata-tab"></ion-nav-view>
         </ion-tab>
-
-        <ion-tab title="Sex" icon="ion-heart" href="#/tab/sex">
-          <ion-nav-view name="sex-tab"></ion-nav-view>
-        </ion-tab>
 		
-        <ion-tab title="Relapse" icon="ion-flash" href="#/tab/relapse">
-          <ion-nav-view name="relapse-tab"></ion-nav-view>
+        <ion-tab title="History" icon="ion-clock" href="#/tab/history">
+          <ion-nav-view name="history-tab"></ion-nav-view>
         </ion-tab>
 		
         <ion-tab title="Settings" icon="ion-gear-b" href="#/tab/settings">
@@ -65,7 +61,7 @@
     </script>
 
 <script id="templates/main.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="NofAPP">
+  <ion-view hide-back-button="true" view-title="Overview">
     <ion-content class="padding">
 	<center><h3>3</h3><br>Days</center>
       
@@ -81,7 +77,7 @@
 </script>
 
 <script id="templates/stats.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Stats">
+  <ion-view hide-back-button="true" view-title="Your Stats">
     <ion-content class="padding">
       <h1>STATS</h1>
       <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
@@ -90,27 +86,23 @@
 </script>
 
 <script id="templates/enterdata.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Sex">
+  <ion-view hide-back-button="true" view-title="Enter some Data">
     <ion-content class="padding">
       <h1>Enter moar Data</h1>
-      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
+	  <button class="button button-large button-balanced" ng-click="justHadSex()">
+		  I JUST HAD SEX!
+	  </button>
+	  <button class="button button-large button-assertive">
+		  I relapsed.
+	  </button>
     </ion-content>
   </ion-view>
 </script>
 
-<script id="templates/sex.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Sex">
+<script id="templates/history.html" type="text/ng-template">
+  <ion-view hide-back-button="true" view-title="History">
     <ion-content class="padding">
-      <h1>SEX</h1>
-      <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
-    </ion-content>
-  </ion-view>
-</script>
-
-<script id="templates/relapse.html" type="text/ng-template">
-  <ion-view hide-back-button="true" view-title="Relapse?!">
-    <ion-content class="padding">
-      <h1>Relapse</h1>
+      <h1>History, Yo</h1>
       <a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</button>
     </ion-content>
   </ion-view>
@@ -127,7 +119,9 @@
         </div>
 	      
 		<ion-toggle toggle-class="toggle-royal">Notifications</ion-toggle>
-		<ion-toggle toggle-class="toggle-royal">NofAPP Cloud</ion-toggle>
+		<!-- NofAPP Cloud may come later
+			<ion-toggle toggle-class="toggle-royal">NofAPP Cloud</ion-toggle>
+			-->
 
       <div class="item item-divider">
           Reset
