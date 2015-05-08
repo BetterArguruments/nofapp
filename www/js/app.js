@@ -43,21 +43,12 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
             }
       }
   })
-  .state('tabs.sex', {
-    url: '/sex',
+  .state('tabs.history', {
+    url: '/history',
   views: {
-            'sex-tab': {
-              templateUrl: 'templates/sex.html',
-              controller: 'SexCtrl'
-            }
-      }
-  })
-  .state('tabs.relapse', {
-    url: '/relapse',
-  views: {
-            'relapse-tab': {
-              templateUrl: 'templates/relapse.html',
-              controller: 'RelapseCtrl'
+            'history-tab': {
+              templateUrl: 'templates/history.html',
+              controller: 'HistoryCtrl'
             }
       }
   })
@@ -100,18 +91,26 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils'])
 
 })
 
-// Sex Controller
-.controller('EnterDataCtrl', function($scope, $state, $db_query) {
-
+// Enter Data Controller
+.controller('EnterDataCtrl', function($scope, $state, $db_query, $ionicPopup) {
+	$scope.justHadSex = function() {
+	    var confirmPopup = $ionicPopup.confirm({
+	      title: 'Are You Serious?',
+	      template: 'Please confirm!',
+	    okType: 'button-balanced'
+	    });
+	    confirmPopup.then(function(res) {
+	       if(res) {
+			   $db_query.addSexToDb(Math.floor(Date.now() / 1000));
+			   console.log("Sex added to Db.");
+	       }
+	    });
+	}
 })
 
-// Sex Controller
-.controller('SexCtrl', function($scope, $state, $db_query) {
+// History Controller
+.controller('HistoryCtrl', function($scope, $state, $db_query) {
 
-})
-
-// Relapse Controller
-.controller('RelapseCtrl', function($scope, $state, $db_query) {
 
 })
 
