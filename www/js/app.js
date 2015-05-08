@@ -469,3 +469,12 @@ function getInitialDataset() {
 				relapse: []
 			};
 };
+
+var verbalizeNumber = function(i, words) {
+  console.log(words);
+  if (i < words.length - 1) {
+    return words[i];
+  } else {
+    return words[words.length - 1].replace("%d", i);
+  }
+}

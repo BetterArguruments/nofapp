@@ -35,8 +35,11 @@ text-align: left;
   color: #886aea;
 }
 
-.in-days-ago {
-  min-width: 120px;
+.button-bar > .flex-contain {
+  flex: none;
+  width: auto;
+  white-space: nowrap;
+  
 }
 
 .no-left-padding {

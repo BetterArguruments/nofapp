@@ -246,7 +246,7 @@
     <script id="popups/last-sex.html" type="text/ng-template">
       <div class="button-bar">
         <button class="button" ng-click="userState.decSexDaysAgo()" ng-disabled="userState.isMinSexDays()">-</button>
-        <div class="button in-days-ago">
+        <div class="button flex-contain">
           <span>{{userState.values.sexDaysAgo}}</span>
           <span>&nbsp;days ago</span>
         </div>
@@ -257,7 +257,7 @@
     <script id="popups/last-fap.html" type="text/ng-template">
       <div class="button-bar">
         <button class="button" ng-click="userState.decFapDaysAgo()" ng-disabled="userState.isMinFapDays()">-</button>
-        <div class="button in-days-ago">
+        <div class="button flex-contain">
           <span>{{userState.values.fapDaysAgo}}</span>
           <span>&nbsp;days ago</span>
         </div>
