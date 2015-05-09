@@ -26,4 +26,10 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','ngAnimate','angu
     };
     $rootScope.$apply();
   });
+})
+
+// Setting for Angular Moment.js to treat
+// Timestamps as Unix Timestamps
+.constant('angularMomentConfig', {
+    preprocess: 'unix', // optional
 });
