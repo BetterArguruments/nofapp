@@ -14,6 +14,18 @@
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 	
+	<!-- Angular Dependencies for MomentJS -->
+	<script src="lib/angular-animate/angular-animate.min.js"></script>
+	<script src="lib/angular-sanitize/angular-sanitize.min.js"></script>
+	<script src="lib/angular-ui-router/release/angular-ui-router.min.js"></script>
+	
+	<!-- MomentJS -->
+	<!--<script src="lib/moment/locale/en-gb.js"></script>-->
+	<script src="lib/moment/moment.js"></script>
+	
+	<!-- Angular MomentJS -->
+	<script src="lib/angular-moment/angular-moment.min.js"></script>
+	
     <!-- your app's js -->
     <script src="js/app.js"></script>
   </head>
@@ -139,6 +151,8 @@
     <script id="templates/history.html" type="text/ng-template">
       <ion-view hide-back-button="true" view-title="Your History">
         <ion-content class="padding">
+		
+		<span am-time-ago="message.time" am-preprocess="unix"></span>
 		
 		<div class="list">
 			<div class="item item-divider">
