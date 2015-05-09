@@ -6,7 +6,7 @@ angular.module('nofApp')
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
-    $db_query.setFirstRun(false);
+    $db_query.setFirstRun('false');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('tabs.main');
   }

@@ -11,6 +11,11 @@ angular.module('nofApp')
     $state.go('intro');
   };
   
+  // Dirty Fix: If this is first run, then go back to Intro
+  if ($scope.isThisFirstRun) {
+    $scope.firstRunReset();
+  }
+  
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
     updateLastFap();
