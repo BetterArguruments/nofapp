@@ -135,33 +135,35 @@
       <ion-view hide-back-button="true" view-title="Your History">
         <ion-content class="padding">
 		
-		<span am-time-ago="message.time" am-preprocess="unix"></span>
 		
+		<span am-time-ago="message.time"></span>
+		mood / energy / libido
 		<div class="list">
-			<div class="item item-divider">
-			    Candy Bars
-			</div>
-			<div class="item item-icon-left row">
-					<div class="col col-20"><i class="icon ion-arrow-graph-up-right"></i></div>
-					<div class="col col-30">Date</div>
-					<div class="col" style="text-align:center;">2</div>
-					<div class="col" style="text-align:center;">3</div>
-					<div class="col" style="text-align:center;">4</div>
-			</div>
-			<div class="item">
-				<div class="row">
-					<div class="col col-50">Date</div>
-					<div class="col" style="text-align:center;">mood</div>
-					<div class="col" style="text-align:center;">energy</div>
-					<div class="col" style="text-align:center;">libido</div>
+			<div ng-repeat="ah in awesomeHistory">
+				<div class="item item-divider" ng-if="ah[0] == 'separator'">
+				    <span am-time-ago="ah[1]" ng-if="ah[2] == 'ago'"></span>
+					<span ng-if="ah[2] == 'date'">{{ah[1] | amCalendar}}</span>
 				</div>
-			</div>
-			<div class="item">
-				<div class="row">
-					<div class="col col-50">Date</div>
-					<div class="col" style="text-align:center;">mood</div>
-					<div class="col" style="text-align:center;">energy</div>
-					<div class="col" style="text-align:center;">libido</div>
+				<div class="item item-icon-left row" ng-if="ah[0] == 'concatData'">
+						<div class="col col-20"><i class="icon ion-arrow-graph-up-right"></i></div>
+						<div class="col col-20"></div>
+						<div class="col" style="text-align:center;">{{ah[2][0]}}</div>
+						<div class="col" style="text-align:center;">{{ah[2][1]}}</div>
+						<div class="col" style="text-align:center;">{{ah[2][2]}}</div>
+				</div>
+				<div class="item item-icon-left row" ng-if="ah[0] == 'sex'">
+					<div class="row">
+						<div class="col col-20"><i class="icon ion-heart"></i></div>
+						<div class="col col-30"></div>
+						<div class="col" style="text-align:center; background: green;">Sex!</div>
+					</div>
+				</div>
+				<div class="item item-icon-left row" ng-if="ah[0] == 'fap'">
+					<div class="row">
+						<div class="col col-20"><i class="icon ion-alert-circled"></i></div>
+						<div class="col col-30"></div>
+						<div class="col" style="text-align:center;">Relapsed!</div>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -91,7 +91,7 @@ angular.module('nofApp')
     }).then(function(res) {
       if(res) {
         // $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
-        $db_query.addToDb("relapse");
+        $db_query.addToDb("fap");
         console.log("Relapse added to DB. Oh noes!");
       }
     });

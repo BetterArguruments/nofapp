@@ -24,7 +24,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
               sampleData.push(["sex", startTimestamp + (meanIncrement * i) - incrementVariance]);
           }
           else if (sampleEventType > 6 ) {
-              sampleData.push(["relapse", startTimestamp + (meanIncrement * i) - incrementVariance]);
+              sampleData.push(["fap", startTimestamp + (meanIncrement * i) - incrementVariance]);
           }
           else {
               sampleData.push(["mood", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
@@ -50,47 +50,64 @@ angular.module('nofapp.utils', ['ionic.utils'])
     return structDb;
   };
   
-  // Read Database, create array and Sort
-  // DEPRECATED --> this.addToDb
-  this.getStructDbAndMelt = function() {
-    var structDb = this.getStructDb();
-    var structDbMelted = []
-    
-    // Get Mood and Energy
-    for (i = 0; i < structDb.values.ts.length; i++) {
-    structDbMelted.push(["mood", structDb.mood.ts[i], structDb.mood.val[i]]);
-    structDbMelted.push(["energy", structDb.energy.ts[i], structDb.energy.val[i]]);
-    }
-    
-    // Get Sex
-    for (i = 0; i < structDb.had_sex.length; i++) {;
-    structDbMelted.push(["had_sex", structDb.had_sex[i]]);
-    }
-    
-    // Get Fap
-    for (i = 0; i < structDb.had_sex.length; i++) {;
-    structDbMelted.push(["relapsed", structDb.relapse[i]]);
-    }
-    
-    structDbMelted.sort(function(a, b) {return b[1] - a[1]})
-    
-    // Convert Timestamps (rudimentary)
-    /*
-    for (i = 0; i < structDbMelted.length; i++) {
-      structDbMelted[i][1] = NofappHelpers.timestampConverter(structDbMelted[i][1]);
-    }
-    */
-    
-    return structDbMelted;
-  };
-  
   // Awesome History Parser
-  // TODO
   this.getHistoryAwesome = function () {
-      // [type, timestamp, value(optional), displaytext]
-      var awesomeHistory = [];
-      var structDbMelted = this.getStructDbMelted();
+      /* Concept of awesomeHistory:
+      *  Different Time Deltas for Different Past Times!
+      *  Time   | Delta
+      *  < 10min  1min
+      *  < 1h     10min
+      *  < 12h    1h
+      *  < 7d     1d
+      *  >= 7d    Date
+      *
+      * Seperators are entered as type = "separator", timestamp
+      * and value = "ago" or "date" (for Moment.js)
+      */
       
+      // Get DB
+      var structDb = this.getStructDb();
+      
+      // Preparation
+      var awesomeHistory = []; // [type, timestamp, value] OR ["concatData", timestamp, values[0-2]]
+      var minute = 60; // One Minute is 60s, duh!
+      var separatorsDelta = [60, 600, 3600, 86400, 86400];
+      var triggerSeparators = [600, 3600, 43200, 518400];
+      var separatorPosition = 0; // 0 - 4
+      var dateDisplayMode = ["ago", "ago", "ago", "ago", "date"];
+      var timestampNow = Math.floor(Date.now() / 1000);
+      var lastTimestamp = timestampNow;
+      var lastSeparated = timestampNow + 100;
+      
+      // Go through array, iterate backwards (newest first)
+      for (var i = (structDb.length - 1); i >= 0; i--) {
+        
+        // Trigger Separator?
+        if ((lastSeparated - structDb[i][1]) > separatorsDelta[separatorPosition]) {
+          awesomeHistory.push(["separator", structDb[i][1], dateDisplayMode[separatorPosition]]);
+          lastSeparated = structDb[i][1];
+        }
+        
+        // Update Separator?
+        if ((separatorPosition < triggerSeparators.length) && (timestampNow - structDb[i][1]) > triggerSeparators[separatorPosition]) {
+          separatorPosition++;
+        }
+        
+        // Write History (Haha..)
+        if (structDb[i][0] === "libido") {
+          awesomeHistory.push(["concatData", structDb[i][1], [structDb[i-2][2], structDb[i-1][2], structDb[i][2]]]); // mood, energy, libido
+        }
+        else if (structDb[i][0] === "sex" || structDb[i][0] === "fap") {
+          awesomeHistory.push([ structDb[i][0], structDb[i][1] ])
+        }
+        // else (structDb[i][0] === "mood" || structDb[i][0] === "energy")
+        
+        // Update lastTimestamp 
+        //lastTimestamp = structDb[i][1];
+        
+      }
+    
+      return awesomeHistory;
   };
   
   // The all-in-one Database Add Method
