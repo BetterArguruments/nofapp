@@ -71,11 +71,14 @@
           <div id="progress" class="round-button center">
             <span class="round-dummy"></span>
             <div class="vertical-middle">
-              <span class="heading">
-                {{count.main.value}} {{count.main.unit}}
+              <span class="first-value">
+                {{progress.getString(0)}}
               </span>
-              <span class="subtitle" ng-class="count.side.isHidden()">
-                {{count.side.value}} {{count.side.unit}}
+              <span class="second-value" ng-if="progress.isDefined(1)">
+                {{progress.getString(1)}}
+              </span>
+              <span class="third-value" ng-if="progress.isDefined(2)">
+                {{progress.getString(2)}}
               </span>
             </div>
           </div>
