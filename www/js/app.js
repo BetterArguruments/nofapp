@@ -84,15 +84,13 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
 .controller('StatsCtrl', function($scope, $state, $db_query) {
     // Sample Data Creator via Click
     $scope.createSampleData = function () {
-        $db_query.createSampleDataset();
-        console.log("Sample Data Created:");
-        console.log($db_query.getStructDb());
+        $db_query.createSampleDataset(150,60);
     };
     
-    $scope.barData = {
-        labels: ['Ad', 'B', 'C', 'Dd'],
-        series: [[1, 2, 3, 4]]
-    };
+    var structDb = $db_query.getStructDb();
+    
+
+    
     
 })
 
@@ -105,6 +103,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
   $scope.userState = {
     mood: 3,
     energy: 3,
+    libido: 3,
     note: "",
     reset: function() {
       this.mood = 3;
@@ -137,11 +136,31 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
     };
   };
   
+  $scope.setLibido = function(i) {
+    if (1 <= i && i <= 5) {
+      $scope.userState.libido = i;
+    };
+  };
+  
+  $scope.isCurrentLibido= function(i) {
+    if ($scope.userState.libido === i) {
+      return 'active';
+    };
+  };
+  
   
   // Submit the mood/energy form and write new entries
   $scope.addDataset = function() {
     console.log($scope.userState);
-    $db_query.addEventsToDb($scope.userState.mood, $scope.userState.energy);
+    // $db_query.addEventsToDb($scope.userState.mood, $scope.userState.energy); DEPRECATED
+    $db_query.addUsualDataToDb($scope.userState.mood, $scope.userState.energy, $scope.userState.libido);
+    
+    // Check for Note and enter it into DB
+    if ($scope.userState.note != "") {
+        $db_query.addToDb("note", $scope.userState.note);
+        console.log("Note added to DB.");
+    }
+    
     $scope.userState.reset();
   };
   
@@ -152,8 +171,9 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
     okType: 'button-balanced'
     }).then(function(res) {
       if(res) {
-        $db_query.addSexToDb(Math.floor(Date.now() / 1000));
-        console.log("Sex added to Db.");
+        // $db_query.addSexToDb(Math.floor(Date.now() / 1000)); DEPRECATED
+        $db_query.addToDb("sex");
+        console.log("Sex added to DB. Nice!");
       }
     });
   }
@@ -165,7 +185,8 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
       okType: 'button-assertive'
     }).then(function(res) {
       if(res) {
-        $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
+        // $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
+        $db_query.addToDb("relapse");
         console.log("Relapse added to DB. Oh noes!");
       }
     });
@@ -175,7 +196,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
 // History Controller
 .controller('HistoryCtrl', function($scope, $state, $db_query) {
   
-  $scope.isHistoryEmpty = function() {
+  /*$scope.isHistoryEmpty = function() {
     return NofappHelpers.isEmpty($db_query.getStructDb());
   };
   
@@ -185,7 +206,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
     return $db_query.getStructDbAndMelt();
   };
   
-  $scope.historySorted = $db_query.getStructDbAndMelt();
+  $scope.historySorted = $db_query.getStructDbAndMelt();*/
 })
 
 // Settings Controller
@@ -230,6 +251,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
     values: {
       mood: 3,
       energy: 3,
+      libido: 3,
       fapDaysAgo: 0,
       sexDaysAgo: -1
     },
@@ -243,7 +265,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
     isMaxSexDays: function() {return this.values.sexDaysAgo >= 30},
     pastDaysInWords: function(day) {
       var words = NofappHelpers
-      .verbalizeNumber(day, ['decades ago', 'today', 'yesterday', '%d days ago'], true);
+      .verbalizeNumber(day, ['decades ago', 'just now', 'yesterday', '%d days ago'], true);
       return words;
     }
   };
@@ -286,6 +308,18 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
   
   $scope.isCurrentEnergy = function(i) {
     if ($scope.userState.values.energy === i) {
+      return 'active';
+    };
+  };
+  
+  $scope.setLibido = function(i) {
+    if (1 <= i && i <= 5) {
+      $scope.userState.values.libido = i;
+    };
+  };
+  
+  $scope.isCurrentLibido = function(i) {
+    if ($scope.userState.values.libido === i) {
       return 'active';
     };
   };
@@ -355,11 +389,11 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','angular-chartist
       
       
       // Write Mood and Energy to DB, Timestamp is added automatically (now)
-      $db_query.addEventsToDb($scope.userState.values.mood, $scope.userState.values.energy);
+      $db_query.addUsualDataToDb($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido);
       
       // Write Sex and Fap to DB
-      $db_query.addSexToDb(timestamp_lastSex);
-      $db_query.addRelapseToDb(timestamp_lastFap);
+      $db_query.addToDb("sex", undefined, timestamp_lastSex);
+      $db_query.addToDb("fap", undefined, timestamp_lastFap);
       
       // Alert User
       // TODO: make toast
@@ -452,38 +486,40 @@ angular.module('ionic.utils', [])
 // The most awesome DB Manager!
 angular.module('nofapp.utils', ['ionic.utils'])
 
+
+
 .service('$db_query', function($localstorage) {
   // Initial Dataset for localStorage Database.
   this.getInitialDataset = function() {
-    return {
-      mood: {
-        ts: [],
-        val: []
-      },
-      energy: {
-        ts: [],
-        val: []
-      },
-      had_sex: [],
-      relapse: []
-    };
+      return [];
   };
   
   // Create Sample Data for Debugging
-  this.createSampleDataset = function() {
-      sampleData = {
-          mood: {
-            ts: [1430751262,1430837662,1430895262,1430906062,1430988862,1431075262,1431093262,1431107662],
-            val: [1,2,2,5,3,3,1,4]
-          },
-          energy: {
-            ts: [1430751262,1430837662,1430895262,1430906062,1430988862,1431075262,1431093262,1431107662],
-            val: [1,1,4,4,3,2,1,5]
-          },
-          had_sex: [1430772862],
-          relapse: [1430664862,1430988862]
-        };
-     $localstorage.setObject("struct", sampleData);
+  this.createSampleDataset = function(numberSamples, numberDays) {
+      var sampleData = [];
+      var eventTypes = ["mood", "energy", "libido", "sex", "fap"];
+      var deltaTimestamp = 86400 * Math.floor(Math.random() * numberDays);
+      var startTimestamp = Math.floor(Date.now() / 1000) - deltaTimestamp;
+      var meanIncrement = Math.round(deltaTimestamp / numberSamples);
+      
+      for (var i = 0; i < numberSamples; i++) {
+          var incrementVariance = Math.floor(Math.random() * 7201) - 3600;
+          // Event Type
+          var sampleEventType = Math.floor(Math.random() * 10);
+          if (sampleEventType === 9) {
+              sampleData.push(["sex", startTimestamp + (meanIncrement * i) - incrementVariance]);
+          }
+          else if (sampleEventType > 6 ) {
+              sampleData.push(["relapse", startTimestamp + (meanIncrement * i) - incrementVariance]);
+          }
+          else {
+              sampleData.push(["mood", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
+              sampleData.push(["energy", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
+              sampleData.push(["libido", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
+          }
+      }
+      console.log(sampleData);
+      $localstorage.setObject("struct", sampleData);
   }
   
   // Read Database
@@ -501,12 +537,13 @@ angular.module('nofapp.utils', ['ionic.utils'])
   };
   
   // Read Database, create array and Sort
+  // DEPRECATED --> this.addToDb
   this.getStructDbAndMelt = function() {
     var structDb = this.getStructDb();
     var structDbMelted = []
     
     // Get Mood and Energy
-    for (i = 0; i < structDb.mood.ts.length; i++) {
+    for (i = 0; i < structDb.values.ts.length; i++) {
     structDbMelted.push(["mood", structDb.mood.ts[i], structDb.mood.val[i]]);
     structDbMelted.push(["energy", structDb.energy.ts[i], structDb.energy.val[i]]);
     }
@@ -523,81 +560,62 @@ angular.module('nofapp.utils', ['ionic.utils'])
     
     structDbMelted.sort(function(a, b) {return b[1] - a[1]})
     
+    // Convert Timestamps (rudimentary)
+    /*
     for (i = 0; i < structDbMelted.length; i++) {
       structDbMelted[i][1] = NofappHelpers.timestampConverter(structDbMelted[i][1]);
     }
+    */
     
     return structDbMelted;
   };
   
-  // Function to write mood and energy to the database.
-  // Mood and energy should be int
-  this.addEventsToDb = function(mood, energy) {
-    var timestamp = Math.floor(Date.now() / 1000);
-    console.log("Reading Database...");
-    var structDb = $localstorage.getObject('struct');
-    // Check if Database is empty and initialize
-    if (NofappHelpers.isEmpty(structDb)) {
-      console.log("structDb is empty. Initializing.")
-      structDb = this.getInitialDataset();
-      console.log("Wrote initial Dataset.");
-    };
-    // Write to struct
-    structDb.mood.ts.push(timestamp);
-    structDb.mood.val.push(mood);
-    structDb.energy.ts.push(timestamp);
-    structDb.energy.val.push(energy);
-    
-    // Write to DB
-    $localstorage.setObject("struct", structDb);
-    console.log("Wrote Events to DB.");
+  // Awesome History Parser
+  // TODO
+  this.getHistoryAwesome = function () {
+      // [type, timestamp, value(optional), displaytext]
+      var awesomeHistory = [];
+      var structDbMelted = this.getStructDbMelted();
+      
   };
   
-  this.addSexToDb = function(sex_time) {
-    var timestamp = Math.floor(Date.now() / 1000);
-    // Overload: Check if sex_time is set, otherwise use now as time
-    var sex_time = (typeof sex_time === "undefined") ? timestamp : sex_time;
-    
-    console.log("Reading Database...");
-    var structDb = $localstorage.getObject('struct');
-    // Check if Database is empty and initialize
-    if (NofappHelpers.isEmpty(structDb)) {
-      console.log("structDb is empty. Initializing.");
-      structDb = this.getInitialDataset();
-    };
-    // Write to struct
-    structDb.had_sex.push(sex_time);
-    
-    // Write to DB
-    $localstorage.setObject("struct", structDb);
-    console.log("Wrote Sex to DB.");
-  };
+  // The all-in-one Database Add Method
+  this.addToDb = function(type, value, time) {
+      // Check if time is set, otherwise use now (Overload)
+      var timestamp = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+      
+      // Read Database
+      console.log("Reading Struct from DB...");
+      var structDb = $localstorage.getObject('struct');
+      
+      // Check if DB is empty and initialize
+      if (NofappHelpers.isEmpty(structDb)) {
+        console.log("structDb is empty. Initializing.")
+        structDb = this.getInitialDataset();
+        console.log("Wrote initial Dataset.");
+      };
+      
+      // Write to Array
+      structDb.push([type, timestamp, value]);
+      
+      // Write to localStorage
+      $localstorage.setObject("struct", structDb);
+      console.log("Wrote Struct to DB.");
+  }
   
-  this.addRelapseToDb = function(relapse_time) {
-    var timestamp = Math.floor(Date.now() / 1000);
-    // Overload: Relapse Time is undefined, therefore use now as time
-    var relapse_time = (typeof relapse_time === "undefined") ? timestamp : relapse_time;
-    
-    // Write to DB
-    console.log("Reading Database...");
-    var structDb = $localstorage.getObject('struct');
-    
-    if (NofappHelpers.isEmpty(structDb)) {
-      console.log("structDb is empty. Initializing.");
-      structDb = this.getInitialDataset();
-    };
-    // Write to Struct
-    structDb.relapse.push(timestamp);
-    
-    // Write to DB
-    $localstorage.setObject("struct", structDb);
-    console.log("Wrote Relapse to DB. Duh");
-  };
+  this.addUsualDataToDb = function(mood, energy, libido, time) {
+      // Check if time is set, otherwise use now (Overload)
+      var timestamp = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+      
+      this.addToDb("mood", mood, timestamp);
+      this.addToDb("energy", energy, timestamp);
+      this.addToDb("libido", libido, timestamp);
+  }
   
   this.resetDb = function() {
     var structDb = this.getInitialDataset();
     $localstorage.setObject("struct", structDb);
-    console.log("Database reset.");
+    console.log("Database Reset.");
   };
   
   this.getFirstRun = function () {
