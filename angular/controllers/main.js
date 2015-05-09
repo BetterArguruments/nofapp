@@ -13,28 +13,32 @@ angular.module('nofApp')
   
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
-      $scope.lastFap = $db_query.getLastFap();
+    updateLastFap();
   });
   
-  $scope.lastFap = $db_query.getLastFap();
-  var timestampNow = Math.floor(Date.now() / 1000);
-  var timeDiff = timestampNow - $scope.lastFap;
-  var days = timeDiff % (60*60*24*7);
-  var weeks = (timeDiff - days) / (60*60*24*7);
+  var updateLastFap = function () {
+    $scope.lastFap = $db_query.getLastFap();
+    var timestampNow = Math.floor(Date.now() / 1000);
+    var timeDiff = timestampNow - $scope.lastFap;
+    var days = timeDiff % (60*60*24*7);
+    var weeks = (timeDiff - days) / (60*60*24*7);
   
-  $scope.count = {
-    main: {
-      value: weeks,
-      unit: 'weeks'
-    },
-    side: {
-      value: Math.floor(days / 86400),
-      unit: 'days',
-      /*isHidden: function() {
-        if (this.value === 0) {
-          return 'hidden';
-        }
-      }*/
+    $scope.count = {
+      main: {
+        value: weeks,
+        unit: 'weeks'
+      },
+      side: {
+        value: Math.floor(days / 86400),
+        unit: 'days',
+        /*isHidden: function() {
+          if (this.value === 0) {
+            return 'hidden';
+          }
+        }*/
+      }
     }
   }
+  
+  updateLastFap();
 });

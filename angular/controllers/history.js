@@ -4,10 +4,13 @@ angular.module('nofApp')
   
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
-      $scope.awesomeHistory = $db_query.getHistoryAwesome();
+    updateHistory();
   });
   
-  $scope.awesomeHistory = $db_query.getHistoryAwesome();
+  // This is what we do
+  var updateHistory = function() {
+    $scope.awesomeHistory = $db_query.getHistoryAwesome();
+  };
   
-  console.log($scope.awesomeHistory);
+  updateHistory();
 });
