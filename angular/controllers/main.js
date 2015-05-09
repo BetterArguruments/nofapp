@@ -19,7 +19,7 @@ angular.module('nofApp')
   // "Update" Function
   var updateLastFap = function () {
     var now = Math.floor(Date.now() / 1000);
-    var lastFap = Math.floor(Date.now() / 1000) - 1118640;
+    var lastFap = $db_query.getLastFap();
   
     $scope.hasInterval = function(i) {
       var ary = $scope.progress.getNamedArray();
@@ -34,7 +34,6 @@ angular.module('nofApp')
       },
       getString: function(i) {
         if (this.isDefined(i)) {
-          console.log('yolo');
           return this.delta.getNamedArray()[i].to_s();
         };
       },

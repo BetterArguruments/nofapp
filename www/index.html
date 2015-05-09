@@ -72,7 +72,7 @@
             <span class="round-dummy"></span>
             <div class="vertical-middle">
               <span class="first-value">
-                {{progress.getString(0)}}
+                {{progress.getString(0) || "0 days"}}
               </span>
               <span class="second-value" ng-if="progress.isDefined(1)">
                 {{progress.getString(1)}}
@@ -186,7 +186,7 @@
 					<div class="row">
 						<div class="col col-20"><i class="icon ion-heart"></i></div>
 						<div class="col col-30"></div>
-						<div class="col" style="text-align:center; background: green;">Sex!</div>
+						<div class="col" style="text-align:center;">Had Sex!</div>
 					</div>
 				</div>
 				<div class="item item-icon-left row" ng-if="ah[0] == 'fap'">
@@ -255,12 +255,28 @@
 		<div class="item item-divider">
 		    About NofAPP
 		  </div>
-		  <div class="item item-text-wrap">
-		    <p>Here you may buy us a Beer to support further development of the NofApp App.</p>
-		
-			<p>However, we didn't have enough time to complete this function - we
-			will have to fall back to buying our own beer for the moment then.</p>
+		<div class="item item-divider">
+		    Version: 0.1 precum
 		  </div>
+		  <div class="item item-text-wrap">
+		    <p>Once upon a time, two highly motivated German Students, who happened to be friends, met up
+				during their University Holidays for a private "Hackathon" to utilize their 1337 Programm0r Skillz.</p>
+		
+			<p>They decided to develop an app. But what type of app? One student had a medical background, the
+				other was studying mechanical engineering.</p>
+			
+			<p>What a perfect combination! They wondered whether
+				Nofap could actually prevent depression and anxiety (therefore the questions about mood and energy)
+				and if one actually has more sex after beginning Nofap.</p>
+		
+			<p>However, after about 30 seconds they noticed, that only by using a framework they would stand a
+				realistic chance of creating an app with more than one page in 48 hours.</p>
+				
+			<p>They finally chose the Ionic Framework, which turned out to be awesome (thanks, Ionic Framework peoples!).</p>
+			
+			<p>Enjoy and keep No-Fapping!</p>
+		  </div>
+  		
         </ion-content>
       </ion-view>
     </script>
@@ -276,8 +292,10 @@
 		    <p>Here you may support further development of the NofApp App by buying us some beer. Additionally,
 				we will probably be less at risk to relapse if we're out drinking beer.</p>
 			
-			<p>However, we didn't have enough time to complete this function - we
-			will have to fall back to buying our own beer for the moment then.</p>
+			<p>However, we didn't have enough time to complete this page - we
+			will have to fall back to buying our own beer for the moment.</p>
+			
+			<p>You may buy a beer for yourself and mentally chink glasses with us. Yeah!</p>
 		  </div>
 		</div>
         </ion-content>
@@ -288,7 +306,7 @@
       <ion-view view-title="NofAPP">
         <ion-slide-box on-slide-changed="slideChanged(index)">
           <ion-slide>
-            <img id="logo" class="intro-logo" src="img/fapstronaut-beta.png">
+            <img id="logo" class="intro-logo" src="img/space-ship_app.png">
             <h3>Welcome, Fapstronaut</h3>
             <br>
             <button class="button button-royal" ng-click="nextSlide()">
