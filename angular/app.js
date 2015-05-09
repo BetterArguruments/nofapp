@@ -19,7 +19,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','ngAnimate','angu
   
     // Watch out, Jedi! localStorage can only save strings,
     // therefore we need the === operator!
-    if ($db_query.getFirstRun() === 'true') {
+    if ($db_query.getFirstRun() === "not_done") {
       $location.path('/intro');
     } else {
       $location.path('/main');

@@ -165,14 +165,26 @@ angular.module('nofapp.utils', ['ionic.utils'])
   this.getFirstRun = function () {
     //var firstRun = NofappHelpers.isEmpty($localstorage.get('firstRun')) ? true : $localstorage.get('firstRun');
     //console.log("firstRun checked, result = " + firstRun);
-    var firstRun = $localstorage.get("firstRun", "true");
+    var firstRun = $localstorage.get("firstRun");
+    if (firstRun != "done" && firstRun != "not_done") {
+      console.log("getFirstRun Error!");
+      return "not_done";
+    }
     return firstRun;
   };
   
   this.setFirstRun = function(val) {
     // val = boolean, well not really, actually it's a string which is
   // either true or false, DUH
-    $localstorage.set("firstRun", val);
+    if (val === "done") {
+      $localstorage.set("firstRun", "done");
+    }
+    else if (val === "not_done") {
+      $localstorage.set("firstRun", "not_done");
+    }
+    else {
+      console.log("setFirstRun Error!");
+    }
     console.log("firstRun set to " + $localstorage.get("firstRun"));
   };
 });

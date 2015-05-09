@@ -65,6 +65,10 @@
     <script id="templates/main.html" type="text/ng-template">
       <ion-view hide-back-button="true" view-title="Overview">
         <ion-content class="padding">
+		
+        <!-- <p class="text-center">
+          {{isThisFirstRun}}
+        </p> -->
           <!--<a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
           <p>{{isThisFirstRun}}</p>-->
           
@@ -310,12 +314,12 @@
               Swipe right to begin
             </button>
 
-            <p class="text-center">
+           <!-- <p class="text-center">
               <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
             </p>
             <p class="text-center">
               {{isThisFirstRun}}
-            </p>
+            </p> -->
           </ion-slide>
 
           <ion-slide>
@@ -349,8 +353,7 @@
           </ion-slide>
 
           <ion-slide class="padding">
-            <h4>Track your mood and sex drive as often as you like</h4>
-            <br>
+            <h4>Track your mood and sex drive</h4>
             <h4>Mood</h4>
             <div class="button-bar">
               <a class="button button-small button-balanced" ng-class="isCurrentMood(5)" ng-click="setMood(5)">5</a>

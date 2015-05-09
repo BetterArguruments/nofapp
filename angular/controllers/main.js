@@ -6,13 +6,13 @@ angular.module('nofApp')
   
   // DEBUG: Reset first run (back to Intro)
   $scope.firstRunReset = function(){
-    $db_query.setFirstRun(true);
+    $db_query.setFirstRun("not_done");
     $ionicHistory.currentView($ionicHistory.backView());
-    $state.go('intro');
+    $state.go("intro");
   };
   
   // Dirty Fix: If this is first run, then go back to Intro
-  if ($scope.isThisFirstRun) {
+  if ($scope.isThisFirstRun === "not_done") {
     $scope.firstRunReset();
   }
   
