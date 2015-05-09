@@ -159,6 +159,9 @@ angular.module('nofApp')
       $db_query.addToDb("sex", undefined, timestamp_lastSex);
       $db_query.addToDb("fap", undefined, timestamp_lastFap);
       
+      // Update Views
+       $scope.$emit('datasetChanged');
+      
       // Alert User
       // TODO: make toast
       var alertPopup = $ionicPopup.alert({

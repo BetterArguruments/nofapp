@@ -50,6 +50,16 @@ angular.module('nofapp.utils', ['ionic.utils'])
     return structDb;
   };
   
+  this.getLastFap = function () {
+    var structDb = this.getStructDb();
+    for (var i = structDb.length - 1; i >= 0; i--) {
+      if (structDb[i][0] === "fap") {
+        return structDb[i][1];
+      }
+    }
+    return false;
+  }
+  
   // Awesome History Parser
   this.getHistoryAwesome = function () {
       /* Concept of awesomeHistory:
@@ -98,7 +108,10 @@ angular.module('nofapp.utils', ['ionic.utils'])
           awesomeHistory.push(["concatData", structDb[i][1], [structDb[i-2][2], structDb[i-1][2], structDb[i][2]]]); // mood, energy, libido
         }
         else if (structDb[i][0] === "sex" || structDb[i][0] === "fap") {
-          awesomeHistory.push([ structDb[i][0], structDb[i][1] ])
+          awesomeHistory.push([ structDb[i][0], structDb[i][1] ]);
+        }
+        else if (structDb[i][0] === "note") {
+          awesomeHistory.push([ structDb[i][0], structDb[i][1], structDb[i][2]]);
         }
         // else (structDb[i][0] === "mood" || structDb[i][0] === "energy")
         

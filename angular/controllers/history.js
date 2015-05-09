@@ -1,12 +1,13 @@
 // History Controller
 angular.module('nofApp')
-.controller('HistoryCtrl', function($scope, $state, $db_query) {
+.controller('HistoryCtrl', function($scope, $state, $db_query, $rootScope) {
   
-  $scope.message = {
-     text: 'hello world!',
-     time: Math.floor(Date.now() / 1000)
-  };
+  // Check for Updates
+  $rootScope.$on('datasetChanged', function() {
+      $scope.awesomeHistory = $db_query.getHistoryAwesome();
+  });
   
   $scope.awesomeHistory = $db_query.getHistoryAwesome();
+  
   console.log($scope.awesomeHistory);
 });

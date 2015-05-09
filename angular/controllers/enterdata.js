@@ -13,6 +13,7 @@ angular.module('nofApp')
     reset: function() {
       this.mood = 3;
       this.energy = 3;
+      this.libido = 3;
       this.note = "";
     }
   };
@@ -65,8 +66,10 @@ angular.module('nofApp')
         $db_query.addToDb("note", $scope.userState.note);
         console.log("Note added to DB.");
     }
-    
+  
     $scope.userState.reset();
+    $scope.$emit('datasetChanged');
+    $state.go('tabs.history');
   };
   
   $scope.justHadSex = function() {
@@ -78,6 +81,8 @@ angular.module('nofApp')
       if(res) {
         // $db_query.addSexToDb(Math.floor(Date.now() / 1000)); DEPRECATED
         $db_query.addToDb("sex");
+        $scope.$emit('datasetChanged');
+        $state.go('tabs.history');
         console.log("Sex added to DB. Nice!");
       }
     });
@@ -92,6 +97,8 @@ angular.module('nofApp')
       if(res) {
         // $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
         $db_query.addToDb("fap");
+        $scope.$emit('datasetChanged');
+        $state.go('tabs.history');
         console.log("Relapse added to DB. Oh noes!");
       }
     });

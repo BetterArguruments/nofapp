@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory) {
+.controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory, $rootScope) {
   
   // Debug DB
   $scope.isThisFirstRun = $db_query.getFirstRun();
@@ -11,19 +11,30 @@ angular.module('nofApp')
     $state.go('intro');
   };
   
+  // Check for Updates
+  $rootScope.$on('datasetChanged', function() {
+      $scope.lastFap = $db_query.getLastFap();
+  });
+  
+  $scope.lastFap = $db_query.getLastFap();
+  var timestampNow = Math.floor(Date.now() / 1000);
+  var timeDiff = timestampNow - $scope.lastFap;
+  var days = timeDiff % (60*60*24*7);
+  var weeks = (timeDiff - days) / (60*60*24*7);
+  
   $scope.count = {
     main: {
-      value: 2,
+      value: weeks,
       unit: 'weeks'
     },
     side: {
-      value: 4,
+      value: Math.floor(days / 86400),
       unit: 'days',
-      isHidden: function() {
+      /*isHidden: function() {
         if (this.value === 0) {
           return 'hidden';
         }
-      }
+      }*/
     }
   }
 });

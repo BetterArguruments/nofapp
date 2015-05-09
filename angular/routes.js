@@ -56,6 +56,22 @@ angular.module('nofApp')
         controller: 'SettingsCtrl'
       }
     }
+  })
+  .state('tabs.about', {
+    url: '/about',
+    views: {
+      'settings-tab': {
+        templateUrl: 'templates/about.html'
+      }
+    }
+  })
+  .state('tabs.beer', {
+    url: '/beer',
+    views: {
+      'settings-tab': {
+        templateUrl: 'templates/beer.html'
+      }
+    }
   });
 
   $urlRouterProvider.otherwise("/tab/main");
