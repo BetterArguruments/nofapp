@@ -10,4 +10,20 @@ angular.module('nofApp')
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('intro');
   };
+  
+  $scope.count = {
+    main: {
+      value: 2,
+      unit: 'weeks'
+    },
+    side: {
+      value: 4,
+      unit: 'days',
+      isHidden: function() {
+        if (this.value === 0) {
+          return 'hidden';
+        }
+      }
+    }
+  }
 });
