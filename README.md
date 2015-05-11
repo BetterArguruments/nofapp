@@ -6,14 +6,14 @@ If you haven't installed Cordova and Ionic yet, do it:
 ```
 sudo npm install -g cordova ionic
 ```
-Clone this
+Clone this repo
 ```
-git clone
+git https://github.com/BetterArguruments/nofapp.git
 ```
 Install Node.js and Bower Dependencies
 ```
 npm install
 bower install
 ```
-TODO:
-- [ ] How to install cordova plugin dependencies after git clone?! See this: http://stackoverflow.com/questions/30042975/manage-cordova-plugins-with-npm-package-json
+Apparently, there is no way to install cordova plugin dependencies at the moment. Are we the only people using cordova via git? Therefore, the cordova plugins/ directory is included and the .gitignore file modified accordingly.
+See this thread: http://stackoverflow.com/questions/30042975/manage-cordova-plugins-with-npm-package-json
