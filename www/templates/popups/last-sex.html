@@ -1,0 +1,7 @@
+<div class="button-bar">
+  <button class="button flex-none" ng-click="userState.decSexDaysAgo()" ng-disabled="userState.isMinSexDays()">-</button>
+  <div class="button">
+    {{userState.pastDaysInWords(userState.values.sexDaysAgo)}}
+  </div>
+  <button class="button flex-none" ng-click="userState.incSexDaysAgo()" ng-disabled="userState.isMaxSexDays()">+</button>
+</div>

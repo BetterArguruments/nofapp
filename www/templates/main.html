@@ -1,0 +1,38 @@
+<ion-view hide-back-button="true" view-title="Overview">
+  <ion-content class="padding">
+
+  <!-- <p class="text-center">
+    {{isThisFirstRun}}
+  </p> -->
+    <!--<a href="#" ng-click="firstRunReset()">Debug: Do Tutorial Again</a>
+    <p>{{isThisFirstRun}}</p>-->
+    
+    <div id="progress" class="round-button center">
+      <span class="round-dummy"></span>
+      <div class="vertical-middle">
+        <span class="first-value">
+          {{progress.getString(0) || "0 days"}}
+        </span>
+        <span class="second-value" ng-if="progress.isDefined(1)">
+          {{progress.getString(1)}}
+        </span>
+        <span class="third-value" ng-if="progress.isDefined(2)">
+          {{progress.getString(2)}}
+        </span>
+      </div>
+    </div>
+    <div id="milestones">
+      <div class="center">Awesome! Keep going!</div>
+  <!--
+      <div class="row">
+        <div class="col col-25">13%</div>
+        <div class="col">Track your progress and get anal...</div>
+      </div>
+      <div class="row">
+        <div class="col col-25">23%</div>
+        <div class="col">Enter card information</div>
+      </div>
+	  -->
+    </div>
+  </ion-content>
+</ion-view>

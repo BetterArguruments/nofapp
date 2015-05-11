@@ -1,0 +1,40 @@
+<ion-view hide-back-button="true" view-title="Enter your Data">
+  <ion-content class="padding">
+    <h4>My current mood</h4>
+    <div class="button-bar">
+      <a class="button button-balanced" ng-class="isCurrentMood(5)" ng-click="setMood(5)">5</a>
+      <a class="button button-royal" ng-class="isCurrentMood(4)" ng-click="setMood(4)">4</a>
+      <a class="button button-royal" ng-class="isCurrentMood(3)" ng-click="setMood(3)">3</a>
+      <a class="button button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">2</a>
+      <a class="button button-assertive" ng-class="isCurrentMood(1)" ng-click="setMood(1)">1</a>
+    </div>
+    <h4>My current energy</h4>
+    <div class="button-bar">
+      <a class="button button-balanced" ng-class="isCurrentEnergy(5)" ng-click="setEnergy(5)">5</a>
+      <a class="button button-royal" ng-class="isCurrentEnergy(4)" ng-click="setEnergy(4)">4</a>
+      <a class="button button-royal" ng-class="isCurrentEnergy(3)" ng-click="setEnergy(3)">3</a>
+      <a class="button button-royal" ng-class="isCurrentEnergy(2)" ng-click="setEnergy(2)">2</a>
+      <a class="button button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
+    </div>
+    <h4>My current libido</h4>
+    <div class="button-bar">
+      <a class="button button-balanced" ng-class="isCurrentLibido(5)" ng-click="setLibido(5)">5</a>
+      <a class="button button-royal" ng-class="isCurrentLibido(4)" ng-click="setLibido(4)">4</a>
+      <a class="button button-royal" ng-class="isCurrentLibido(3)" ng-click="setLibido(3)">3</a>
+      <a class="button button-royal" ng-class="isCurrentLibido(2)" ng-click="setLibido(2)">2</a>
+      <a class="button button-assertive" ng-class="isCurrentLibido(1)" ng-click="setLibido(1)">1</a>
+    </div>
+    <div class="list list-inset">
+      <label class="item item-input">
+        <input type="text" placeholder="Leave a note" ng-model="userState.note">
+      </label>
+    </div>
+    <button class="button button-block button-balanced" ng-click="addDataset()">Save</button>
+    <button class="button button-block button-large button-royal" ng-click="justHadSex()">
+      I JUST HAD SEX!
+    </button>
+    <button class="button button-block button-small button-assertive" ng-click="justRelapsed()">
+      I relapsed
+    </button>
+  </ion-content>
+</ion-view>

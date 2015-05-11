@@ -1,0 +1,91 @@
+<ion-view view-title="NofAPP">
+  <ion-slide-box on-slide-changed="slideChanged(index)">
+    <ion-slide>
+      <img id="logo" class="intro-logo" src="img/space-ship_app.png">
+      <h3>Welcome, Fapstronaut</h3>
+      <br>
+      <button class="button button-royal" ng-click="nextSlide()">
+        Swipe right to begin
+      </button>
+
+     <!-- <p class="text-center">
+        <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
+      </p>
+      <p class="text-center">
+        {{isThisFirstRun}}
+      </p> -->
+    </ion-slide>
+
+    <ion-slide>
+      <h3>Using NofAPP</h3>
+      <div class="list card">
+        <a href="#" class="item item-icon-left">
+          <i class="icon ion-stats-bars"></i>
+          Track your progress
+        </a>
+
+        <a href="#" class="item item-icon-left">
+          <i class="icon ion-pie-graph"></i>
+          Get awesome analytics
+        </a>
+
+        <a href="#" class="item item-icon-left">
+          <i class="icon ion-heart"></i>
+          Have Sex!
+        </a>
+
+        <!--<a href="#" class="item item-icon-left">
+          <i class="icon ion-earth"></i>
+          Contribute to the Nofap Community
+        </a>-->
+        <div class="item item-divider"></div>
+        <a class="item item-icon-left royal" onclick="window.open('http://reddit.com/r/nofap', '_system', 'localtion=yes'); return false;">
+          <!--<i class="icon ion-help"></i>-->
+          What is Nofap?
+        </a>
+      </div>
+    </ion-slide>
+
+    <ion-slide class="padding">
+      <h4>Track your mood and sex drive</h4>
+      <h4>Mood</h4>
+      <div class="button-bar">
+        <a class="button button-small button-balanced" ng-class="isCurrentMood(5)" ng-click="setMood(5)">5</a>
+        <a class="button button-small button-royal" ng-class="isCurrentMood(4)" ng-click="setMood(4)">4</a>
+        <a class="button button-small button-royal" ng-class="isCurrentMood(3)" ng-click="setMood(3)">3</a>
+        <a class="button button-small button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">2</a>
+        <a class="button button-small button-assertive" ng-class="isCurrentMood(1)" ng-click="setMood(1)">1</a>
+      </div>
+      <h4>Energy</h4>
+      <div class="button-bar">
+        <a class="button button-small button-balanced" ng-class="isCurrentEnergy(5)" ng-click="setEnergy(5)">5</a>
+        <a class="button button-small button-royal" ng-class="isCurrentEnergy(4)" ng-click="setEnergy(4)">4</a>
+        <a class="button button-small button-royal" ng-class="isCurrentEnergy(3)" ng-click="setEnergy(3)">3</a>
+        <a class="button button-small button-royal" ng-class="isCurrentEnergy(2)" ng-click="setEnergy(2)">2</a>
+        <a class="button button-small button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
+      </div>
+      <h4>Libido</h4>
+      <div class="button-bar">
+        <a class="button button-small button-balanced" ng-class="isCurrentLibido(5)" ng-click="setLibido(5)">5</a>
+        <a class="button button-small button-royal" ng-class="isCurrentLibido(4)" ng-click="setLibido(4)">4</a>
+        <a class="button button-small button-royal" ng-class="isCurrentLibido(3)" ng-click="setLibido(3)">3</a>
+        <a class="button button-small button-royal" ng-class="isCurrentLibido(2)" ng-click="setLibido(2)">2</a>
+        <a class="button button-small button-assertive" ng-class="isCurrentLibido(1)" ng-click="setLibido(1)">1</a>
+      </div>
+      <br>
+      <h4>When did you last...</h4>
+      <div class="row no-left-padding no-right-padding">
+        <div class="col no-left-padding">
+          <button class="button button-small button-block padding-right" ng-click="openLastSex()">have sex?</button>
+        </div>
+        <div class="col no-right-padding">
+          <button class="button button-small button-block padding-left" ng-click="openLastFap()">take a wank?</button>
+        </div>
+      </div>
+      <button class="button button-small button-block button-balanced" ng-click="submitForm()">
+        Alright, got it!
+      </button>
+    </div>
+    </ion-slide>
+  </ion-slide-box>
+</ion-view>
