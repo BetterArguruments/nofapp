@@ -101,7 +101,7 @@ angular.module('nofApp')
   
   $scope.openLastFap = function() {
     $ionicPopup.show({
-      templateUrl: 'popups/last-fap.html',
+      templateUrl: 'templates/popups/last-fap.html',
       title: 'Be honest!',
       subTitle: 'When did you last fap?',
       scope: $scope,
@@ -118,7 +118,7 @@ angular.module('nofApp')
   
   $scope.openLastSex = function() {
     $ionicPopup.show({
-      templateUrl: 'popups/last-sex.html',
+      templateUrl: 'templates/popups/last-sex.html',
       title: 'Make us proud!',
       subTitle: 'When did you last have sex?',
       scope: $scope,
