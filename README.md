@@ -13,7 +13,7 @@ sudo npm install -g cordova ionic
 ```
 Clone this repo
 ```
-git https://github.com/BetterArguruments/nofapp.git
+git clone https://github.com/BetterArguruments/nofapp.git
 ```
 Install Node.js and Bower Dependencies
 ```
