@@ -1,7 +1,14 @@
-<ion-view view-title="NofAPP">
+<ion-view view-title="{{introViewTitle}}">
+
+<ion-nav-buttons side="right"> 
+  <button class="button button-icon ion-help-circled"
+          ng-click="modal.show()" ng-if="slideIndex == 2">
+  </button>
+</ion-nav-buttons>
+
   <ion-slide-box on-slide-changed="slideChanged(index)">
     <ion-slide>
-      <img id="logo" class="intro-logo" src="img/space-ship_app.png">
+      <img id="logo" class="intro-logo" src="../img/space-ship_app.png">
       <h3>Welcome, Fapstronaut</h3>
       <br>
       <button class="button button-royal" ng-click="nextSlide()">

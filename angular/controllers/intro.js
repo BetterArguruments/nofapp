@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location, $ionicModal) {
   
   // Debug DB
   $scope.isThisFirstRun = $db_query.getFirstRun();
@@ -7,10 +7,45 @@ angular.module('nofApp')
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
     $db_query.setFirstRun("done");
-    //$scope.$emit('datasetChanged');
+    $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('tabs.main');
   }
+  
+  /*
+  *  Slider and Title Control
+  */
+  
+  // Title Control, gets called on slide changed
+  $scope.introViewTitle = "NofApp";
+  $scope.getNewTitle = function(slideNumber) {
+    switch(slideNumber) {
+      case 1: return "Using NofApp"; break;
+      case 2: return "Getting started"; break;
+      default: return "NofApp";
+    }
+  }
+  
+  // Called each time the slide changes
+  $scope.slideChanged = function(index) {
+    $scope.slideIndex = index;
+    $scope.introViewTitle = $scope.getNewTitle(index);
+  };
+  
+  // Slide Box Control
+  $scope.nextSlide = function() {
+    $ionicSlideBoxDelegate.next();
+  };
+
+  $ionicModal.fromTemplateUrl('templates/modals/intro-help-enterdata.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal = modal;
+    });
+
+  /*
+  *  User State
+  */
 
   $scope.userState = {
     values: {
@@ -87,16 +122,6 @@ angular.module('nofApp')
     if ($scope.userState.values.libido === i) {
       return 'active';
     };
-  };
-
-  // Called each time the slide changes
-  $scope.slideChanged = function(index) {
-    $scope.slideIndex = index;
-  };
-  
-  // Slide Box Control
-  $scope.nextSlide = function() {
-    $ionicSlideBoxDelegate.next();
   };
   
   $scope.openLastFap = function() {
