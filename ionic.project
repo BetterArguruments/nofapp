@@ -2,12 +2,13 @@
   "name": "nofapp",
   "app_id": "",
   "gulpStartupTasks": [
-    "sass",
-    "js",
+    "default",
     "watch"
     ],
   "watchPatterns": [
-      "www/**/*",
-      "!www/css/**/*"
+      "www/css/**/*",
+      "www/js/**/*",
+      "www/templates/**/*",
+      "www/index.html"
     ]
 }

@@ -1,25 +1,30 @@
 {
   "name": "nofapp",
   "version": "1.0.0",
-  "description": "nofapp: An Ionic project",
-  "dependencies": {
+  "description": "Simple Ionic App to track your NoFap progress",
+  "repository": "betterarguruments/nofapp",
+  "dependencies": {},
+  "devDependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^1.3.3",
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
-    "gulp-rename": "^1.2.0"
-  },
-  "devDependencies": {
-    "bower": "^1.3.3",
+    "gulp-rename": "^1.2.0",
     "gulp-util": "^2.2.14",
+    "gulp-sourcemaps": "^1.5.2",
+    "gulp-uglify": "^1.2.0",
+    "gulp-rm": "^1.0.0",
+    "bower": "^1.3.3",
     "shelljs": "^0.3.0"
   },
   "cordovaPlugins": [
     "org.apache.cordova.device",
     "org.apache.cordova.console",
-    "com.ionic.keyboard"
+    "com.ionic.keyboard",
+    "cordova-plugin-inappbrowser"
   ],
   "cordovaPlatforms": [
+    "android",
     "ios"
   ]
 }
