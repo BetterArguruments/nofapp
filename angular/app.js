@@ -6,7 +6,7 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','ngAnimate','angu
 .run(function($ionicPlatform, $location, $db_query, $rootScope, amMoment) {
   // Initialize Angular Moment
   //amMoment.changeLocale('en-gb');
-  
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -16,16 +16,12 @@ angular.module('nofApp', ['ionic','ionic.utils','nofapp.utils','ngAnimate','angu
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
-  
-    // Watch out, Jedi! localStorage can only save strings,
-    // therefore we need the === operator!
-    if ($db_query.getFirstRun() === "not_done") {
-      $location.path('/intro');
-    } else {
-      $location.path('/main');
-    };
-    $rootScope.$apply();
   });
+
+  // Go to intro if first run
+  if ($db_query.isFirstRun()) {
+    $location.path('/intro');
+  }
 })
 
 // Setting for Angular Moment.js to treat

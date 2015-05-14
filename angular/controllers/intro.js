@@ -1,21 +1,17 @@
 angular.module('nofApp')
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location, $ionicModal) {
-  
-  // Debug DB
-  $scope.isThisFirstRun = $db_query.getFirstRun();
-  
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
-    $db_query.setFirstRun("done");
+    $db_query.firstRunDone();
     $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('tabs.main');
-  }
-  
+  };
+
   /*
   *  Slider and Title Control
   */
-  
+
   // Title Control, gets called on slide changed
   $scope.introViewTitle = "NofApp";
   $scope.getNewTitle = function(slideNumber) {
@@ -25,13 +21,13 @@ angular.module('nofApp')
       default: return "NofApp";
     }
   }
-  
+
   // Called each time the slide changes
   $scope.slideChanged = function(index) {
     $scope.slideIndex = index;
     $scope.introViewTitle = $scope.getNewTitle(index);
   };
-  
+
   // Slide Box Control
   $scope.nextSlide = function() {
     $ionicSlideBoxDelegate.next();
@@ -69,7 +65,7 @@ angular.module('nofApp')
       return words;
     }
   };
-  
+
   // Tests whether the user has clicked all fields.
   // He shouldnt submit the form without editing some (all) data.
   $scope.userHasInteractedCompletely = function(whatHasHeDone) {
@@ -78,52 +74,52 @@ angular.module('nofApp')
       clicked_sex = false,
       clicked_fap = false;
     };
-      
+
     switch (whatHasHeDone) {
       case "clicked_sex": clicked_sex = true; break;
       case "clicked_fap": clicked_fap = true; break;
     };
-    
+
     // Return true if all fields have been clicked
     return clicked_sex && clicked_fap;
   }
-  
+
   $scope.setMood = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.values.mood = i;
     };
   };
-  
+
   $scope.isCurrentMood = function(i) {
     if ($scope.userState.values.mood === i) {
       return 'active';
     };
   };
-  
+
   $scope.setEnergy = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.values.energy = i;
     };
   };
-  
+
   $scope.isCurrentEnergy = function(i) {
     if ($scope.userState.values.energy === i) {
       return 'active';
     };
   };
-  
+
   $scope.setLibido = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.values.libido = i;
     };
   };
-  
+
   $scope.isCurrentLibido = function(i) {
     if ($scope.userState.values.libido === i) {
       return 'active';
     };
   };
-  
+
   $scope.openLastFap = function() {
     $ionicPopup.show({
       templateUrl: 'templates/popups/last-fap.html',
@@ -140,7 +136,7 @@ angular.module('nofApp')
       $scope.userHasInteractedCompletely("clicked_fap");
     });
   };
-  
+
   $scope.openLastSex = function() {
     $ionicPopup.show({
       templateUrl: 'templates/popups/last-sex.html',
@@ -157,7 +153,7 @@ angular.module('nofApp')
       $scope.userHasInteractedCompletely("clicked_sex");
     });
   };
-  
+
   $scope.submitForm = function() {
     if (!$scope.userHasInteractedCompletely()) {
       console.log("User has not interacted completely!");
@@ -174,20 +170,23 @@ angular.module('nofApp')
       var timestamp = Math.floor(Date.now() / 1000);
       var timestamp_lastSex = timestamp - (60*60*24*$scope.userState.values.sexDaysAgo);
       var timestamp_lastFap = timestamp - (60*60*24*$scope.userState.values.fapDaysAgo);
-      
+
       console.log("Mood: " + $scope.userState.values.mood + " Energy: " + $scope.userState.values.energy + " FapDaysAgo: " + $scope.userState.values.fapDaysAgo + " SexDaysAgo: " + $scope.userState.values.sexDaysAgo + " Fap Timestamp: " + timestamp_lastFap + " Sex Timestamp: " + timestamp_lastSex);
-      
-      
+
+
       // Write Mood and Energy to DB, Timestamp is added automatically (now)
       $db_query.addUsualDataToDb($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido);
-      
+
       // Write Sex and Fap to DB
-      $db_query.addToDb("sex", undefined, timestamp_lastSex);
+      console.log("Last sex: " + $scope.userState.values.sexDaysAgo);
+      if ($scope.userState.values.sexDaysAgo !== -1) {
+        $db_query.addToDb("sex", undefined, timestamp_lastSex);
+      }
       $db_query.addToDb("fap", undefined, timestamp_lastFap);
-      
+
       // Update Views
        $scope.$emit('datasetChanged');
-      
+
       // Alert User
       // TODO: make toast
       var alertPopup = $ionicPopup.alert({
@@ -195,8 +194,8 @@ angular.module('nofApp')
         template: "Way to get it started!",
         okType: "button-royal"
       });
-      
-      // Set firstRun = false and Redirect to Main 
+
+      // Set firstRun = false and Redirect to Main
       alertPopup.then($scope.firstRunDone());
     }
   }
