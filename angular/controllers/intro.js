@@ -37,8 +37,7 @@ angular.module('nofApp')
       scope: $scope
     }).then(function(modal) {
       $scope.modal = modal;
-    });
-
+  });
   /*
   *  User State
   */
@@ -178,7 +177,7 @@ angular.module('nofApp')
       $db_query.addUsualDataToDb($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido);
 
       // Write Sex and Fap to DB
-      console.log("Last sex: " + $scope.userState.values.sexDaysAgo);
+      // Handle last sex on 'decades ago'
       if ($scope.userState.values.sexDaysAgo !== -1) {
         $db_query.addToDb("sex", undefined, timestamp_lastSex);
       }
