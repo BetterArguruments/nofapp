@@ -1,6 +1,6 @@
 <ion-view view-title="{{introViewTitle}}">
 
-<ion-nav-buttons side="right"> 
+<ion-nav-buttons side="right">
   <button class="button button-icon ion-help-circled"
           ng-click="modal.show()" ng-if="slideIndex == 2">
   </button>
@@ -8,7 +8,7 @@
 
   <ion-slide-box on-slide-changed="slideChanged(index)">
     <ion-slide>
-      <img id="logo" class="intro-logo" src="../img/space-ship_app.png">
+      <img id="logo" class="intro-logo" src="img/space-ship_app.png">
       <h3>Welcome, Fapstronaut</h3>
       <br>
       <button class="button button-royal" ng-click="nextSlide()">
@@ -26,29 +26,28 @@
     <ion-slide>
       <h3>Using NofAPP</h3>
       <div class="list card">
-        <a href="#" class="item item-icon-left">
+        <div class="item item-icon-left">
           <i class="icon ion-stats-bars"></i>
           Track your progress
-        </a>
+        </div>
 
-        <a href="#" class="item item-icon-left">
+        <div class="item item-icon-left">
           <i class="icon ion-pie-graph"></i>
           Get awesome analytics
-        </a>
+        </div>
 
-        <a href="#" class="item item-icon-left">
+        <div class="item item-icon-left">
           <i class="icon ion-heart"></i>
           Have Sex!
-        </a>
+        </div>
 
         <!--<a href="#" class="item item-icon-left">
           <i class="icon ion-earth"></i>
           Contribute to the Nofap Community
         </a>-->
         <div class="item item-divider"></div>
-        <a class="item item-icon-left royal" onclick="window.open('http://reddit.com/r/nofap', '_system', 'localtion=yes'); return false;">
-          <!--<i class="icon ion-help"></i>-->
-          What is Nofap?
+        <a href="#" class="item item-icon-left" onclick="$window.open('http://reddit.com/r/nofap', '_system'); return false;">
+          <span class="royal">What is Nofap?</span>
         </a>
       </div>
     </ion-slide>
