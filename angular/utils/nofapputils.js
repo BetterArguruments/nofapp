@@ -7,7 +7,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
   this.getInitialDataset = function() {
       return [];
   };
-  
+
   // Create Sample Data for Debugging
   this.createSampleDataset = function(numberSamples, numberDays) {
       var sampleData = [];
@@ -15,7 +15,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
       var deltaTimestamp = 86400 * Math.floor(Math.random() * numberDays);
       var startTimestamp = Math.floor(Date.now() / 1000) - deltaTimestamp;
       var meanIncrement = Math.round(deltaTimestamp / numberSamples);
-      
+
       for (var i = 0; i < numberSamples; i++) {
           var incrementVariance = Math.floor(Math.random() * 7201) - 3600;
           // Event Type
@@ -35,7 +35,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
       console.log(sampleData);
       $localstorage.setObject("struct", sampleData);
   }
-  
+
   // Read Database
   this.getStructDb = function() {
     console.log("Reading Database...");
@@ -49,7 +49,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
     };
     return structDb;
   };
-  
+
   this.getLastFap = function () {
     var structDb = this.getStructDb();
     for (var i = structDb.length - 1; i >= 0; i--) {
@@ -59,7 +59,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
     }
     return false;
   }
-  
+
   // Awesome History Parser
   this.getHistoryAwesome = function () {
       /* Concept of awesomeHistory:
@@ -74,10 +74,10 @@ angular.module('nofapp.utils', ['ionic.utils'])
       * Seperators are entered as type = "separator", timestamp
       * and value = "ago" or "date" (for Moment.js)
       */
-      
+
       // Get DB
       var structDb = this.getStructDb();
-      
+
       // Preparation
       var awesomeHistory = []; // [type, timestamp, value] OR ["concatData", timestamp, values[0-2]]
       var minute = 60; // One Minute is 60s, duh!
@@ -88,21 +88,21 @@ angular.module('nofapp.utils', ['ionic.utils'])
       var timestampNow = Math.floor(Date.now() / 1000);
       var lastTimestamp = timestampNow;
       var lastSeparated = timestampNow + 100;
-      
+
       // Go through array, iterate backwards (newest first)
       for (var i = (structDb.length - 1); i >= 0; i--) {
-        
+
         // Trigger Separator?
         if ((lastSeparated - structDb[i][1]) > separatorsDelta[separatorPosition]) {
           awesomeHistory.push(["separator", structDb[i][1], dateDisplayMode[separatorPosition]]);
           lastSeparated = structDb[i][1];
         }
-        
+
         // Update Separator?
         if ((separatorPosition < triggerSeparators.length) && (timestampNow - structDb[i][1]) > triggerSeparators[separatorPosition]) {
           separatorPosition++;
         }
-        
+
         // Write History (Haha..)
         if (structDb[i][0] === "libido") {
           awesomeHistory.push(["concatData", structDb[i][1], [structDb[i-2][2], structDb[i-1][2], structDb[i][2]]]); // mood, energy, libido
@@ -114,65 +114,67 @@ angular.module('nofapp.utils', ['ionic.utils'])
           awesomeHistory.push([ structDb[i][0], structDb[i][1], structDb[i][2]]);
         }
         // else (structDb[i][0] === "mood" || structDb[i][0] === "energy")
-        
-        // Update lastTimestamp 
+
+        // Update lastTimestamp
         //lastTimestamp = structDb[i][1];
-        
+
       }
-    
+
       return awesomeHistory;
   };
-  
+
   // The all-in-one Database Add Method
   this.addToDb = function(type, value, time) {
       // Check if time is set, otherwise use now (Overload)
       var timestamp = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
-      
+
       // Read Database
       console.log("Reading Struct from DB...");
       var structDb = $localstorage.getObject('struct');
-      
+
       // Check if DB is empty and initialize
       if (NofappHelpers.isEmpty(structDb)) {
         console.log("structDb is empty. Initializing.")
         structDb = this.getInitialDataset();
         console.log("Wrote initial Dataset.");
       };
-      
+
       // Write to Array
       structDb.push([type, timestamp, value]);
-      
+
       // Write to localStorage
       $localstorage.setObject("struct", structDb);
       console.log("Wrote Struct to DB.");
   }
-  
+
   this.addUsualDataToDb = function(mood, energy, libido, time) {
       // Check if time is set, otherwise use now (Overload)
       var timestamp = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
-      
+
       this.addToDb("mood", mood, timestamp);
       this.addToDb("energy", energy, timestamp);
       this.addToDb("libido", libido, timestamp);
   }
-  
+
   this.resetDb = function() {
     var structDb = this.getInitialDataset();
     $localstorage.setObject("struct", structDb);
     console.log("Database Reset.");
   };
-  
-  this.getFirstRun = function () {
-    //var firstRun = NofappHelpers.isEmpty($localstorage.get('firstRun')) ? true : $localstorage.get('firstRun');
-    //console.log("firstRun checked, result = " + firstRun);
-    var firstRun = $localstorage.get("firstRun");
-    if (firstRun != "done" && firstRun != "not_done") {
-      console.log("getFirstRun Error!");
-      return "not_done";
-    }
-    return firstRun;
+
+  this.isFirstRun = function () {
+    var firstRun = $localstorage.get("firstRun", "true");
+    if (firstRun === "false") {
+      return false;
+    } else {
+      return true;
+    };
   };
-  
+
+  this.firstRunDone = function() {
+    $localstorage.set("firstRun", "false");
+  };
+
   this.setFirstRun = function(val) {
     // val = boolean, well not really, actually it's a string which is
   // either true or false, DUH

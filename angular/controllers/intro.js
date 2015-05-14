@@ -1,16 +1,12 @@
 angular.module('nofApp')
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location, $ionicModal) {
-
-  // Debug DB
-  $scope.isThisFirstRun = $db_query.getFirstRun();
-
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
-    $db_query.setFirstRun("done");
+    $db_query.firstRunDone();
     $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('tabs.main');
-  }
+  };
 
   /*
   *  Slider and Title Control

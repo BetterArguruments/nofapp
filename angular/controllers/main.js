@@ -1,36 +1,21 @@
 angular.module('nofApp')
 .controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory, $rootScope) {
-  
-  // Debug DB
-  $scope.isThisFirstRun = $db_query.getFirstRun();
-  
-  // DEBUG: Reset first run (back to Intro)
-  $scope.firstRunReset = function(){
-    $db_query.setFirstRun("not_done");
-    $ionicHistory.currentView($ionicHistory.backView());
-    $state.go("intro");
-  };
-  
-  // Dirty Fix: If this is first run, then go back to Intro
-  if ($scope.isThisFirstRun === "not_done") {
-    $scope.firstRunReset();
-  }
-  
+
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
     updateLastFap();
   });
-  
+
   // "Update" Function
   var updateLastFap = function () {
     var now = Math.floor(Date.now() / 1000);
     var lastFap = $db_query.getLastFap();
-  
+
     $scope.hasInterval = function(i) {
       var ary = $scope.progress.getNamedArray();
       return !typeof(ary[i] === 'undefined');
     };
-  
+
     $scope.progress = {
       delta: new DeltaDate(now - lastFap),
       isDefined: function(i) {
@@ -49,7 +34,7 @@ angular.module('nofApp')
       }
     }
   };
-  
+
   updateLastFap();
 });
 
@@ -58,7 +43,7 @@ function DeltaDate(delta) {
   var s_week = (s_day * 7);
   var s_year = (s_day * 365);
   this.delta = delta;
-  
+
   this.getYears = function() {
     return Math.floor(this.delta / s_year);
   };
@@ -68,13 +53,13 @@ function DeltaDate(delta) {
   this.getDays = function() {
     return Math.floor((this.delta % s_week) / s_day);
   };
-  
+
   this.getNamedArray = function() {
     var day = ['day', 'days'];
     var week = ['week', 'weeks'];
     var year = ['year', 'years'];
     var ary = [];
-    
+
     if (this.getYears() > 0) {
       ary.push(this.pluralize(this.getYears(), year));
     };
@@ -86,7 +71,7 @@ function DeltaDate(delta) {
     };
     return ary;
   };
-  
+
   this.pluralize = function(number, word) {
     if (-1 <= number && number <= 1) {
       return {value: number, unit: word[0], to_s: function() {
