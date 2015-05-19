@@ -261,3 +261,93 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     console.log("firstRun set to " + $localstorage.get("firstRun"));
   };
 });
+
+.factory('$sqlite', function($cordovaSQLite, $q, $ionicPlatform) {
+  // https://gist.github.com/borissondagh/29d1ed19d0df6051c56f
+  
+  var self = this;
+ 
+  // Handle query's and potential errors
+  self.query = function (query, parameters) {
+    parameters = parameters || [];
+    var q = $q.defer();
+ 
+    $ionicPlatform.ready(function () {
+      $cordovaSQLite.execute(db, query, parameters)
+        .then(function (result) {
+          q.resolve(result);
+        }, function (error) {
+          console.warn('I found an error');
+          console.warn(error);
+          q.reject(error);
+        });
+    });
+    return q.promise;
+  }
+ 
+  // Proces a result set
+  self.getAll = function(result) {
+    var output = [];
+ 
+    for (var i = 0; i < result.rows.length; i++) {
+      output.push(result.rows.item(i));
+    }
+    return output;
+  }
+ 
+  // Process a single result
+  self.getById = function(result) {
+    var output = null;
+    output = angular.copy(result.rows.item(0));
+    return output;
+  }
+ 
+  return self;
+})
+
+.factory('$sql_structure', function($sqlite) {
+  var self = this;
+  
+  self.setInitialTables = function() {
+    // Initial Table Structure here
+  }
+  
+  return self;
+})
+
+.factory('$sql_events', function($cordovaSQLite, $sqlite) {
+  // https://gist.github.com/borissondagh/29d1ed19d0df6051c56f
+  var self = this;
+ 
+  self.all = function() {
+    return $sqlite.query("SELECT id, name FROM team")
+      .then(function(result){
+        return $sqlite.getAll(result);
+      });
+  }
+ 
+  self.get = function(memberId) {
+    var parameters = [memberId];
+    return $sqlite.query("SELECT id, name FROM team WHERE id = (?)", parameters)
+      .then(function(result) {
+        return $sqlite.getById(result);
+      });
+  }
+ 
+  self.add = function(member) {
+    var parameters = [member.id, member.name];
+    return $sqlite.query("INSERT INTO team (id, name) VALUES (?,?)", parameters);
+  }
+ 
+  self.remove = function(member) {
+    var parameters = [member.id];
+    return $sqlite.query("DELETE FROM team WHERE id = (?)", parameters);
+  }
+ 
+  self.update = function(origMember, editMember) {
+    var parameters = [editMember.id, editMember.name, origMember.id];
+    return $sqlite.query("UPDATE team SET id = (?), name = (?) WHERE id = (?)", parameters);
+  }
+ 
+  return self;
+})
