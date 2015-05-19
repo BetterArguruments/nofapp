@@ -1,5 +1,11 @@
 angular.module('nofApp')
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location, $ionicModal) {
+  // Debug: Test SQLite
+  $scope.sqlite_debug = function() {
+    $db_query.sql_debug("event_types");
+  }
+  
+  
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
     $db_query.firstRunDone();
@@ -174,7 +180,8 @@ angular.module('nofApp')
 
 
       // Write Mood and Energy to DB, Timestamp is added automatically (now)
-      $db_query.addUsualDataToDb($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido);
+      //$db_query.addUsualDataToDb($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido);
+      $db_query.sql_insertUsualEvents($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido, timestamp);
 
       // Write Sex and Fap to DB
       // Handle last sex on 'decades ago'

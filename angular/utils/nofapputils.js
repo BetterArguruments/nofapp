@@ -1,8 +1,87 @@
 // Angular Module for entering data into the database
 // The most awesome DB Manager!
-angular.module('nofapp.utils', ['ionic.utils'])
+angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 
-.service('$db_query', function($localstorage) {
+.service('$db_query', function($localstorage, $cordovaSQLite, $rootScope) {
+  // SQLite: Open Database
+  this.sql_openDb = function() {
+    console.log("SQLite: Database Open");
+    $rootScope.db = $cordovaSQLite.openDB("nofapp.db");
+  }
+  
+  // SQLite: Create initial table structure
+  this.sql_initDb = function() {
+    console.log("SQLite: Database Init with Values");
+    
+    // Check if tables exist (first run) and create if necessary
+    $cordovaSQLite.execute($rootScope.db, "CREATE TABLE IF NOT EXISTS event_types (id integer primary key, name varchar(20))");
+    $cordovaSQLite.execute($rootScope.db, "CREATE TABLE IF NOT EXISTS events (id integer primary key, type integer, time timestamp, value integer)");
+    $cordovaSQLite.execute($rootScope.db, "CREATE TABLE IF NOT EXISTS notes (id integer primary key, linked_event integer, value text)");
+    
+    // Create Standard Event Types
+    $cordovaSQLite.execute($rootScope.db, "INSERT INTO event_types (name) VALUES ('Mood')");
+    $cordovaSQLite.execute($rootScope.db, "INSERT INTO event_types (name) VALUES ('Energy')");
+    $cordovaSQLite.execute($rootScope.db, "INSERT INTO event_types (name) VALUES ('Libido')");
+  };
+  
+  // Reset Database: Delete and Re-Create
+  this.sql_resetDb = function() {
+    console.log("SQLite: Deleting and re-creating database");
+    $cordovaSQLite.deleteDB({name: "nofapp.db"});
+    this.sql_openDb();
+    this.sql_initDb();
+  };
+  
+  this.sql_debug = function(table) {
+    var query = "SELECT * FROM " + table;
+    $cordovaSQLite.execute($rootScope.db, query).then(function(res) {
+      console.log(JSON.stringify(res));
+      console.log(res.rows.length);
+      console.log(JSON.stringify(res.rows.item(0)));
+      for (var i = 0; i < res.rows.length; i++) {
+        console.log(JSON.stringify(res.rows.item(i)));
+      }
+    }, function(err) {
+      console.log(err);
+    });
+  };
+  
+  this.sql_insertEvent = function (type, value, time) {
+    console.log("Inserting new Row into Dataset");
+    
+    // Overload: Use timestamp of now (sql) of time is undefined
+    var insert_time = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+    
+    // Get Type
+    var insert_type = this.sql_getTypeIdByName(type);
+    
+    // The Value
+    var insert_value = value;
+    
+    // Do the Query
+    var query = "INSERT INTO events (type, time, value) VALUES (?, UNIX_TIMESTAMP(?), ?)";
+    $cordovaSQLite.execute($rootScope.db, query, [insert_type, insert_time, insert_value]);
+  };
+  
+  this.sql_insertUsualEvents = function (mood, energy, libido, time) {
+    // Check if time is set, otherwise use now (Overload)
+    var insert_time = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+
+    this.sql_insertEvent("Mood", mood, insert_time);
+    this.sql_insertEvent("Energy", energy, insert_time);
+    this.sql_insertEvent("Libido", libido, insert_time);
+  }
+  
+  this.sql_getTypeIdByName = function (typeName) {
+    var query = "SELECT id FROM event_types WHERE (name == ?)";
+    $cordovaSQLite.execute($rootScope.db, query, [typeName]).then(function(res) {
+      return res.rows.item(0).id;
+    }, function(err) {
+      console.log(err);
+      return false;
+    });
+  }
+  
   // Initial Dataset for localStorage Database.
   this.getInitialDataset = function() {
       return [];
@@ -178,15 +257,7 @@ angular.module('nofapp.utils', ['ionic.utils'])
   this.setFirstRun = function(val) {
     // val = boolean, well not really, actually it's a string which is
   // either true or false, DUH
-    if (val === "done") {
-      $localstorage.set("firstRun", "done");
-    }
-    else if (val === "not_done") {
-      $localstorage.set("firstRun", "not_done");
-    }
-    else {
-      console.log("setFirstRun Error!");
-    }
+    $localstorage.set("firstRun", val)
     console.log("firstRun set to " + $localstorage.get("firstRun"));
   };
 });

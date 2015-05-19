@@ -1,6 +1,12 @@
 angular.module('nofApp')
 .controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory, $rootScope) {
 
+  // Debug SQLite
+  $scope.debug_sql = function() {
+    $db_query.sql_debug("events");
+  }
+
+
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
     updateLastFap();

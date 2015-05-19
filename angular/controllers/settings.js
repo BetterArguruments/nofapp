@@ -4,7 +4,7 @@ angular.module('nofApp')
   // Reset App
   $scope.resetApp = function() {
     $db_query.resetDb();
-    $db_query.setFirstRun("not_done");
+    $db_query.setFirstRun("true");
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('intro');
   }
