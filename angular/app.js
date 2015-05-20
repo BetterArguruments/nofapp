@@ -3,7 +3,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAnimate','angularMoment','ngSanitize','ui.router'])
 
-.run(function($ionicPlatform, $location, $db_query, $rootScope, amMoment, $cordovaKeyboard) {
+.run(function($ionicPlatform, $location, $db_query, $cordovaSQLite, $firstRunCheck, $sql_structure, $rootScope, amMoment, $cordovaKeyboard) {
   // Initialize Angular Moment
   //amMoment.changeLocale('en-gb');
 
@@ -11,14 +11,14 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
     if(window.cordova && window.cordova.plugins.Keyboard) {
-      // cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-      $cordovaKeyboard.hideAccessoryBar(true);
+      $cordovaKeyboard.hideAccessoryBar(true); // ngCordova Syntax, modified from standard Ionic Syntax
     }
     
     if(window.StatusBar) {
       StatusBar.styleDefault();
     }
     
+    // Open Database
     if(window.cordova) {
       // App syntax
       db = $cordovaSQLite.openDB("nofapp.db");
@@ -26,13 +26,22 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
       // Ionic serve syntax
       db = window.openDatabase("nofapp.db", "1.0", "NofApp", -1);
     }
+    
+    // Open Database
+    // db = $cordovaSQLite.openDB("nofapp.db");
+
+    // Check if Database is empty and initialize with initial Data
+    if ($sql_structure.getTables().length === 0) {
+      console.log("Creating Initial Tables");
+      $sql_structure.createInitialTables();
+      $sql_structure.insertInitialData();
+    }
 
     // Go to intro if first run
     // We should consider setting the "first run" flag
     // in SQLite instead of localstorage.
-    if ($db_query.isFirstRun()) {
+    if ($firstRunCheck.isFirstRun()) {
       $location.path('/intro');
-      $db_query.sql_initDb();
     }    
   });
 

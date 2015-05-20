@@ -260,14 +260,35 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     $localstorage.set("firstRun", val)
     console.log("firstRun set to " + $localstorage.get("firstRun"));
   };
-});
+})
+
+
+.factory('$firstRunCheck', function($localstorage) {
+  this.isFirstRun = function () {
+    var firstRun = $localstorage.get("firstRun", "true");
+    if (firstRun === "false") {
+      return false;
+    } else {
+      return true;
+    };
+  };
+  
+  this.setFirstRun = function(val) {
+    // val = boolean, well not really, actually it's a string which is
+    // either true or false, DUH
+    $localstorage.set("firstRun", val)
+    console.log("firstRun set to " + $localstorage.get("firstRun"));
+  };
+  
+  return this;
+})
 
 .factory('$sqlite', function($cordovaSQLite, $q, $ionicPlatform) {
   // https://gist.github.com/borissondagh/29d1ed19d0df6051c56f
   
   var self = this;
  
-  // Handle query's and potential errors
+  // Handle queries and potential errors
   self.query = function (query, parameters) {
     parameters = parameters || [];
     var q = $q.defer();
@@ -278,14 +299,14 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
           q.resolve(result);
         }, function (error) {
           console.warn('I found an error');
-          console.warn(error);
+          console.warn(JSON.stringify(error));
           q.reject(error);
         });
     });
     return q.promise;
   }
  
-  // Proces a result set
+  // Process a result set
   self.getAll = function(result) {
     var output = [];
  
@@ -296,7 +317,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   }
  
   // Process a single result
-  self.getById = function(result) {
+  self.getFirst = function(result) {
     var output = null;
     output = angular.copy(result.rows.item(0));
     return output;
@@ -305,13 +326,68 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$sql_structure', function($sqlite) {
+.factory('$sql_structure', function($cordovaSQLite, $sqlite) {
   var self = this;
   
-  self.setInitialTables = function() {
-    // Initial Table Structure here
+  self.getTables = function() {
+    return $sqlite.query("SELECT name FROM sqlite_master WHERE type='table'")
+      .then(function(result){
+        return $sqlite.getAll(result);
+      });
+  };
+  
+  self.InitialTables = ["CREATE TABLE IF NOT EXISTS event_types (id integer primary key, name varchar(64))",
+                        "CREATE TABLE IF NOT EXISTS events (id integer primary key, time timestamp, type integer, value integer, synced bool)",
+                        "CREATE TABLE IF NOT EXISTS notes (id integer primary key, time timestamp, value text)",
+                        "CREATE TABLE IF NOT EXISTS settings (id integer primary key, type varchar(64), value integer)"];
+
+  self.InitialData = ["INSERT INTO settings (type, value) VALUES ('first_run', 1)",
+                      "INSERT INTO event_types (name) VALUES ('Mood')",
+                      "INSERT INTO event_types (name) VALUES ('Energy')",
+                      "INSERT INTO event_types (name) VALUES ('Libido')"];
+  
+  self.createInitialTables = function() {
+    console.log("SQLite: Creating Initial Tables");
+    for (var i = 0; i < self.InitialTables.length; i++) {
+      $sqlite.query(self.InitialTables(i));
+    }
+    
+  };
+  
+  self.insertInitialData = function() {
+    console.log("SQLite: Inserting Initial Data");
+    for (var i = 0; i < self.InitialData.length; i++) {
+      $sqlite.query(self.InitialData(i));
+    }
+  };
+  
+
+  return self;
+})
+
+.factory('$sql_settings', function($cordovaSQLite, $sqlite) {
+
+  var self = this;
+ 
+  self.getFirstRun = function() {
+    return $sqlite.query("SELECT value FROM settings WHERE type = 'first_run'")
+      .then(function(result){
+        var firstRun = $sqlite.getFirst(result);
+        if (firstRun === 0) {
+          return false;
+        }
+        else {
+          return true;
+        }
+      });
   }
   
+  self.setFirstRun = function(setParam) {
+    firstRun = (setParam === true) ? 1 : 0;
+    return $sqlite.query("UPDATE settings SET value = " + firstRun + " WHERE type == first_run");
+  }
+
+ 
   return self;
 })
 
@@ -350,4 +426,4 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   }
  
   return self;
-})
+});
