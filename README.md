@@ -26,6 +26,10 @@ See this thread: http://stackoverflow.com/questions/30042975/manage-cordova-plug
 ## Debug
 Important! Native plugins like Cordova-SQLite won't work in the browser. Therefore, we should debug in our devices or emulators from now on.
 
+Guess what! You have to re-build it every time, for example with ionic serve:
+```
+ionic serve -b
+```
 Run the App (Android)
 ```
 ionic run android
