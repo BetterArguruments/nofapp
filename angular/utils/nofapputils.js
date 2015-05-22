@@ -326,14 +326,20 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$sql_structure', function($cordovaSQLite, $sqlite) {
+.factory('$sql_structure', function($cordovaSQLite, $sqlite, $q) {
   var self = this;
   
   self.getTables = function() {
-    return $sqlite.query("SELECT name FROM sqlite_master WHERE type='table'")
+    var q = $q.defer();
+    
+    $sqlite.query("SELECT name FROM sqlite_master WHERE type='table'")
       .then(function(result){
-        return $sqlite.getAll(result);
+        q.resolve($sqlite.getAll(result));
+      }, function(error) {
+        q.reject(error);
       });
+      
+    return q.promise;
   };
   
   self.InitialTables = ["CREATE TABLE IF NOT EXISTS event_types (id integer primary key, name varchar(64))",
@@ -348,17 +354,26 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   
   self.createInitialTables = function() {
     console.log("SQLite: Creating Initial Tables");
+    
+    var promises = [];
+    
     for (var i = 0; i < self.InitialTables.length; i++) {
-      $sqlite.query(self.InitialTables(i));
+      promises.push($sqlite.query(self.InitialTables[i]));
     }
     
+    return $q.all(promises);
   };
   
   self.insertInitialData = function() {
     console.log("SQLite: Inserting Initial Data");
+    
+    var promises = [];
+    
     for (var i = 0; i < self.InitialData.length; i++) {
-      $sqlite.query(self.InitialData(i));
+      promises.push($sqlite.query(self.InitialData[i]));
     }
+    
+    return $q.all(promises);
   };
   
 
