@@ -3,7 +3,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAnimate','angularMoment','ngSanitize','ui.router'])
 
-.run(function($ionicPlatform, $q, $location, $db_query, $cordovaSQLite, $firstRunCheck, $sqlite, $sql_structure, $rootScope, amMoment, $cordovaKeyboard) {
+.run(function($ionicPlatform, $q, $location, $db_query, $cordovaSQLite, $cordovaAppVersion, $firstRunCheck, $sqlite, $sql_init, $sql_events, $rootScope, amMoment, $cordovaKeyboard) {
   // Initialize Angular Moment
   //amMoment.changeLocale('en-gb');
 
@@ -18,27 +18,43 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
       StatusBar.styleDefault();
     }
     
-    // Debug: Delete DB
+    // Debug: Delete DB, Create Sample Data (Localstorage, Old, for Upgrade)
     $cordovaSQLite.deleteDB("nofapp.db");
+    $db_query.createSampleDataset(300,60);
     
     // Open SQLite Database
     db = $cordovaSQLite.openDB("nofapp.db");
     
     // Check whether tables exist and create, if necessary
-    var sqlTableCount = $sql_structure.getTables();
-    sqlTableCount.then(function(result) {
+    $sql_init.getTables().then(function(result) {
       if (result.length === 0) {
         // Create Tables
-        var doInitialSql = $sql_structure.createInitialTables();
-        doInitialSql.then(function() {
-          $sql_structure.insertInitialData();
-          
-          // Debug SQL
-          var sqlDebug = $sqlite.query("SELECT * FROM event_types");
-          sqlDebug.then(function(result) {
-            console.log(JSON.stringify($sqlite.getAll(result)));
-          });
-          
+        $sql_init.createInitialTables()
+          .then(function() {
+            $sql_init.insertInitialData()
+              .then(function() {
+                $sqlite.query("SELECT * FROM event_types")
+                .then(function(result) {
+                  console.log(JSON.stringify($sqlite.getAll(result)));
+                });
+                
+                
+                // Debug SQL
+                var qq = [];
+                //qq.push($sql_events.addEvent("Mood", 4));
+                //qq.push($sql_events.addEvent("Energy", 5));
+                 //var q3 = $sql_events.addEvent("Libido", 1, 14324211111);
+                 //var q4 = $sql_events.addEvent("Penis", 10);
+                 $sql_events.addEvent("Libido", 3);
+                 //$q.all(qq)
+                 $sql_events.addEvent("Energy", 5)
+                  .then(function() {
+                    $sqlite.query("SELECT * FROM events")
+                    .then(function(result) {
+                      console.log(JSON.stringify($sqlite.getAll(result)));
+                    });
+                  });
+              });
         });
       }
     }, function(error) {
@@ -46,23 +62,11 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     });
     
 
-
-    // Check if Database is empty and initialize with initial Data
-    //console.log(JSON.stringify($sql_structure.isSet()));
-    //var isSet = $sql_structure.isSet();
-
-    /*if ($sql_structure.isSet().length === 0) {
-      console.log("Creating Initial Tables");
-      $sql_structure.createInitialTables();
-      $sql_structure.insertInitialData();
-    }*/
-
     // Go to intro if first run
-    // We should consider setting the "first run" flag
-    // in SQLite instead of localstorage.
     if ($firstRunCheck.isFirstRun()) {
       $location.path('/intro');
-    }    
+    }
+    
   });
 
 })

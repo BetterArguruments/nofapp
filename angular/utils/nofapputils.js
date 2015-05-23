@@ -2,86 +2,7 @@
 // The most awesome DB Manager!
 angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 
-.service('$db_query', function($localstorage, $cordovaSQLite, $rootScope) {
-  // SQLite: Open Database
-  this.sql_openDb = function() {
-    console.log("SQLite: Database Open");
-    $rootScope.db = $cordovaSQLite.openDB("nofapp.db");
-  }
-  
-  // SQLite: Create initial table structure
-  this.sql_initDb = function() {
-    console.log("SQLite: Database Init with Values");
-    
-    // Check if tables exist (first run) and create if necessary
-    $cordovaSQLite.execute($rootScope.db, "CREATE TABLE IF NOT EXISTS event_types (id integer primary key, name varchar(20))");
-    $cordovaSQLite.execute($rootScope.db, "CREATE TABLE IF NOT EXISTS events (id integer primary key, type integer, time timestamp, value integer)");
-    $cordovaSQLite.execute($rootScope.db, "CREATE TABLE IF NOT EXISTS notes (id integer primary key, linked_event integer, value text)");
-    
-    // Create Standard Event Types
-    $cordovaSQLite.execute($rootScope.db, "INSERT INTO event_types (name) VALUES ('Mood')");
-    $cordovaSQLite.execute($rootScope.db, "INSERT INTO event_types (name) VALUES ('Energy')");
-    $cordovaSQLite.execute($rootScope.db, "INSERT INTO event_types (name) VALUES ('Libido')");
-  };
-  
-  // Reset Database: Delete and Re-Create
-  this.sql_resetDb = function() {
-    console.log("SQLite: Deleting and re-creating database");
-    $cordovaSQLite.deleteDB({name: "nofapp.db"});
-    this.sql_openDb();
-    this.sql_initDb();
-  };
-  
-  this.sql_debug = function(table) {
-    var query = "SELECT * FROM " + table;
-    $cordovaSQLite.execute($rootScope.db, query).then(function(res) {
-      console.log(JSON.stringify(res));
-      console.log(res.rows.length);
-      console.log(JSON.stringify(res.rows.item(0)));
-      for (var i = 0; i < res.rows.length; i++) {
-        console.log(JSON.stringify(res.rows.item(i)));
-      }
-    }, function(err) {
-      console.log(err);
-    });
-  };
-  
-  this.sql_insertEvent = function (type, value, time) {
-    console.log("Inserting new Row into Dataset");
-    
-    // Overload: Use timestamp of now (sql) of time is undefined
-    var insert_time = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
-    
-    // Get Type
-    var insert_type = this.sql_getTypeIdByName(type);
-    
-    // The Value
-    var insert_value = value;
-    
-    // Do the Query
-    var query = "INSERT INTO events (type, time, value) VALUES (?, UNIX_TIMESTAMP(?), ?)";
-    $cordovaSQLite.execute($rootScope.db, query, [insert_type, insert_time, insert_value]);
-  };
-  
-  this.sql_insertUsualEvents = function (mood, energy, libido, time) {
-    // Check if time is set, otherwise use now (Overload)
-    var insert_time = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
-
-    this.sql_insertEvent("Mood", mood, insert_time);
-    this.sql_insertEvent("Energy", energy, insert_time);
-    this.sql_insertEvent("Libido", libido, insert_time);
-  }
-  
-  this.sql_getTypeIdByName = function (typeName) {
-    var query = "SELECT id FROM event_types WHERE (name == ?)";
-    $cordovaSQLite.execute($rootScope.db, query, [typeName]).then(function(res) {
-      return res.rows.item(0).id;
-    }, function(err) {
-      console.log(err);
-      return false;
-    });
-  }
-  
+.service('$db_query', function($localstorage) {
   // Initial Dataset for localStorage Database.
   this.getInitialDataset = function() {
       return [];
@@ -111,7 +32,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
               sampleData.push(["libido", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
           }
       }
-      console.log(sampleData);
+      //console.log(sampleData);
       $localstorage.setObject("struct", sampleData);
   }
 
@@ -257,7 +178,15 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   this.setFirstRun = function(val) {
     // val = boolean, well not really, actually it's a string which is
   // either true or false, DUH
-    $localstorage.set("firstRun", val)
+    if (val === "done") {
+      $localstorage.set("firstRun", "done");
+    }
+    else if (val === "not_done") {
+      $localstorage.set("firstRun", "not_done");
+    }
+    else {
+      console.log("setFirstRun Error!");
+    }
     console.log("firstRun set to " + $localstorage.get("firstRun"));
   };
 })
@@ -326,8 +255,18 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$sql_structure', function($cordovaSQLite, $sqlite, $q) {
+.factory('$sql_init', function($cordovaSQLite, $sqlite, $q, $cordovaAppVersion) {
   var self = this;
+  
+  // Note: SQLite 3 has no Boolean Class, therefore synced is an Integer
+  self.InitialTables = ["CREATE TABLE IF NOT EXISTS event_types (id integer primary key, name text)",
+                        "CREATE TABLE IF NOT EXISTS events (id integer primary key, time integer, type integer, value integer, synced integer)",
+                        "CREATE TABLE IF NOT EXISTS notes (id integer primary key, time integer, value text)",
+                        "CREATE TABLE IF NOT EXISTS settings (id integer primary key, type text, value integer)"];
+
+  self.InitialData = ["INSERT INTO event_types (name) VALUES ('Mood')",
+                      "INSERT INTO event_types (name) VALUES ('Energy')",
+                      "INSERT INTO event_types (name) VALUES ('Libido')"];
   
   self.getTables = function() {
     var q = $q.defer();
@@ -341,16 +280,6 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       
     return q.promise;
   };
-  
-  self.InitialTables = ["CREATE TABLE IF NOT EXISTS event_types (id integer primary key, name varchar(64))",
-                        "CREATE TABLE IF NOT EXISTS events (id integer primary key, time timestamp, type integer, value integer, synced bool)",
-                        "CREATE TABLE IF NOT EXISTS notes (id integer primary key, time timestamp, value text)",
-                        "CREATE TABLE IF NOT EXISTS settings (id integer primary key, type varchar(64), value integer)"];
-
-  self.InitialData = ["INSERT INTO settings (type, value) VALUES ('first_run', 1)",
-                      "INSERT INTO event_types (name) VALUES ('Mood')",
-                      "INSERT INTO event_types (name) VALUES ('Energy')",
-                      "INSERT INTO event_types (name) VALUES ('Libido')"];
   
   self.createInitialTables = function() {
     console.log("SQLite: Creating Initial Tables");
@@ -376,39 +305,107 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return $q.all(promises);
   };
   
+  // Database Initializer or Upgrader:
+  // Should be run in $ionicPlatform.ready()
+  self.initDispatch = function() {
+    var structDb = $localstorage.getObject('struct');
 
-  return self;
-})
-
-.factory('$sql_settings', function($cordovaSQLite, $sqlite) {
-
-  var self = this;
- 
-  self.getFirstRun = function() {
-    return $sqlite.query("SELECT value FROM settings WHERE type = 'first_run'")
-      .then(function(result){
-        var firstRun = $sqlite.getFirst(result);
-        if (firstRun === 0) {
-          return false;
+    var q1 = $cordovaAppVersion.getAppVersion();
+    var q2 = $sql_init.getTables();
+    
+    $q.all([q1, q2])
+    .then(function(resArray) {
+      var appVersion = resArray[0];
+      var tableCount = resArray[1].length;
+      console.log("Updater / Init: App Version: "+ appVersion + ", Table Count: " + tableCount);
+      
+      if (tableCount !== 0) {
+        console.log("Updater stopped, found SQLite Tables");
+        return false;
+      }
+      
+      if (appVersion === "0.0.2") {
+        if ((typeof structDb === "undefined") || structDb.length === 0) {
+          // User has no old Data, create Initial SQL Structure
+          console.log("No old Data, creating SQLite Structure");
+          $sql_init.createInitialTables().then(function() {
+            $sql_init.insertInitialData();
+          });
         }
-        else {
-          return true;
+        else if ((typeof structDb !== "undefined") && structDb.length > 0) {
+          // User has old Data, Migrate 1 -> 2
+          console.log("Found old Data, starting Migration 1 -> 2");
+          self.update_from_1_to_2();
         }
-      });
-  }
+      }
+    });   
+      
+  };
   
-  self.setFirstRun = function(setParam) {
-    firstRun = (setParam === true) ? 1 : 0;
-    return $sqlite.query("UPDATE settings SET value = " + firstRun + " WHERE type == first_run");
-  }
+  // Upgrade from v0.0.1 to v0.0.2
+  self.upgrade_from_1_to_2 = function() {
+    structDb = $localstorage.getObject('struct');
+    
+    for (var i = 0; i < structDb.length; i++) {
+      switch(structDb[i][0]) {
+      case "mood":
+        break;
+      case "energy":
+        break;
+      case "libido":
+        break;
+      case "sex":
+        break;
+      case "fap":
+        break;
+      case "note":
+        break;
+      }
+    }
+    
+  };
 
- 
   return self;
 })
 
-.factory('$sql_events', function($cordovaSQLite, $sqlite) {
+.factory('$sql_events', function($cordovaSQLite, $sqlite, $q) {
   // https://gist.github.com/borissondagh/29d1ed19d0df6051c56f
   var self = this;
+ 
+  self.getEventTypeIdByName = function(eventName) {
+    q = $q.defer();
+    $sqlite.query("SELECT id FROM event_types WHERE name = ?", [eventName])
+    .then(function(result) {
+      if (typeof $sqlite.getFirst(result) === "undefined") {
+        q.reject("No Event Type ID found for Name " + eventName);
+      }
+      else {
+        q.resolve($sqlite.getFirst(result).id);
+      }
+    }, function(error) {
+      q.reject(error);
+    });
+    return q.promise;
+  };
+  
+  self.addEvent = function(type, value, time) {
+    q = $q.defer();
+    addEventTime = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+    
+    self.getEventTypeIdByName(type)
+      .then(function(addEventTypeId) {
+        console.log("Inserting: " + [addEventTime, addEventTypeId, value]);
+        //console.log(JSON.stringify(addEventTypeId));
+        $sqlite.query("INSERT INTO events (time, type, value, synced) VALUES (?, ?, ?, ?)", [addEventTime, addEventTypeId, value, 0])
+          .then(function() {
+            q.resolve(true);
+          });
+      }, function(error) {
+        q.reject(error);
+      });
+      
+    return q.promise;
+  }
  
   self.all = function() {
     return $sqlite.query("SELECT id, name FROM team")

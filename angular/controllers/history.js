@@ -13,4 +13,8 @@ angular.module('nofApp')
   };
   
   updateHistory();
+  
+  $scope.createSampleData = function () {
+      $db_query.createSampleDataset(300,60);
+  };
 });
