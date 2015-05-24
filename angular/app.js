@@ -20,13 +20,22 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     
     // Debug: Delete DB, Create Sample Data (Localstorage, Old, for Upgrade)
     $cordovaSQLite.deleteDB("nofapp.db");
-    $db_query.createSampleDataset(300,60);
+    //$db_query.createSampleDataset(300,60);
     
     // Open SQLite Database
     db = $cordovaSQLite.openDB("nofapp.db");
     
+    // Update Table Structure or Create Tables (First Time)
+    $sql_init.initOrUpdate()
+      .then(function() {
+        $sqlite.query("SELECT * FROM event_types")
+        .then(function(result) {
+          console.log(JSON.stringify($sqlite.getAll(result)));
+        });
+      });
+    
     // Check whether tables exist and create, if necessary
-    $sql_init.getTables().then(function(result) {
+    /*$sql_init.getTables().then(function(result) {
       if (result.length === 0) {
         // Create Tables
         $sql_init.createInitialTables()
@@ -47,19 +56,22 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
                  //var q4 = $sql_events.addEvent("Penis", 10);
                  $sql_events.addEvent("Libido", 3);
                  //$q.all(qq)
-                 $sql_events.addEvent("Energy", 5)
+                 $sql_events.addEvent("PimmelPimmel", 5)
                   .then(function() {
                     $sqlite.query("SELECT * FROM events")
                     .then(function(result) {
                       console.log(JSON.stringify($sqlite.getAll(result)));
                     });
+                  }, function(error) {
+                    console.log("addEventError!");
+                    console.log(error);
                   });
               });
         });
       }
     }, function(error) {
       console.log(JSON.stringify(error));
-    });
+    });*/
     
 
     // Go to intro if first run

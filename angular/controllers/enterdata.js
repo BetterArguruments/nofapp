@@ -1,7 +1,7 @@
 angular.module('nofApp')
 
 // Enter Data Controller
-.controller('EnterDataCtrl', function($scope, $state, $db_query, $ionicPopup) {
+.controller('EnterDataCtrl', function($scope, $state, $db_query, $ionicPopup, $sql_events, $sqlite, $q) {
 
   // set initial values for a new state
   // TODO: read values from db if last dataset < x minutes ago
@@ -57,19 +57,28 @@ angular.module('nofApp')
   
   // Submit the mood/energy form and write new entries
   $scope.addDataset = function() {
-    console.log($scope.userState);
+    console.log(JSON.stringify($scope.userState));
     // $db_query.addEventsToDb($scope.userState.mood, $scope.userState.energy); DEPRECATED
-    $db_query.addUsualDataToDb($scope.userState.mood, $scope.userState.energy, $scope.userState.libido);
+    //$db_query.addUsualDataToDb($scope.userState.mood, $scope.userState.energy, $scope.userState.libido);
+    var promises = [];
+    promises.push($sql_events.addEvent("Mood", $scope.userState.mood));
+    promises.push($sql_events.addEvent("Energy", $scope.userState.energy));
+    promises.push($sql_events.addEvent("Libido", $scope.userState.libido));
     
     // Check for Note and enter it into DB
     if ($scope.userState.note != "") {
-        $db_query.addToDb("note", $scope.userState.note);
-        console.log("Note added to DB.");
+        //$db_query.addToDb("note", $scope.userState.note);
+        // TODO: Add Note
+        //promises.push();
     }
+    
+    $q.all(promises).then(function() {
+      $scope.userState.reset();
+      $scope.$emit('datasetChanged');
+      $state.go('tabs.history');
+      
+    });
   
-    $scope.userState.reset();
-    $scope.$emit('datasetChanged');
-    $state.go('tabs.history');
   };
   
   $scope.justHadSex = function() {
@@ -79,27 +88,29 @@ angular.module('nofApp')
     okType: 'button-balanced'
     }).then(function(res) {
       if(res) {
-        // $db_query.addSexToDb(Math.floor(Date.now() / 1000)); DEPRECATED
-        $db_query.addToDb("sex");
-        $scope.$emit('datasetChanged');
-        $state.go('tabs.history');
-        console.log("Sex added to DB. Nice!");
+        //$db_query.addToDb("sex");
+        $sql_events.addEvent("Sex").then(function() {
+          console.log("Sex added to DB. Nice!");
+          $scope.$emit('datasetChanged');
+          $state.go('tabs.history');
+        })
       }
     });
   }
   
   $scope.justRelapsed = function() {
     var confirmPopup = $ionicPopup.confirm({
-      title: 'Relapsed?',
+      title: 'Oh Noes!',
       template: 'Please confirm!',
       okType: 'button-assertive'
     }).then(function(res) {
       if(res) {
-        // $db_query.addRelapseToDb(Math.floor(Date.now() / 1000));
-        $db_query.addToDb("fap");
-        $scope.$emit('datasetChanged');
-        $state.go('tabs.history');
-        console.log("Relapse added to DB. Oh noes!");
+        //$db_query.addToDb("fap");
+        $sql_events.addEvent("Fap").then(function() {
+          console.log("Relapse added to DB. Oh noes!");
+          $scope.$emit('datasetChanged');
+          $state.go('tabs.history');
+        })
       }
     });
   }

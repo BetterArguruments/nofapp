@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.betterarguruments.nofapp" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.betterarguruments.nofapp" version="0.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>NofApp</name>
   <description>
     NofApp Awesomeness.
     </description>
-  <author email="better.arguruments@gmail.com">
+  <author email="hello@betterarguruments.com">
     Better Arguruments
     </author>
   <content src="index.html"/>

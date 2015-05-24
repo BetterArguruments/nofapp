@@ -1,10 +1,13 @@
 angular.module('nofApp')
-.controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory, $rootScope) {
+.controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory, $rootScope, $sqlite) {
 
   // Debug SQLite
   $scope.debug_sql = function() {
-    $db_query.sql_debug("events");
-  }
+    $sqlite.query("SELECT * FROM events")
+    .then(function(result) {
+      console.log(JSON.stringify($sqlite.getAll(result)));
+    });
+  };
 
 
   // Check for Updates

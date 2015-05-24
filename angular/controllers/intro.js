@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location, $ionicModal) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite) {
   // Debug: Test SQLite
   $scope.sqlite_debug = function() {
     $db_query.sql_debug("event_types");
@@ -176,33 +176,44 @@ angular.module('nofApp')
       var timestamp_lastSex = timestamp - (60*60*24*$scope.userState.values.sexDaysAgo);
       var timestamp_lastFap = timestamp - (60*60*24*$scope.userState.values.fapDaysAgo);
 
-      console.log("Mood: " + $scope.userState.values.mood + " Energy: " + $scope.userState.values.energy + " FapDaysAgo: " + $scope.userState.values.fapDaysAgo + " SexDaysAgo: " + $scope.userState.values.sexDaysAgo + " Fap Timestamp: " + timestamp_lastFap + " Sex Timestamp: " + timestamp_lastSex);
+      console.log("Mood: " + $scope.userState.values.mood + " Energy: " + $scope.userState.values.energy + " Libido: " + $scope.userState.values.libido + " FapDaysAgo: " + $scope.userState.values.fapDaysAgo + " SexDaysAgo: " + $scope.userState.values.sexDaysAgo + " Fap Timestamp: " + timestamp_lastFap + " Sex Timestamp: " + timestamp_lastSex);
 
 
       // Write Mood and Energy to DB, Timestamp is added automatically (now)
       //$db_query.addUsualDataToDb($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido);
-      $db_query.sql_insertUsualEvents($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido, timestamp);
+      //$db_query.sql_insertUsualEvents($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido, timestamp);
+      var promises = [];
+      promises.push($sql_events.addEvent("Mood", $scope.userState.values.mood));
+      promises.push($sql_events.addEvent("Energy", $scope.userState.values.energy));
+      promises.push($sql_events.addEvent("Libido", $scope.userState.values.libido));
 
       // Write Sex and Fap to DB
       // Handle last sex on 'decades ago'
       if ($scope.userState.values.sexDaysAgo !== -1) {
-        $db_query.addToDb("sex", undefined, timestamp_lastSex);
+        //$db_query.addToDb("sex", undefined, timestamp_lastSex);
+        promises.push($sql_events.addEvent("Sex", null, timestamp_lastSex));
       }
-      $db_query.addToDb("fap", undefined, timestamp_lastFap);
+      //$db_query.addToDb("fap", undefined, timestamp_lastFap);
+      promises.push($sql_events.addEvent("Fap", null, timestamp_lastFap));
+      
+      $q.all(promises).then(function() {        
+        // Alert User
+        // TODO: make toast
+        var alertPopup = $ionicPopup.alert({
+          title: "Awesome!",
+          template: "Way to get it started!",
+          okType: "button-royal"
+        });
+        
+        // Set firstRun = false and Redirect to Main
+        alertPopup.then($scope.firstRunDone());
+        $scope.$emit('datasetChanged');
+      })
+      
 
-      // Update Views
-       $scope.$emit('datasetChanged');
+      
 
-      // Alert User
-      // TODO: make toast
-      var alertPopup = $ionicPopup.alert({
-        title: "Awesome!",
-        template: "Way to get it started!",
-        okType: "button-royal"
-      });
-
-      // Set firstRun = false and Redirect to Main
-      alertPopup.then($scope.firstRunDone());
+      
     }
   }
 });

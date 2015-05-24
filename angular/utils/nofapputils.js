@@ -255,7 +255,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$sql_init', function($cordovaSQLite, $sqlite, $q, $cordovaAppVersion) {
+.factory('$sql_init', function($cordovaSQLite, $sqlite, $q, $cordovaAppVersion, $localstorage) {
   var self = this;
   
   // Note: SQLite 3 has no Boolean Class, therefore synced is an Integer
@@ -266,7 +266,9 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 
   self.InitialData = ["INSERT INTO event_types (name) VALUES ('Mood')",
                       "INSERT INTO event_types (name) VALUES ('Energy')",
-                      "INSERT INTO event_types (name) VALUES ('Libido')"];
+                      "INSERT INTO event_types (name) VALUES ('Libido')",
+                      "INSERT INTO event_types (name) VALUES ('Sex')",
+                      "INSERT INTO event_types (name) VALUES ('Fap')"];
   
   self.getTables = function() {
     var q = $q.defer();
@@ -307,11 +309,14 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   
   // Database Initializer or Upgrader:
   // Should be run in $ionicPlatform.ready()
-  self.initDispatch = function() {
+  self.initOrUpdate = function() {
+    var q = $q.defer();
     var structDb = $localstorage.getObject('struct');
+    console.log(structDb);
+    console.log(JSON.stringify(structDb));
 
     var q1 = $cordovaAppVersion.getAppVersion();
-    var q2 = $sql_init.getTables();
+    var q2 = self.getTables();
     
     $q.all([q1, q2])
     .then(function(resArray) {
@@ -321,25 +326,28 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       
       if (tableCount !== 0) {
         console.log("Updater stopped, found SQLite Tables");
-        return false;
+        q.resolve(true);
       }
       
       if (appVersion === "0.0.2") {
-        if ((typeof structDb === "undefined") || structDb.length === 0) {
+        if ((typeof structDb === "undefined") || Object.keys(structDb).length === 0 || structDb.length === 0) {
           // User has no old Data, create Initial SQL Structure
           console.log("No old Data, creating SQLite Structure");
-          $sql_init.createInitialTables().then(function() {
-            $sql_init.insertInitialData();
+          self.createInitialTables().then(function() {
+            self.insertInitialData().then(function() {
+              q.resolve(true);
+            });
           });
         }
         else if ((typeof structDb !== "undefined") && structDb.length > 0) {
           // User has old Data, Migrate 1 -> 2
           console.log("Found old Data, starting Migration 1 -> 2");
-          self.update_from_1_to_2();
+          //self.update_from_1_to_2();
         }
       }
     });   
-      
+    
+    return q.promise;
   };
   
   // Upgrade from v0.0.1 to v0.0.2
@@ -373,30 +381,35 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   var self = this;
  
   self.getEventTypeIdByName = function(eventName) {
-    q = $q.defer();
+    var q = $q.defer();
     $sqlite.query("SELECT id FROM event_types WHERE name = ?", [eventName])
-    .then(function(result) {
-      if (typeof $sqlite.getFirst(result) === "undefined") {
-        q.reject("No Event Type ID found for Name " + eventName);
-      }
-      else {
-        q.resolve($sqlite.getFirst(result).id);
-      }
-    }, function(error) {
-      q.reject(error);
+      .then(function(result) {
+        if (typeof $sqlite.getFirst(result) === "undefined") {
+          q.reject("No Event Type ID found for Name " + eventName);
+        }
+        else {
+          q.resolve($sqlite.getFirst(result).id);
+        }
+      }, function(error) {
+        q.reject(error);
     });
     return q.promise;
   };
   
   self.addEvent = function(type, value, time) {
-    q = $q.defer();
-    addEventTime = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+    var q = $q.defer();
+    
+    // Get Timestamp(now) if undefined
+    var addEventTime = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+    
+    // Set Value = null if undefined (e.g. for Sex and Fap)
+    var addEventValue = (typeof value === "undefined") ? null : value;
     
     self.getEventTypeIdByName(type)
       .then(function(addEventTypeId) {
-        console.log("Inserting: " + [addEventTime, addEventTypeId, value]);
+        console.log("Inserting: " + [addEventTime, addEventTypeId, addEventValue]);
         //console.log(JSON.stringify(addEventTypeId));
-        $sqlite.query("INSERT INTO events (time, type, value, synced) VALUES (?, ?, ?, ?)", [addEventTime, addEventTypeId, value, 0])
+        $sqlite.query("INSERT INTO events (time, type, value, synced) VALUES (?, ?, ?, ?)", [addEventTime, addEventTypeId, addEventValue, 0])
           .then(function() {
             q.resolve(true);
           });
