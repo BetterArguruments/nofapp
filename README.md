@@ -20,8 +20,10 @@ Install Node.js and Bower Dependencies
 npm install
 bower install
 ```
-Apparently, there is no way to install cordova plugin dependencies at the moment. Are we the only people using cordova via git? Therefore, the cordova plugins/ directory is included and the .gitignore file modified accordingly.
-See this thread: http://stackoverflow.com/questions/30042975/manage-cordova-plugins-with-npm-package-json
+Install Cordova Plugins
+```
+ionic state restore
+```
 
 ## Debug
 Important! Native plugins like Cordova-SQLite won't work in the browser. Therefore, we should debug in our devices or emulators from now on.
