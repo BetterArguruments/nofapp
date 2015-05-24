@@ -20,7 +20,7 @@ Install Node.js and Bower Dependencies
 npm install
 bower install
 ```
-Install Cordova Plugins
+Install Cordova Plugins based on package.json
 ```
 ionic state restore
 ```
