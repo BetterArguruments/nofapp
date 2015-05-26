@@ -20,19 +20,22 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     
     // Debug: Delete DB, Create Sample Data (Localstorage, Old, for Upgrade)
     $cordovaSQLite.deleteDB("nofapp.db");
-    //$db_query.createSampleDataset(300,60);
+    $db_query.createSampleDataset(8,7);
     
     // Open SQLite Database
     db = $cordovaSQLite.openDB("nofapp.db");
     
     // Update Table Structure or Create Tables (First Time)
-    $sql_init.initOrUpdate()
+    
+    
+    $sql_init.init()
       .then(function() {
         $sqlite.query("SELECT * FROM event_types")
         .then(function(result) {
           console.log(JSON.stringify($sqlite.getAll(result)));
         });
       });
+      
     
     // Check whether tables exist and create, if necessary
     /*$sql_init.getTables().then(function(result) {

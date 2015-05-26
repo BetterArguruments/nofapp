@@ -21,17 +21,21 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
           // Event Type
           var sampleEventType = Math.floor(Math.random() * 10);
           if (sampleEventType === 9) {
-              sampleData.push(["sex", startTimestamp + (meanIncrement * i) - incrementVariance]);
+            sampleData.push(["sex", startTimestamp + (meanIncrement * i) - incrementVariance]);
           }
-          else if (sampleEventType > 6 ) {
-              sampleData.push(["fap", startTimestamp + (meanIncrement * i) - incrementVariance]);
+          else if (sampleEventType > 7 ) {
+            sampleData.push(["fap", startTimestamp + (meanIncrement * i) - incrementVariance]);
+          }
+          else if (sampleEventType > 5) {
+            sampleData.push(["note", startTimestamp + (meanIncrement * i) - incrementVariance, "HELLO WORLD!"]);
           }
           else {
-              sampleData.push(["mood", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
-              sampleData.push(["energy", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
-              sampleData.push(["libido", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
+            sampleData.push(["mood", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
+            sampleData.push(["energy", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
+            sampleData.push(["libido", startTimestamp + (meanIncrement * i) - incrementVariance, 1 + Math.floor(Math.random() * 5)]);
           }
       }
+      
       //console.log(sampleData);
       $localstorage.setObject("struct", sampleData);
   }
@@ -255,7 +259,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$sql_init', function($cordovaSQLite, $sqlite, $q, $cordovaAppVersion, $localstorage) {
+.factory('$sql_init', function($sqlite, $q, $cordovaAppVersion, $localstorage, $sql_events, $sql_notes) {
   var self = this;
   
   // Note: SQLite 3 has no Boolean Class, therefore synced is an Integer
@@ -297,7 +301,6 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   
   self.insertInitialData = function() {
     console.log("SQLite: Inserting Initial Data");
-    
     var promises = [];
     
     for (var i = 0; i < self.InitialData.length; i++) {
@@ -309,74 +312,104 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   
   // Database Initializer or Upgrader:
   // Should be run in $ionicPlatform.ready()
-  self.initOrUpdate = function() {
+  self.init = function() {
     var q = $q.defer();
     var structDb = $localstorage.getObject('struct');
-    console.log(structDb);
     console.log(JSON.stringify(structDb));
 
-    var q1 = $cordovaAppVersion.getAppVersion();
-    var q2 = self.getTables();
-    
-    $q.all([q1, q2])
-    .then(function(resArray) {
-      var appVersion = resArray[0];
-      var tableCount = resArray[1].length;
-      console.log("Updater / Init: App Version: "+ appVersion + ", Table Count: " + tableCount);
+    self.getTables().then(function(tableCount) {
+      console.log("SQLite Init: SQLite Table Count: " + tableCount.length);
       
-      if (tableCount !== 0) {
-        console.log("Updater stopped, found SQLite Tables");
+      if (tableCount.length !== 0) {
+        console.log("SQLite Init: Stopped, found " + tableCount.length + "SQLite Tables");
         q.resolve(true);
       }
-      
-      if (appVersion === "0.0.2") {
-        if ((typeof structDb === "undefined") || Object.keys(structDb).length === 0 || structDb.length === 0) {
-          // User has no old Data, create Initial SQL Structure
-          console.log("No old Data, creating SQLite Structure");
-          self.createInitialTables().then(function() {
-            self.insertInitialData().then(function() {
-              q.resolve(true);
-            });
-          });
-        }
-        else if ((typeof structDb !== "undefined") && structDb.length > 0) {
-          // User has old Data, Migrate 1 -> 2
-          console.log("Found old Data, starting Migration 1 -> 2");
-          //self.update_from_1_to_2();
-        }
+      else {
+        console.log("SQLite Init: No SQLite Tables found. Creating initial Tables and starting Upgrader");
+        self.createInitialTables()
+        .then(function() {
+          self.insertInitialData()
+        })
+        .then(function() {
+          self.upgrade();
+        })
+        .then(function() {
+          q.resolve(true);
+        });
       }
+      
+      
     });   
     
     return q.promise;
   };
   
+  // Database Upgrader
+  self.upgrade = function() {
+    var q = $q.defer();
+    var structDb = $localstorage.getObject('struct');
+    
+    $cordovaAppVersion.getAppVersion().then(function(appVersion) {
+      if (appVersion === "0.0.2") {
+        if ((typeof structDb !== "undefined") && structDb.length > 0) {
+          // User has old Data, Migrate 1 -> 2
+          console.log("Updater: Found old localstorage Data, starting Migration 1 -> 2");
+          self.upgrade_from_1_to_2().then(function() {
+            q.resolve("Upgrade complete");
+          });
+        }
+        else {
+          // User has no old Data
+          console.log("Updater: No old localstorage Data found");
+          q.resolve("Upgrade skipped");
+        }
+      }
+    });
+    
+    return q.promise;
+  }
+  
   // Upgrade from v0.0.1 to v0.0.2
   self.upgrade_from_1_to_2 = function() {
-    structDb = $localstorage.getObject('struct');
+    var structDb = $localstorage.getObject('struct');
+    var promises = [];
+    
+    //$sql_notes.addNote("HELLO", 1432679581);
     
     for (var i = 0; i < structDb.length; i++) {
       switch(structDb[i][0]) {
       case "mood":
+        promises.push($sql_events.addEvent("Mood", structDb[i][2], structDb[i][1]));
         break;
       case "energy":
+        promises.push($sql_events.addEvent("Energy", structDb[i][2], structDb[i][1]));
         break;
       case "libido":
+        promises.push($sql_events.addEvent("Libido", structDb[i][2], structDb[i][1]));
         break;
       case "sex":
+        promises.push($sql_events.addEvent("Sex", null, structDb[i][1]));
         break;
       case "fap":
+        promises.push($sql_events.addEvent("Fap", null, structDb[i][1]));
         break;
       case "note":
+        promises.push($sql_notes.addNote(structDb[i][2], structDb[i][1]));
         break;
       }
     }
     
+    // Delete localstorage
+    $localstorage.set("struct","");
+    
+    console.log("Migrating " + structDb.length + " localstorage Entries to " + promises.length + " SQLite Entries");
+    return $q.all(promises);
   };
 
   return self;
 })
 
-.factory('$sql_events', function($cordovaSQLite, $sqlite, $q) {
+.factory('$sql_events', function($sqlite, $q) {
   // https://gist.github.com/borissondagh/29d1ed19d0df6051c56f
   var self = this;
  
@@ -407,8 +440,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     
     self.getEventTypeIdByName(type)
       .then(function(addEventTypeId) {
-        console.log("Inserting: " + [addEventTime, addEventTypeId, addEventValue]);
-        //console.log(JSON.stringify(addEventTypeId));
+        console.log("Inserting Event: " + [addEventTime, addEventTypeId, addEventValue]);
         $sqlite.query("INSERT INTO events (time, type, value, synced) VALUES (?, ?, ?, ?)", [addEventTime, addEventTypeId, addEventValue, 0])
           .then(function() {
             q.resolve(true);
@@ -450,5 +482,24 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return $sqlite.query("UPDATE team SET id = (?), name = (?) WHERE id = (?)", parameters);
   }
  
+  return self;
+})
+
+.factory('$sql_notes', function($sqlite, $q) {
+  self.addNote = function(value, time) {
+    var q = $q.defer();
+    var addNoteTime = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
+    
+    console.log("Inserting Note: " + [addNoteTime, value.trim()]);
+    $sqlite.query("INSERT INTO notes (time, value) VALUES (?, ?)", [addNoteTime, value.trim()])
+      .then(function(value) {
+        q.resolve(true);
+      }, function(error) {
+        q.reject(error);
+      });
+    
+    return q.promise;
+  }
+  
   return self;
 });
