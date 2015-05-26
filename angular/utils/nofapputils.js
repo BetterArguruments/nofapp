@@ -166,33 +166,6 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     console.log("Database Reset.");
   };
 
-  this.isFirstRun = function () {
-    var firstRun = $localstorage.get("firstRun", "true");
-    if (firstRun === "false") {
-      return false;
-    } else {
-      return true;
-    };
-  };
-
-  this.firstRunDone = function() {
-    $localstorage.set("firstRun", "false");
-  };
-
-  this.setFirstRun = function(val) {
-    // val = boolean, well not really, actually it's a string which is
-  // either true or false, DUH
-    if (val === "done") {
-      $localstorage.set("firstRun", "done");
-    }
-    else if (val === "not_done") {
-      $localstorage.set("firstRun", "not_done");
-    }
-    else {
-      console.log("setFirstRun Error!");
-    }
-    console.log("firstRun set to " + $localstorage.get("firstRun"));
-  };
 })
 
 
@@ -317,29 +290,27 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     var structDb = $localstorage.getObject('struct');
     console.log(JSON.stringify(structDb));
 
-    self.getTables().then(function(tableCount) {
-      console.log("SQLite Init: SQLite Table Count: " + tableCount.length);
+    return self.getTables()
+      .then(function(tableCount) {
+        console.log("SQLite Init: SQLite Table Count: " + tableCount.length);
       
-      if (tableCount.length !== 0) {
-        console.log("SQLite Init: Stopped, found " + tableCount.length + "SQLite Tables");
-        q.resolve(true);
-      }
-      else {
-        console.log("SQLite Init: No SQLite Tables found. Creating initial Tables and starting Upgrader");
-        self.createInitialTables()
-        .then(function() {
-          self.insertInitialData()
-        })
-        .then(function() {
-          self.upgrade();
-        })
-        .then(function() {
+        if (tableCount.length !== 0) {
+          console.log("SQLite Init: Stopped, found " + tableCount.length + "SQLite Tables");
           q.resolve(true);
-        });
-      }
+        }
+        else {
+          console.log("SQLite Init: No SQLite Tables found. Creating initial Tables and starting Upgrader");
+          return self.createInitialTables()
+            .then(function() {
+              return self.insertInitialData();
+            })
+            .then(function() {
+              return self.upgrade();
+            });
+        }
       
       
-    });   
+      });
     
     return q.promise;
   };
@@ -349,14 +320,12 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     var q = $q.defer();
     var structDb = $localstorage.getObject('struct');
     
-    $cordovaAppVersion.getAppVersion().then(function(appVersion) {
+    return $cordovaAppVersion.getAppVersion().then(function(appVersion) {
       if (appVersion === "0.0.2") {
         if ((typeof structDb !== "undefined") && structDb.length > 0) {
           // User has old Data, Migrate 1 -> 2
           console.log("Updater: Found old localstorage Data, starting Migration 1 -> 2");
-          self.upgrade_from_1_to_2().then(function() {
-            q.resolve("Upgrade complete");
-          });
+          return self.upgrade_from_1_to_2();
         }
         else {
           // User has no old Data

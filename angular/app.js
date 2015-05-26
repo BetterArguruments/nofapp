@@ -30,51 +30,21 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     
     $sql_init.init()
       .then(function() {
+        console.log("Done?1");
         $sqlite.query("SELECT * FROM event_types")
+          .then(function(result) {
+            console.log(JSON.stringify($sqlite.getAll(result)));
+          });
+      })
+      .then(function() {
+        console.log("Done?2");
+      $sqlite.query("SELECT * FROM events")
         .then(function(result) {
           console.log(JSON.stringify($sqlite.getAll(result)));
         });
       });
       
-    
-    // Check whether tables exist and create, if necessary
-    /*$sql_init.getTables().then(function(result) {
-      if (result.length === 0) {
-        // Create Tables
-        $sql_init.createInitialTables()
-          .then(function() {
-            $sql_init.insertInitialData()
-              .then(function() {
-                $sqlite.query("SELECT * FROM event_types")
-                .then(function(result) {
-                  console.log(JSON.stringify($sqlite.getAll(result)));
-                });
-                
-                
-                // Debug SQL
-                var qq = [];
-                //qq.push($sql_events.addEvent("Mood", 4));
-                //qq.push($sql_events.addEvent("Energy", 5));
-                 //var q3 = $sql_events.addEvent("Libido", 1, 14324211111);
-                 //var q4 = $sql_events.addEvent("Penis", 10);
-                 $sql_events.addEvent("Libido", 3);
-                 //$q.all(qq)
-                 $sql_events.addEvent("PimmelPimmel", 5)
-                  .then(function() {
-                    $sqlite.query("SELECT * FROM events")
-                    .then(function(result) {
-                      console.log(JSON.stringify($sqlite.getAll(result)));
-                    });
-                  }, function(error) {
-                    console.log("addEventError!");
-                    console.log(error);
-                  });
-              });
-        });
-      }
-    }, function(error) {
-      console.log(JSON.stringify(error));
-    });*/
+
     
 
     // Go to intro if first run
