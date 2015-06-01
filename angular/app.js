@@ -53,8 +53,13 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     }
     
   });
-
+  
 })
+
+.config(function($ionicConfigProvider) {
+  // Native Scrolling
+  $ionicConfigProvider.platform.android.scrolling.jsScrolling(false);
+}) 
 
 // Setting for Angular Moment.js to treat
 // Timestamps as Unix Timestamps

@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $db_query, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite) {
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $firstRunCheck, $db_query, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite) {
   // Debug: Test SQLite
   $scope.sqlite_debug = function() {
     $db_query.sql_debug("event_types");
@@ -8,7 +8,7 @@ angular.module('nofApp')
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
-    $db_query.firstRunDone();
+    $firstRunCheck.setFirstRun("false");
     $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('tabs.main');
