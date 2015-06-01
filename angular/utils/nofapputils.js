@@ -232,7 +232,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$sql_init', function($sqlite, $q, $cordovaAppVersion, $localstorage, $sql_events, $sql_notes) {
+.factory('$sql_init', function($sqlite, $q, $cordovaSQLite, $cordovaAppVersion, $localstorage, $sql_events, $sql_notes) {
   var self = this;
   
   // Note: SQLite 3 has no Boolean Class, therefore synced is an Integer
@@ -314,6 +314,16 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     
     return q.promise;
   };
+  
+  self.reset = function() {
+    return $cordovaSQLite.deleteDB("nofapp.db")
+      .then(function() {
+        return db = $cordovaSQLite.openDB("nofapp.db");
+        db.then(function() {
+          return self.init();
+        });
+      });
+  }
   
   // Database Upgrader
   self.upgrade = function() {

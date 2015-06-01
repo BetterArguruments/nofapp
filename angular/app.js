@@ -3,7 +3,8 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAnimate','angularMoment','ngSanitize','ui.router'])
 
-.run(function($ionicPlatform, $q, $location, $db_query, $cordovaSQLite, $cordovaAppVersion, $firstRunCheck, $sqlite, $sql_init, $sql_events, $rootScope, amMoment, $cordovaKeyboard) {
+.run(function($ionicPlatform, $q, $location, $db_query, $cordovaSQLite, $cordovaAppVersion, $cordovaInAppBrowser, 
+  $firstRunCheck, $sqlite, $sql_init, $sql_events, $rootScope, amMoment, $cordovaKeyboard) {
   // Initialize Angular Moment
   //amMoment.changeLocale('en-gb');
 
@@ -18,12 +19,16 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
       StatusBar.styleDefault();
     }
     
+    // Initialize Cordova InAppBrowser
+    //window.open = $cordovaInAppBrowser.open;
+    
     // Debug: Delete DB, Create Sample Data (Localstorage, Old, for Upgrade)
     $cordovaSQLite.deleteDB("nofapp.db");
     $db_query.createSampleDataset(8,7);
     
     // Open SQLite Database
     db = $cordovaSQLite.openDB("nofapp.db");
+    
     
     // Update Table Structure or Create Tables (First Time)
     
@@ -37,7 +42,6 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
           });
       })
       .then(function() {
-        console.log("Done?2");
       $sqlite.query("SELECT * FROM events")
         .then(function(result) {
           console.log(JSON.stringify($sqlite.getAll(result)));

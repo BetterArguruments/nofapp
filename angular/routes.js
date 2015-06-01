@@ -57,19 +57,27 @@ angular.module('nofApp')
       }
     }
   })
-  .state('tabs.about', {
-    url: '/about',
+  .state('tabs.settings_about', {
+    url: '/settings_about',
     views: {
       'settings-tab': {
-        templateUrl: 'templates/about.html'
+        templateUrl: 'templates/sub/settings/page_about.html'
       }
     }
   })
-  .state('tabs.beer', {
-    url: '/beer',
+  .state('tabs.settings_beer', {
+    url: '/settings_beer',
     views: {
       'settings-tab': {
-        templateUrl: 'templates/beer.html'
+        templateUrl: 'templates/sub/settings/page_beer.html'
+      }
+    }
+  })
+  .state('tabs.settings_fapsperiment', {
+    url: '/settings_fapsperiment',
+    views: {
+      'settings-tab': {
+        templateUrl: 'templates/sub/settings/page_fapsperiment.html'
       }
     }
   });
