@@ -1,10 +1,9 @@
 angular.module('nofApp')
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $firstRunCheck, $db_query, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite) {
-  // Debug: Test SQLite
-  $scope.sqlite_debug = function() {
-    $db_query.sql_debug("event_types");
-  }
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $ionicHistory,
+  $firstRunCheck, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite) {
   
+  // Clear History, so Android Back Button doesn't go to Main Screen
+  $ionicHistory.clearHistory();
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
@@ -20,7 +19,7 @@ angular.module('nofApp')
 
   // Title Control, gets called on slide changed
   $scope.introViewTitle = "NofApp";
-  $scope.getNewTitle = function(slideNumber) {
+  var getNewTitle = function(slideNumber) {
     switch(slideNumber) {
       case 1: return "Using NofApp"; break;
       case 2: return "Getting started"; break;
@@ -31,7 +30,7 @@ angular.module('nofApp')
   // Called each time the slide changes
   $scope.slideChanged = function(index) {
     $scope.slideIndex = index;
-    $scope.introViewTitle = $scope.getNewTitle(index);
+    $scope.introViewTitle = getNewTitle(index);
   };
 
   // Slide Box Control
@@ -180,21 +179,17 @@ angular.module('nofApp')
 
 
       // Write Mood and Energy to DB, Timestamp is added automatically (now)
-      //$db_query.addUsualDataToDb($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido);
-      //$db_query.sql_insertUsualEvents($scope.userState.values.mood, $scope.userState.values.energy, $scope.userState.values.libido, timestamp);
       var promises = [];
-      promises.push($sql_events.addEvent("Mood", $scope.userState.values.mood));
-      promises.push($sql_events.addEvent("Energy", $scope.userState.values.energy));
-      promises.push($sql_events.addEvent("Libido", $scope.userState.values.libido));
+      promises.push($sql_events.add("Mood", $scope.userState.values.mood));
+      promises.push($sql_events.add("Energy", $scope.userState.values.energy));
+      promises.push($sql_events.add("Libido", $scope.userState.values.libido));
 
       // Write Sex and Fap to DB
       // Handle last sex on 'decades ago'
       if ($scope.userState.values.sexDaysAgo !== -1) {
-        //$db_query.addToDb("sex", undefined, timestamp_lastSex);
-        promises.push($sql_events.addEvent("Sex", null, timestamp_lastSex));
+        promises.push($sql_events.add("Sex", null, timestamp_lastSex));
       }
-      //$db_query.addToDb("fap", undefined, timestamp_lastFap);
-      promises.push($sql_events.addEvent("Fap", null, timestamp_lastFap));
+      promises.push($sql_events.add("Fap", null, timestamp_lastFap));
       
       $q.all(promises).then(function() {        
         // Alert User

@@ -1,6 +1,6 @@
 // History Controller
 angular.module('nofApp')
-.controller('HistoryCtrl', function($scope, $state, $db_query, $rootScope) {
+.controller('HistoryCtrl', function($scope, $state, $rootScope) {
   
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
@@ -9,12 +9,8 @@ angular.module('nofApp')
   
   // This is what we do
   var updateHistory = function() {
-    $scope.awesomeHistory = $db_query.getHistoryAwesome();
+    $scope.awesomeHistory = $historyParser.getHistoryAwesome();
   };
   
   updateHistory();
-  
-  $scope.createSampleData = function () {
-      $db_query.createSampleDataset(300,60);
-  };
 });

@@ -1,13 +1,5 @@
 angular.module('nofApp')
-.controller('MainCtrl', function($scope, $state, $db_query, $ionicHistory, $rootScope, $sqlite) {
-
-  // Debug SQLite
-  $scope.debug_sql = function() {
-    $sqlite.query("SELECT * FROM events")
-    .then(function(result) {
-      console.log(JSON.stringify($sqlite.getAll(result)));
-    });
-  };
+.controller('MainCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events) {
 
 
   // Check for Updates
@@ -18,7 +10,7 @@ angular.module('nofApp')
   // "Update" Function
   var updateLastFap = function () {
     var now = Math.floor(Date.now() / 1000);
-    var lastFap = $db_query.getLastFap();
+    var lastFap = $sql_events.getLast("Fap");
 
     $scope.hasInterval = function(i) {
       var ary = $scope.progress.getNamedArray();

@@ -1,6 +1,6 @@
 // Settings Controller
 angular.module('nofApp')
-.controller('SettingsCtrl', function($scope, $state, $sql_init, $firstRunCheck, $db_query, $ionicHistory, $ionicPopup) {
+.controller('SettingsCtrl', function($scope, $state, $sql_init, $firstRunCheck, $ionicHistory, $ionicPopup) {
   // Reset App
   $scope.resetApp = function() {
     $sql_init.reset();

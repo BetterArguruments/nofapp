@@ -1,7 +1,7 @@
 angular.module('nofApp')
 
 // Enter Data Controller
-.controller('EnterDataCtrl', function($scope, $state, $db_query, $ionicPopup, $sql_events, $sqlite, $q) {
+.controller('EnterDataCtrl', function($scope, $state, $q, $ionicPopup, $sqlite, $sql_events, $sql_notes) {
 
   // set initial values for a new state
   // TODO: read values from db if last dataset < x minutes ago
@@ -58,18 +58,18 @@ angular.module('nofApp')
   // Submit the mood/energy form and write new entries
   $scope.addDataset = function() {
     console.log(JSON.stringify($scope.userState));
-    // $db_query.addEventsToDb($scope.userState.mood, $scope.userState.energy); DEPRECATED
-    //$db_query.addUsualDataToDb($scope.userState.mood, $scope.userState.energy, $scope.userState.libido);
     var promises = [];
-    promises.push($sql_events.addEvent("Mood", $scope.userState.mood));
-    promises.push($sql_events.addEvent("Energy", $scope.userState.energy));
-    promises.push($sql_events.addEvent("Libido", $scope.userState.libido));
+    promises.push($sql_events.add("Mood", $scope.userState.mood));
+    promises.push($sql_events.add("Energy", $scope.userState.energy));
+    promises.push($sql_events.add("Libido", $scope.userState.libido));
     
     // Check for Note and enter it into DB
     if ($scope.userState.note != "") {
-        //$db_query.addToDb("note", $scope.userState.note);
-        // TODO: Add Note
-        //promises.push();
+        $sql_notes.add($scope.userState.note).then(function() {
+          console.log("Note added to DB");
+          $scope.$emit('datasetChanged');
+          $state.go('tabs.history');
+        });
     }
     
     $q.all(promises).then(function() {
@@ -88,8 +88,7 @@ angular.module('nofApp')
     okType: 'button-balanced'
     }).then(function(res) {
       if(res) {
-        //$db_query.addToDb("sex");
-        $sql_events.addEvent("Sex").then(function() {
+        $sql_events.add("Sex").then(function() {
           console.log("Sex added to DB. Nice!");
           $scope.$emit('datasetChanged');
           $state.go('tabs.history');
@@ -105,8 +104,7 @@ angular.module('nofApp')
       okType: 'button-assertive'
     }).then(function(res) {
       if(res) {
-        //$db_query.addToDb("fap");
-        $sql_events.addEvent("Fap").then(function() {
+        $sql_events.add("Fap").then(function() {
           console.log("Relapse added to DB. Oh noes!");
           $scope.$emit('datasetChanged');
           $state.go('tabs.history');
