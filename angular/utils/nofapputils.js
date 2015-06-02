@@ -219,12 +219,25 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$sql_events', function($sqlite, $q) {
-  // https://gist.github.com/borissondagh/29d1ed19d0df6051c56f
+.factory('$sql_event_types', function($sqlite, $q) {
   var self = this;
- 
-  self.getEventTypeIdByName = function(eventName) {
+  
+  self.getAll = function() {
     var q = $q.defer();
+    
+    $sqlite.query("SELECT id, name FROM event_types ORDER BY id ASC")
+      .then(function(res) {
+        q.resolve($sqlite.getAll(res));
+      }, function(error) {
+        q.reject(error);
+      });
+    
+    return q.promise;
+  }
+  
+  self.getId = function(eventName) {
+    var q = $q.defer();
+    
     $sqlite.query("SELECT id FROM event_types WHERE name = ?", [eventName])
       .then(function(result) {
         if (typeof $sqlite.getFirst(result) === "undefined") {
@@ -236,8 +249,16 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       }, function(error) {
         q.reject(error);
     });
+    
     return q.promise;
-  };
+  }
+  
+  return self;
+})
+
+.factory('$sql_events', function($q, $sqlite, $sql_event_types) {
+  // https://gist.github.com/borissondagh/29d1ed19d0df6051c56f
+  var self = this;
   
   self.add = function(type, value, time) {
     var q = $q.defer();
@@ -248,7 +269,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     // Set Value = null if undefined (e.g. for Sex and Fap)
     var addEventValue = (typeof value === "undefined") ? null : value;
     
-    self.getEventTypeIdByName(type)
+    $sql_event_types.getId(type)
       .then(function(addEventTypeId) {
         console.log("Inserting Event: " + [addEventTime, addEventTypeId, addEventValue]);
         $sqlite.query("INSERT INTO events (time, type, value, synced) VALUES (?, ?, ?, ?)", [addEventTime, addEventTypeId, addEventValue, 0])
@@ -262,20 +283,72 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return q.promise;
   }
   
-  self.getLast = function(eventType) {
+  self.get = function(eventType) {
     var q = $q.defer();
     
-    self.getEventTypeIdByName(eventType)
+    $sql_event_types.getId(eventType)
       .then(function(eventTypeId) {
-        return $sqlite.query("SELECT time FROM events WHERE type = ? ORDER BY time DESC LIMIT 1", [eventTypeId])
+        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? ORDER BY time DESC", [eventTypeId])
           .then(function(res) {
-            q.resolve($sqlite.getFirst(res).time);
-            console.log($sqlite.getFirst(res).time);
+            q.resolve($sqlite.getAll(res));
+            console.log(JSON.stringify($sqlite.getFirst(res)));
+          });
+      }, function(error) {
+        q.reject(error);
+      });
+    
+    return q.promise;
+  }
+  
+  self.getLast = function(eventType) {
+    var q = $q.defer();
+
+    $sql_event_types.getId(eventType)
+      .then(function(eventTypeId) {
+        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? ORDER BY time DESC LIMIT 1", [eventTypeId])
+          .then(function(res) {
+            q.resolve($sqlite.getFirst(res));
+            console.log(JSON.stringify($sqlite.getFirst(res)));
           });
       }, function(error) {
         q.reject(error);
       });
       
+    return q.promise;
+  }
+ 
+  self.getAll = function(eventType) {
+    var q = $q.defer();
+
+    var test = $sql_event_types.getAll();
+    test.then(function(res) {
+      console.log(JSON.stringify(test));
+      console.log(JSON.stringify(res));
+    });
+
+    $sql_event_types.getAll().then(function(eventTypes) {
+      console.log(JSON.stringify(eventTypes));
+      $sqlite.query("SELECT time, type, value FROM events ORDER BY id ASC").then(function(res) {
+        var events = $sqlite.getAll(res);
+        // Resolve Event TypeIds to Names
+        for (var i = 0; i < events.length; i++) {
+          var type = events[i].type;
+          if (type === null) {
+            q.reject("Something fishy is going down in the Database!");
+          }
+          console.log(JSON.stringify(events));
+          console.log(JSON.stringify(events[i]));
+          console.log(type);
+          console.log(eventTypes[type]);
+          console.log(JSON.stringify(eventTypes[type]));
+          events[i].type = eventTypes[type].name;
+        };
+        q.resolve(events);
+      });
+    }), function(error) {
+      q.reject(error);
+    };
+    
     return q.promise;
   }
  
@@ -313,6 +386,8 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 })
 
 .factory('$sql_notes', function($sqlite, $q) {
+  var self = this;
+  
   self.add = function(value, time) {
     var q = $q.defer();
     var addNoteTime = (typeof time === "undefined") ? Math.floor(Date.now() / 1000) : time;
@@ -332,6 +407,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 })
 
 .factory('$sql_debug', function($q, $sqlite, $sql_events, $sql_notes) {
+  var self = this;
   
   // Create Sample Data for Debugging
   self.createSampleDataset = function(numberSamples, numberDays) {
@@ -363,24 +439,35 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       return $q.all(sampleData);
   };
 
+
+  
+  return self;
+})
+
+.factory('$historyParser', function($q, $sqlite, $sql_events, $sql_notes) {
+  var self = this;
+  
   // Awesome History Parser
-  self.getHistoryAwesome = function () {
-      /* Concept of awesomeHistory:
-      *  Different Time Deltas for Different Past Times!
-      *  Time   | Delta
-      *  < 10min  1min
-      *  < 1h     10min
-      *  < 12h    1h
-      *  < 7d     1d
-      *  >= 7d    Date
-      *
-      * Seperators are entered as type = "separator", timestamp
-      * and value = "ago" or "date" (for Moment.js)
-      */
+  self.getAwesome = function () {
+    /* Concept of awesomeHistory:
+    *  Different Time Deltas for Different Past Times!
+    *  Time   | Delta
+    *  < 10min  1min
+    *  < 1h     10min
+    *  < 12h    1h
+    *  < 7d     1d
+    *  >= 7d    Date
+    *
+    * Seperators are entered as type = "separator", timestamp
+    * and value = "ago" or "date" (for Moment.js)
+    */
 
-      // Get DB
-      var structDb = this.getStructDb();
+    // Get DB
+    var events = $sql_events.getAll();
 
+
+    events.then(function() {
+      console.log(JSON.stringify(events));
       // Preparation
       var awesomeHistory = []; // [type, timestamp, value] OR ["concatData", timestamp, values[0-2]]
       var minute = 60; // One Minute is 60s, duh!
@@ -392,22 +479,25 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       var lastTimestamp = timestampNow;
       var lastSeparated = timestampNow + 100;
 
+
+      console.log(events[0].length);
+    
       // Go through array, iterate backwards (newest first)
-      for (var i = (structDb.length - 1); i >= 0; i--) {
+      for (var i = (events[0].length - 1); i >= 0; i--) {
 
         // Trigger Separator?
-        if ((lastSeparated - structDb[i][1]) > separatorsDelta[separatorPosition]) {
-          awesomeHistory.push(["separator", structDb[i][1], dateDisplayMode[separatorPosition]]);
-          lastSeparated = structDb[i][1];
+        if ((lastSeparated - events[0][i].time) > separatorsDelta[separatorPosition]) {
+          awesomeHistory.push(["separator", events[0][i].time, dateDisplayMode[separatorPosition]]);
+          lastSeparated = events[0][i].time;
         }
 
         // Update Separator?
-        if ((separatorPosition < triggerSeparators.length) && (timestampNow - structDb[i][1]) > triggerSeparators[separatorPosition]) {
+        if ((separatorPosition < triggerSeparators.length) && (timestampNow - events[0][i].time) > triggerSeparators[separatorPosition]) {
           separatorPosition++;
         }
 
         // Write History (Haha..)
-        if (structDb[i][0] === "libido") {
+        if (events[0][i].type === "libido") {
           awesomeHistory.push(["concatData", structDb[i][1], [structDb[i-2][2], structDb[i-1][2], structDb[i][2]]]); // mood, energy, libido
         }
         else if (structDb[i][0] === "sex" || structDb[i][0] === "fap") {
@@ -424,6 +514,8 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       }
 
       return awesomeHistory;
+    });
+
   };
   
   return self;

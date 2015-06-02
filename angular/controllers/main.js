@@ -10,7 +10,7 @@ angular.module('nofApp')
   // "Update" Function
   var updateLastFap = function () {
     var now = Math.floor(Date.now() / 1000);
-    var lastFap = $sql_events.getLast("Fap");
+    var lastFap = $sql_events.getLast("Fap").time;
 
     $scope.hasInterval = function(i) {
       var ary = $scope.progress.getNamedArray();
