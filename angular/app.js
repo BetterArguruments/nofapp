@@ -26,7 +26,6 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     
     // Debug: Delete DB, Create Sample Data (Localstorage, Old, for Upgrade)
     //$cordovaSQLite.deleteDB("nofapp.db");
-    //$db_query.createSampleDataset(8,7);
     
     // Open SQLite Database
     db = $cordovaSQLite.openDB("nofapp.db");

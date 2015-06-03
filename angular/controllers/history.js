@@ -9,7 +9,9 @@ angular.module('nofApp')
   
   // This is what we do
   var updateHistory = function() {
-    $scope.awesomeHistory = $historyParser.getAwesome();
+    $historyParser.getAwesome().then(function(res) {
+      $scope.awesomeHistory = res;
+    });
   };
   
   updateHistory();

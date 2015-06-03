@@ -1,8 +1,6 @@
   <ion-view hide-back-button="true" view-title="Your History">
     <ion-content class="padding">
 
-<a href="#" ng-click="createSampleData()">Create Some Data</a>
-
 <div class="list">
 	<div class="item item-divider row">
 		<div class="col col-20"></div>
@@ -11,27 +9,27 @@
 		<div class="col" style="text-align:center;">Energy</div>
 		<div class="col" style="text-align:center;">Libido</div>
 	</div>
-	
+  
 	<div ng-repeat="ah in awesomeHistory">
-		<div class="item item-divider" ng-if="ah[0] == 'separator'">
+		<div class="item item-divider" ng-if="ah[0] == 'Separator'">
 		    <span am-time-ago="ah[1]" ng-if="ah[2] == 'ago'"></span>
 			<span ng-if="ah[2] == 'date'">{{ah[1] | amCalendar}}</span>
 		</div>
-		<div class="item item-icon-left row" ng-if="ah[0] == 'concatData'">
+		<div class="item item-icon-left row" ng-if="ah[0] == 'Data'">
 				<div class="col col-20"><i class="icon ion-arrow-graph-up-right"></i></div>
 				<div class="col col-20"></div>
 				<div class="col" style="text-align:center;">{{ah[2][0]}}</div>
 				<div class="col" style="text-align:center;">{{ah[2][1]}}</div>
 				<div class="col" style="text-align:center;">{{ah[2][2]}}</div>
 		</div>
-		<div class="item item-icon-left row" ng-if="ah[0] == 'sex'">
+		<div class="item item-icon-left row" ng-if="ah[0] == 'Sex'">
 			<div class="row">
 				<div class="col col-20"><i class="icon ion-heart"></i></div>
 				<div class="col col-30"></div>
 				<div class="col" style="text-align:center;">Had Sex!</div>
 			</div>
 		</div>
-		<div class="item item-icon-left row" ng-if="ah[0] == 'fap'">
+		<div class="item item-icon-left row" ng-if="ah[0] == 'Fap'">
 			<div class="row">
 				<div class="col col-20"><i class="icon ion-alert-circled"></i></div>
 				<div class="col col-30"></div>

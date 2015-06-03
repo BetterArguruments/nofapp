@@ -1,7 +1,14 @@
 angular.module('nofApp')
-.controller('MainCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events, $firstRunCheck) {
+.controller('MainCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events, $sql_debug, $firstRunCheck) {
 
-
+  // Debug: Insert Sample Data
+  $scope.insertMoarData = function() {
+    $sql_debug.createSampleDataset(50, 30).then(function() {
+      $scope.$emit('datasetChanged');
+      return true;
+    });
+  };
+  
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
     updateLastFap();

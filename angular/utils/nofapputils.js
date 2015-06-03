@@ -322,27 +322,21 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   self.getAll = function(eventType) {
     var q = $q.defer();
 
-    var test = $sql_event_types.getAll();
-    test.then(function(res) {
-      console.log(JSON.stringify(test));
-      console.log(JSON.stringify(res));
-    });
-
     $sql_event_types.getAll().then(function(eventTypes) {
       console.log(JSON.stringify(eventTypes));
-      $sqlite.query("SELECT time, type, value FROM events ORDER BY id ASC").then(function(res) {
+      $sqlite.query("SELECT id, time, type, value FROM events ORDER BY id ASC").then(function(res) {
         var events = $sqlite.getAll(res);
         // Resolve Event TypeIds to Names
         for (var i = 0; i < events.length; i++) {
-          var type = events[i].type;
+          var type = events[i].type - 1; // SQL event_types: [1-5]; Array: [0-4]
           if (type === null) {
             q.reject("Something fishy is going down in the Database!");
           }
-          console.log(JSON.stringify(events));
-          console.log(JSON.stringify(events[i]));
-          console.log(type);
-          console.log(eventTypes[type]);
-          console.log(JSON.stringify(eventTypes[type]));
+          // console.log(JSON.stringify(events));
+          // console.log(JSON.stringify(events[i]));
+          // console.log(type);
+          // console.log(eventTypes[type]);
+          // console.log(JSON.stringify(eventTypes[type]));
           events[i].type = eventTypes[type].name;
         };
         q.resolve(events);
@@ -352,36 +346,6 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     };
     
     return q.promise;
-  }
- 
-  self.all = function() {
-    return $sqlite.query("SELECT id, name FROM team")
-      .then(function(result){
-        return $sqlite.getAll(result);
-      });
-  }
- 
-  self.get = function(memberId) {
-    var parameters = [memberId];
-    return $sqlite.query("SELECT id, name FROM team WHERE id = (?)", parameters)
-      .then(function(result) {
-        return $sqlite.getById(result);
-      });
-  }
- 
-  self.addDeprecated = function(member) {
-    var parameters = [member.id, member.name];
-    return $sqlite.query("INSERT INTO team (id, name) VALUES (?,?)", parameters);
-  }
- 
-  self.remove = function(member) {
-    var parameters = [member.id];
-    return $sqlite.query("DELETE FROM team WHERE id = (?)", parameters);
-  }
- 
-  self.update = function(origMember, editMember) {
-    var parameters = [editMember.id, editMember.name, origMember.id];
-    return $sqlite.query("UPDATE team SET id = (?), name = (?) WHERE id = (?)", parameters);
   }
  
   return self;
@@ -463,15 +427,11 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     * Seperators are entered as type = "separator", timestamp
     * and value = "ago" or "date" (for Moment.js)
     */
-
-    // Get DB
-    var events = $sql_events.getAll();
-
-
-    events.then(function() {
-      console.log(JSON.stringify(events));
+    var q = $q.defer();
+    
+    $sql_events.getAll().then(function(events) {
       // Preparation
-      var awesomeHistory = []; // [type, timestamp, value] OR ["concatData", timestamp, values[0-2]]
+      var awesomeHistory = []; // [type, timestamp, value] OR ["Data", timestamp, values[0-2]]
       var minute = 60; // One Minute is 60s, duh!
       var separatorsDelta = [60, 600, 3600, 86400, 86400];
       var triggerSeparators = [600, 3600, 43200, 518400];
@@ -480,44 +440,35 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       var timestampNow = Math.floor(Date.now() / 1000);
       var lastTimestamp = timestampNow;
       var lastSeparated = timestampNow + 100;
-
-
-      console.log(events[0].length);
     
       // Go through array, iterate backwards (newest first)
-      for (var i = (events[0].length - 1); i >= 0; i--) {
+      for (var i = (events.length - 1); i >= 0; i--) {
 
         // Trigger Separator?
-        if ((lastSeparated - events[0][i].time) > separatorsDelta[separatorPosition]) {
-          awesomeHistory.push(["separator", events[0][i].time, dateDisplayMode[separatorPosition]]);
-          lastSeparated = events[0][i].time;
+        if ((lastSeparated - events[i].time) > separatorsDelta[separatorPosition]) {
+          awesomeHistory.push(["Separator", events[i].time, dateDisplayMode[separatorPosition]]);
+          lastSeparated = events[i].time;
         }
 
         // Update Separator?
-        if ((separatorPosition < triggerSeparators.length) && (timestampNow - events[0][i].time) > triggerSeparators[separatorPosition]) {
+        if ((separatorPosition < triggerSeparators.length) && (timestampNow - events[i].time) > triggerSeparators[separatorPosition]) {
           separatorPosition++;
         }
 
         // Write History (Haha..)
-        if (events[0][i].type === "libido") {
-          awesomeHistory.push(["concatData", structDb[i][1], [structDb[i-2][2], structDb[i-1][2], structDb[i][2]]]); // mood, energy, libido
+        if (events[i].type === "Libido") {
+          awesomeHistory.push(["Data", events[i].time, [events[i-2].value, events[i-1].value, events[i].value] ]); // mood, energy, libido
         }
-        else if (structDb[i][0] === "sex" || structDb[i][0] === "fap") {
-          awesomeHistory.push([ structDb[i][0], structDb[i][1] ]);
+        else if (events[i].type === "Sex" || events[i].type === "Fap") {
+          awesomeHistory.push([events[i].type, events[i].time, null]);
         }
-        else if (structDb[i][0] === "note") {
-          awesomeHistory.push([ structDb[i][0], structDb[i][1], structDb[i][2]]);
-        }
-        // else (structDb[i][0] === "mood" || structDb[i][0] === "energy")
-
-        // Update lastTimestamp
-        //lastTimestamp = structDb[i][1];
 
       }
-
-      return awesomeHistory;
+      
+      q.resolve(awesomeHistory);
     });
-
+    
+    return q.promise;
   };
   
   return self;
