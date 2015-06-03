@@ -34,7 +34,7 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     // Update Table Structure or Create Tables (First Time)
     $sql_init.init().then(function() {
       console.log("SQLite Init complete");
-      $sql_debug.createSampleDataset(8, 7)
+      //$sql_debug.createSampleDataset(8, 7)
     });
 
   });

@@ -123,7 +123,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     var structDb = $localstorage.getObject('struct');
     //console.log(JSON.stringify(structDb));
 
-    return self.getTables()
+    self.getTables()
       .then(function(tableCount) {
         console.log("SQLite Init: SQLite Table Count: " + tableCount.length);
       
@@ -133,12 +133,15 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
         }
         else {
           console.log("SQLite Init: No SQLite Tables found. Creating initial Tables and starting Upgrader");
-          return self.createInitialTables()
+          self.createInitialTables()
             .then(function() {
-              return self.insertInitialData();
+              self.insertInitialData();
             })
             .then(function() {
-              return self.upgrade();
+              self.upgrade();
+            })
+            .then(function() {
+              q.resolve(true);
             });
         }
       
@@ -302,13 +305,12 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   
   self.getLast = function(eventType) {
     var q = $q.defer();
-
+    
     $sql_event_types.getId(eventType)
       .then(function(eventTypeId) {
         return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? ORDER BY time DESC LIMIT 1", [eventTypeId])
           .then(function(res) {
             q.resolve($sqlite.getFirst(res));
-            console.log(JSON.stringify($sqlite.getFirst(res)));
           });
       }, function(error) {
         q.reject(error);

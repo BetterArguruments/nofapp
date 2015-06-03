@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('MainCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events) {
+.controller('MainCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events, $firstRunCheck) {
 
 
   // Check for Updates
@@ -10,33 +10,37 @@ angular.module('nofApp')
   // "Update" Function
   var updateLastFap = function () {
     var now = Math.floor(Date.now() / 1000);
-    var lastFap = $sql_events.getLast("Fap").time;
+    $sql_events.getLast("Fap").then(function(res) {
+      var lastFap = res.time;
+      $scope.hasInterval = function(i) {
+        var ary = $scope.progress.getNamedArray();
+        return !typeof(ary[i] === 'undefined');
+      };
 
-    $scope.hasInterval = function(i) {
-      var ary = $scope.progress.getNamedArray();
-      return !typeof(ary[i] === 'undefined');
-    };
-
-    $scope.progress = {
-      delta: new DeltaDate(now - lastFap),
-      isDefined: function(i) {
-        var asd = !(typeof(this.delta.getNamedArray()[i]) === 'undefined');
-        return asd;
-      },
-      getString: function(i) {
-        if (this.isDefined(i)) {
-          return this.delta.getNamedArray()[i].to_s();
-        };
-      },
-      isHidden: function(i) {
-        if (isDefined(i)) {
-          return 'hidden';
+      $scope.progress = {
+        delta: new DeltaDate(now - lastFap),
+        isDefined: function(i) {
+          return !(typeof(this.delta.getNamedArray()[i]) === 'undefined');
+        },
+        getString: function(i) {
+          if (this.isDefined(i)) {
+            return this.delta.getNamedArray()[i].to_s();
+          };
+        },
+        isHidden: function(i) {
+          if (isDefined(i)) {
+            return 'hidden';
+          }
         }
       }
-    }
+    });
+
+    
   };
 
-  updateLastFap();
+  if (!$firstRunCheck.isFirstRun()) {
+    updateLastFap();
+  };
 });
 
 function DeltaDate(delta) {
