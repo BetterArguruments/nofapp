@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $ionicHistory,
+.controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $ionicHistory, $ionicLoading,
   $firstRunCheck, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite) {
   
   // Clear History, so Android Back Button doesn't go to Main Screen
@@ -50,6 +50,14 @@ angular.module('nofApp')
     }).then(function(modal) {
       $scope.modal_enterdata_help = modal;
   });
+  
+  // Explanation Popup when clicking the explanatory buttons
+  $scope.explanation_enterbelow = function() {
+    $ionicLoading.show({
+      template: 'Enter Your Data below.',
+      duration: 3500
+        });
+  };
   
   /*
   *  User State
@@ -200,17 +208,16 @@ angular.module('nofApp')
       promises.push($sql_events.add("Fap", null, timestamp_lastFap));
       
       $q.all(promises).then(function() {        
-        // Alert User
-        // TODO: make toast
-        var alertPopup = $ionicPopup.alert({
-          title: "Awesome!",
-          template: "Way to get it started!",
-          okType: "button-royal"
-        });
-        
         // Set firstRun = false and Redirect to Main
-        alertPopup.then($scope.firstRunDone());
+        // TODO: Make Toast
+        
+        $scope.firstRunDone();
         $scope.$emit('datasetChanged');
+        $scope.modal_enterdata.hide();
+        $ionicLoading.show({
+          template: 'Awesome! Good Luck, Fapstronaut!',
+          duration: 4500
+            });
       })
       
 

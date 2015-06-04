@@ -1,8 +1,9 @@
 <ion-modal-view>
 
   <ion-header-bar class="bar bar-header bar-royal">
-    <button class="button button-icon ion-close-circled" ng-click="modal_enterdata.hide()">
-    </button>
+    <!-- Back Button, we probably don't need this
+    <button class="button button-icon ion-android-arrow-back" ng-click="modal_enterdata.hide()">
+    </button> -->
     <h1 class="title">Getting started</h1>
     <button class="button button-icon ion-help-circled" ng-click="modal_enterdata_help.show()">
     </button>
@@ -15,8 +16,8 @@
   
     <div class="item item-text-wrap">
       <div class="button-bar">
-        <a class="button button-small button-assertive">1: Very Bad</a>
-        <a class="button button-small button-balanced">5: Awesome</a>
+        <a class="button button-small button-assertive" ng-click="explanation_enterbelow()">1: Very Bad</a>
+        <a class="button button-small button-balanced" ng-click="explanation_enterbelow()">5: Awesome</a>
       </div>
     </div>
   
@@ -49,7 +50,7 @@
       </div>
     </div>
     <div class="item item-divider">
-      <i class="icon ion-fireball"></i>
+      <i class="icon ion-flame"></i>
       Libido
     </div>
     <div class="item item-text-wrap">
@@ -66,15 +67,18 @@
     When did you last...
     </div>
     <div class="item item-text-wrap">
-      <div class="row no-left-padding no-right-padding">
-        <div class="col no-left-padding">
-          <button class="button button-small button-block padding-right" ng-click="openLastSex()">have sex?</button>
+      <div class="row no-left-padding no-right-padding no-top-padding no-bottom-padding">
+        <div class="col col-50 no-left-padding">
+          <a href="#" class="button button-small button-block padding-right" style="margin-top: 0px; margin-bottom: 0px" ng-click="openLastSex()">have sex?</a>
         </div>
-        <div class="col no-right-padding">
-          <button class="button button-small button-block padding-left" ng-click="openLastFap()">take a wank?</button>
+        <div class="col col-50 no-right-padding">
+          <a href="#" class="button button-small button-block padding-left" style="margin-top: 0px; margin-bottom: 0px" ng-click="openLastFap()">take a wank?</a>
         </div>
       </div>
     </div>
+    
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
     
   </ion-content>
   
