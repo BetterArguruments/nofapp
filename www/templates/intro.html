@@ -6,7 +6,7 @@
   </button>
 </ion-nav-buttons>
 
-  <ion-slide-box on-slide-changed="slideChanged($index)">
+  <ion-slide-box show-pager="false" on-slide-changed="slideChanged($index)">
     <ion-slide>
       <img id="logo" class="intro-logo" src="img/space-ship_app.png">
       <h3>Welcome, Fapstronaut</h3>
@@ -15,15 +15,10 @@
         Swipe right to begin
       </button>
 
-     <p class="text-center">
+      <!--<p class="text-center">
         <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
-      </p>
-      <p class="text-center">
-        {{isThisFirstRun}}
-      </p>
-      <p class="text-center">
-         <a href="#" ng-click="sqlite_debug()">Debug: SQLite</a>
-       </p>
+      </p>-->
+       
     </ion-slide>
 
     <ion-slide>
@@ -40,19 +35,24 @@
         </div>
 
         <div class="item item-icon-left">
+          <i class="icon ion-earth"></i>
+          Take part in the Fapsperiment
+        </div>
+
+        <div class="item item-icon-left">
           <i class="icon ion-heart"></i>
           Have Sex!
         </div>
 
-        <!--<a href="#" class="item item-icon-left">
-          <i class="icon ion-earth"></i>
-          Contribute to the Nofap Community
-        </a>-->
         <div class="item item-divider"></div>
         <a href="#" class="item item-icon-left" onclick="window.open('http://reddit.com/r/nofap', '_system'); return false;">
-          <i class="icon ion-social-reddit-outline"></i>
+          <i class="icon ion-help-circled"></i>
           <span class="royal">What is Nofap?</span>
         </a>
+      </div>
+      
+      <div class="bar bar-footer bar-royal">
+        <div class="title">Enter some Data!</div>
       </div>
     </ion-slide>
 

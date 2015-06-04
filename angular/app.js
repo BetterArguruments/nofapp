@@ -3,8 +3,8 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAnimate','angularMoment','ngSanitize','ui.router'])
 
-.run(function($ionicPlatform, $q, $location, $cordovaSQLite, $cordovaAppVersion, $cordovaInAppBrowser, 
-  $firstRunCheck, $sqlite, $sql_init, $sql_events, $sql_debug, $rootScope, amMoment, $cordovaKeyboard) {
+.run(function($ionicPlatform, $q, $state, $cordovaSQLite, $cordovaAppVersion, $cordovaInAppBrowser, 
+  $firstRunCheck, $sqlite, $sql_init, $sql_debug, $rootScope, amMoment, $cordovaKeyboard, $cordovaSplashscreen) {
   // Initialize Angular Moment
   //amMoment.changeLocale('en-gb');
 
@@ -21,7 +21,13 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     
     // Go to intro if first run
     if ($firstRunCheck.isFirstRun()) {
-      $location.path('/intro');
+      //$location.path('/intro');
+      $state.go('intro').then(function() {
+        $cordovaSplashscreen.hide();
+      });
+    }
+    else {
+      $cordovaSplashscreen.hide();
     }
     
     // Debug: Delete DB, Create Sample Data (Localstorage, Old, for Upgrade)
