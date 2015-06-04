@@ -1,0 +1,85 @@
+<ion-modal-view>
+
+  <ion-header-bar class="bar bar-header bar-royal">
+    <button class="button button-icon ion-close-circled" ng-click="modal_enterdata.hide()">
+    </button>
+    <h1 class="title">Getting started</h1>
+    <button class="button button-icon ion-help-circled" ng-click="modal_enterdata_help.show()">
+    </button>
+  </ion-header-bar>
+  
+  <ion-content class="padding">
+    <div class="item item-divider">
+      Explanation
+    </div>
+  
+    <div class="item item-text-wrap">
+      <div class="button-bar">
+        <a class="button button-small button-assertive">1: Very Bad</a>
+        <a class="button button-small button-balanced">5: Awesome</a>
+      </div>
+    </div>
+  
+    <div class="item item-divider">
+      <i class="icon ion-shuffle"></i>
+      Mood
+    </div>
+    
+    <div class="item item-text-wrap">
+      <div class="button-bar">
+        <a class="button button-small button-assertive" ng-class="isCurrentMood(1)" ng-click="setMood(1)">1</a>
+        <a class="button button-small button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">2</a>
+        <a class="button button-small button-royal" ng-class="isCurrentMood(3)" ng-click="setMood(3)">3</a>
+        <a class="button button-small button-royal" ng-class="isCurrentMood(4)" ng-click="setMood(4)">4</a>
+        <a class="button button-small button-balanced" ng-class="isCurrentMood(5)" ng-click="setMood(5)">5</a>
+      </div>
+    </div>
+    
+    <div class="item item-divider">
+      <i class="icon ion-flash"></i>
+      Energy
+    </div>
+    <div class="item item-text-wrap">
+      <div class="button-bar">
+        <a class="button button-small button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
+        <a class="button button-small button-royal" ng-class="isCurrentEnergy(2)" ng-click="setEnergy(2)">2</a>
+        <a class="button button-small button-royal" ng-class="isCurrentEnergy(3)" ng-click="setEnergy(3)">3</a>
+        <a class="button button-small button-royal" ng-class="isCurrentEnergy(4)" ng-click="setEnergy(4)">4</a>
+        <a class="button button-small button-balanced" ng-class="isCurrentEnergy(5)" ng-click="setEnergy(5)">5</a>
+      </div>
+    </div>
+    <div class="item item-divider">
+      <i class="icon ion-fireball"></i>
+      Libido
+    </div>
+    <div class="item item-text-wrap">
+      <div class="button-bar">
+        <a class="button button-small button-assertive" ng-class="isCurrentLibido(1)" ng-click="setLibido(1)">1</a>
+        <a class="button button-small button-royal" ng-class="isCurrentLibido(2)" ng-click="setLibido(2)">2</a>
+        <a class="button button-small button-royal" ng-class="isCurrentLibido(3)" ng-click="setLibido(3)">3</a>
+        <a class="button button-small button-royal" ng-class="isCurrentLibido(4)" ng-click="setLibido(4)">4</a>
+        <a class="button button-small button-balanced" ng-class="isCurrentLibido(5)" ng-click="setLibido(5)">5</a>
+      </div>
+    </div>
+    
+    <div class="item item-divider">
+    When did you last...
+    </div>
+    <div class="item item-text-wrap">
+      <div class="row no-left-padding no-right-padding">
+        <div class="col no-left-padding">
+          <button class="button button-small button-block padding-right" ng-click="openLastSex()">have sex?</button>
+        </div>
+        <div class="col no-right-padding">
+          <button class="button button-small button-block padding-left" ng-click="openLastFap()">take a wank?</button>
+        </div>
+      </div>
+    </div>
+    
+  </ion-content>
+  
+  <div class="bar bar-footer bar-royal" ng-click="submitForm()">
+    <div class="title">Done!</div>
+  </div>
+  
+</ion-modal-view>

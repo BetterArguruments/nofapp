@@ -1,28 +1,24 @@
 <ion-view view-title="{{introViewTitle}}">
 
 <ion-nav-buttons side="right">
-  <button class="button button-icon ion-help-circled"
-          ng-click="modal.show()" ng-if="slideIndex == 2">
-  </button>
 </ion-nav-buttons>
 
   <ion-slide-box show-pager="false" on-slide-changed="slideChanged($index)">
-    <ion-slide>
+    <ion-slide class="padding">
       <img id="logo" class="intro-logo" src="img/space-ship_app.png">
       <h3>Welcome, Fapstronaut</h3>
       <br>
-      <button class="button button-royal" ng-click="nextSlide()">
-        Swipe right to begin
-      </button>
-
+      
       <!--<p class="text-center">
         <a href="#" ng-click="firstRunDone()">Debug: Skip Intro</a>
       </p>-->
-       
+        
+       <div class="bar bar-footer bar-royal" ng-click="nextSlide()">
+         <div class="title">Swipe right to begin</div>
+       </div>
     </ion-slide>
 
-    <ion-slide>
-      <h3>Using NofAPP</h3>
+    <ion-slide class="padding">
       <div class="list card">
         <div class="item item-icon-left">
           <i class="icon ion-stats-bars"></i>
@@ -51,51 +47,39 @@
         </a>
       </div>
       
-      <div class="bar bar-footer bar-royal">
-        <div class="title">Enter some Data!</div>
+      <div class="bar bar-footer bar-royal" ng-click="modal_enterdata.show()">
+        <div class="title">Get Started!</div>
       </div>
     </ion-slide>
 
     <ion-slide class="padding">
-      <h4>Track your mood and sex drive</h4>
-      <h4>Mood</h4>
-      <div class="button-bar">
-        <a class="button button-small button-balanced" ng-class="isCurrentMood(5)" ng-click="setMood(5)">5</a>
-        <a class="button button-small button-royal" ng-class="isCurrentMood(4)" ng-click="setMood(4)">4</a>
-        <a class="button button-small button-royal" ng-class="isCurrentMood(3)" ng-click="setMood(3)">3</a>
-        <a class="button button-small button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">2</a>
-        <a class="button button-small button-assertive" ng-class="isCurrentMood(1)" ng-click="setMood(1)">1</a>
-      </div>
-      <h4>Energy</h4>
-      <div class="button-bar">
-        <a class="button button-small button-balanced" ng-class="isCurrentEnergy(5)" ng-click="setEnergy(5)">5</a>
-        <a class="button button-small button-royal" ng-class="isCurrentEnergy(4)" ng-click="setEnergy(4)">4</a>
-        <a class="button button-small button-royal" ng-class="isCurrentEnergy(3)" ng-click="setEnergy(3)">3</a>
-        <a class="button button-small button-royal" ng-class="isCurrentEnergy(2)" ng-click="setEnergy(2)">2</a>
-        <a class="button button-small button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
-      </div>
-      <h4>Libido</h4>
-      <div class="button-bar">
-        <a class="button button-small button-balanced" ng-class="isCurrentLibido(5)" ng-click="setLibido(5)">5</a>
-        <a class="button button-small button-royal" ng-class="isCurrentLibido(4)" ng-click="setLibido(4)">4</a>
-        <a class="button button-small button-royal" ng-class="isCurrentLibido(3)" ng-click="setLibido(3)">3</a>
-        <a class="button button-small button-royal" ng-class="isCurrentLibido(2)" ng-click="setLibido(2)">2</a>
-        <a class="button button-small button-assertive" ng-class="isCurrentLibido(1)" ng-click="setLibido(1)">1</a>
-      </div>
-      <br>
-      <h4>When did you last...</h4>
-      <div class="row no-left-padding no-right-padding">
-        <div class="col no-left-padding">
-          <button class="button button-small button-block padding-right" ng-click="openLastSex()">have sex?</button>
+      <ion-content class="padding">
+        <div class="item item-divider" style="text-align:left">
+          Introduction
         </div>
-        <div class="col no-right-padding">
-          <button class="button button-small button-block padding-left" ng-click="openLastFap()">take a wank?</button>
+        <div class="item item-text-wrap" style="text-align:left">
+          <p>NoFap is a web community in which users ("Fapstronauts") abstain from pornography and masturbation for a period of time ("fapstinence" or "rebooting").</p>
+          <p>NofApp is a free App which helps you track of abstinence while analyzing parameters like mood, energy and libido. It provides you with awesome plots and analytics!</p>
+          <p>If you wish, you may take part in the Fapsperiment in which you submit your data anonymously to find out whether Nofap provides benefits for a vast number of people.</p>
         </div>
+        <div class="item item-divider" style="text-align:left">
+          NoFap's Challenges
+        </div>
+        <div class="item item-text-wrap" style="text-align:left">
+          <p>No Masturbating: The vast majority of NoFap users (which we nickname "Fapstronauts") choose to abstain from masturbating throughout the duration of their challenges. This includes "edging" which is physical stimulation without orgasm. This is masturbation and counts in our programs, but it is your call whether it warrants resetting your badge or not. For the vast majority of NoFap's users, edging does count as a reset.</p>
+        </div>
+        <div class="item item-divider" style="text-align:left">
+          NoFap's Challenges
+        </div>
+        <div class="item item-text-wrap" style="text-align:left">
+          <p>No Masturbating: The vast majority of NoFap users (which we nickname "Fapstronauts") choose to abstain from masturbating throughout the duration of their challenges. This includes "edging" which is physical stimulation without orgasm. This is masturbation and counts in our programs, but it is your call whether it warrants resetting your badge or not. For the vast majority of NoFap's users, edging does count as a reset.</p>
+        </div>
+      
+        
+      </ion-content>
+      <div class="bar bar-footer bar-royal" ng-click="modal_enterdata.show()">
+        <div class="title">Get Started!</div>
       </div>
-      <button class="button button-small button-block button-balanced" ng-click="submitForm()">
-        Alright, got it!
-      </button>
-    </div>
     </ion-slide>
   </ion-slide-box>
 </ion-view>

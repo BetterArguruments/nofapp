@@ -21,8 +21,8 @@ angular.module('nofApp')
   $scope.introViewTitle = "NofApp";
   var getNewTitle = function(slideNumber) {
     switch(slideNumber) {
-      case 1: return "Using NofApp"; break;
-      case 2: return "Getting started"; break;
+      case 1: return "NofApp Features"; break;
+      case 2: return "What is Nofap?"; break;
       default: return "NofApp";
     }
   }
@@ -38,11 +38,19 @@ angular.module('nofApp')
     $ionicSlideBoxDelegate.next();
   };
 
-  $ionicModal.fromTemplateUrl('templates/modals/intro-help-enterdata.html', {
+  // Modals
+  $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata.html', {
       scope: $scope
     }).then(function(modal) {
-      $scope.modal = modal;
+      $scope.modal_enterdata = modal;
   });
+  
+  $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata_help.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal_enterdata_help = modal;
+  });
+  
   /*
   *  User State
   */
@@ -126,7 +134,7 @@ angular.module('nofApp')
 
   $scope.openLastFap = function() {
     $ionicPopup.show({
-      templateUrl: 'templates/popups/last-fap.html',
+      templateUrl: 'templates/sub/intro/popup_last-fap.html',
       title: 'Be honest!',
       subTitle: 'When did you last fap?',
       scope: $scope,
@@ -143,7 +151,7 @@ angular.module('nofApp')
 
   $scope.openLastSex = function() {
     $ionicPopup.show({
-      templateUrl: 'templates/popups/last-sex.html',
+      templateUrl: 'templates/sub/intro/popup_last-sex.html',
       title: 'Make us proud!',
       subTitle: 'When did you last have sex?',
       scope: $scope,
