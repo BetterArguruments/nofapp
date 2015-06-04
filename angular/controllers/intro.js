@@ -13,10 +13,6 @@ angular.module('nofApp')
     $state.go('tabs.main');
   };
 
-  /*
-  *  Slider and Title Control
-  */
-
   // Title Control, gets called on slide changed
   $scope.introViewTitle = "NofApp";
   var getNewTitle = function(slideNumber) {
@@ -59,15 +55,19 @@ angular.module('nofApp')
         });
   };
   
-  /*
-  *  User State
-  */
+  // Stepwise showing of Input Form
+  $scope.step = 0;
+  var setStep = function(step) {
+    var lastStep = $scope.step;
+    $scope.step = (step > lastStep) ? step : lastStep;
+  };
 
+  // User State
   $scope.userState = {
     values: {
-      mood: 3,
-      energy: 3,
-      libido: 3,
+      mood: 0,
+      energy: 0,
+      libido: 0,
       fapDaysAgo: 0,
       sexDaysAgo: -1
     },
@@ -96,8 +96,14 @@ angular.module('nofApp')
     };
 
     switch (whatHasHeDone) {
-      case "clicked_sex": clicked_sex = true; break;
-      case "clicked_fap": clicked_fap = true; break;
+      case "clicked_sex":
+        clicked_sex = true;
+        setStep(4);
+        break;
+      case "clicked_fap":
+        clicked_fap = true;
+        setStep(5);
+        break;
     };
 
     // Return true if all fields have been clicked
@@ -107,6 +113,7 @@ angular.module('nofApp')
   $scope.setMood = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.values.mood = i;
+      setStep(1);
     };
   };
 
@@ -119,6 +126,7 @@ angular.module('nofApp')
   $scope.setEnergy = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.values.energy = i;
+      setStep(2);
     };
   };
 
@@ -131,6 +139,7 @@ angular.module('nofApp')
   $scope.setLibido = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.values.libido = i;
+      setStep(3);
     };
   };
 
@@ -149,7 +158,7 @@ angular.module('nofApp')
       buttons: [
         {
           text: 'Save',
-          type: 'button-balanced'
+          type: 'button-royal'
         }
       ]
     }).then(function() {
@@ -166,7 +175,7 @@ angular.module('nofApp')
       buttons: [
         {
           text: 'Save',
-          type: 'button-balanced'
+          type: 'button-royal'
         }
       ]
     }).then(function() {

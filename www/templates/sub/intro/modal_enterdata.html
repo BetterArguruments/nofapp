@@ -10,15 +10,13 @@
   </ion-header-bar>
   
   <ion-content class="padding">
-    <div class="item item-divider">
-      Explanation
-    </div>
   
     <div class="item item-text-wrap">
-      <div class="button-bar">
+      <!--<div class="button-bar">
         <a class="button button-small button-assertive" ng-click="explanation_enterbelow()">1: Very Bad</a>
         <a class="button button-small button-balanced" ng-click="explanation_enterbelow()">5: Awesome</a>
-      </div>
+      </div>-->
+      <p>Track Your Mood, Energy and Libido while doing Nofap. Values are entered on a scale from 1 (very bad) to 5 (awesome).</p>
     </div>
   
     <div class="item item-divider">
@@ -36,11 +34,11 @@
       </div>
     </div>
     
-    <div class="item item-divider">
+    <div class="item item-divider" ng-if="step > 0">
       <i class="icon ion-flash"></i>
       Energy
     </div>
-    <div class="item item-text-wrap">
+    <div class="item item-text-wrap" ng-if="step > 0">
       <div class="button-bar">
         <a class="button button-small button-assertive" ng-class="isCurrentEnergy(1)" ng-click="setEnergy(1)">1</a>
         <a class="button button-small button-royal" ng-class="isCurrentEnergy(2)" ng-click="setEnergy(2)">2</a>
@@ -49,11 +47,11 @@
         <a class="button button-small button-balanced" ng-class="isCurrentEnergy(5)" ng-click="setEnergy(5)">5</a>
       </div>
     </div>
-    <div class="item item-divider">
+    <div class="item item-divider" ng-if="step > 1">
       <i class="icon ion-flame"></i>
       Libido
     </div>
-    <div class="item item-text-wrap">
+    <div class="item item-text-wrap" ng-if="step > 1">
       <div class="button-bar">
         <a class="button button-small button-assertive" ng-class="isCurrentLibido(1)" ng-click="setLibido(1)">1</a>
         <a class="button button-small button-royal" ng-class="isCurrentLibido(2)" ng-click="setLibido(2)">2</a>
@@ -63,16 +61,16 @@
       </div>
     </div>
     
-    <div class="item item-divider">
+    <div class="item item-divider" ng-if="step > 2">
     When did you last...
     </div>
-    <div class="item item-text-wrap">
+    <div class="item item-text-wrap" ng-if="step > 2">
       <div class="row" style="padding: 0px">
         <div class="col col-50 no-left-padding no-top-padding no-bottom-padding">
-          <a href="#" class="button button-small button-block padding-right" style="margin-top: 0px; margin-bottom: 0px" ng-click="openLastSex()">have sex?</a>
+          <a href="#" class="button button-small button-royal button-block padding-right" style="margin-top: 0px; margin-bottom: 0px" ng-click="openLastSex()">have sex?</a>
         </div>
-        <div class="col col-50 no-right-padding no-top-padding no-bottom-padding">
-          <a href="#" class="button button-small button-block padding-left" style="margin-top: 0px; margin-bottom: 0px" ng-click="openLastFap()">take a wank?</a>
+        <div class="col col-50 no-right-padding no-top-padding no-bottom-padding" ng-if="step > 3">
+          <a href="#" class="button button-small button-royal button-block padding-left" style="margin-top: 0px; margin-bottom: 0px" ng-click="openLastFap()">take a wank?</a>
         </div>
       </div>
     </div>
@@ -82,8 +80,8 @@
     
   </ion-content>
   
-  <div class="bar bar-footer bar-royal" ng-click="submitForm()">
-    <div class="title">Done!</div>
+  <div class="bar bar-footer bar-royal" ng-click="submitForm()" ng-if="step > 4">
+    <div class="title">Continue</div>
   </div>
   
 </ion-modal-view>
