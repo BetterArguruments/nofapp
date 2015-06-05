@@ -1,6 +1,60 @@
 // Stats Controller
 angular.module('nofApp')
-.controller('StatsCtrl', function($scope, $state) {
+.controller('StatsCtrl', function($scope, $state, $window, $rootScope, $ionicHistory, $q, $firstRunCheck, $sql_events) {
+  $scope.$watch(function(){
+         return $window.innerWidth;
+      }, function(value) {
+         console.log("Window Width: " + value);
+         updatePlotSizes(value);
+         //$state.go($state.currentState, {}, {reload:true});
+         $ionicHistory.clearCache();
+         $state.go($ionicHistory.currentStateName());
+     });
+     
+   var updatePlotSizes = function(windowWidth) {
+     $scope.linePlotWidth = windowWidth;
+     $scope.linePlotHeight = 0.618 * windowWidth;
+   };
+  
+  var prepareMEL = function(sql_res) {
+    preparedArr = [];
+    for (var i = 0; i < sql_res.length; i++) {
+      preparedArr.push([sql_res[i].time, sql_res[i].value]);
+    }
+    return preparedArr;
+  };
+  
+  var updateStats = function() {
+    $sql_events.getLast("Fap").then(function(res) {
+      var lastFapTime = res.time;
+      console.log(lastFapTime);
+    
+      p = [];
+      p.push($sql_events.get("Mood", lastFapTime));
+      p.push($sql_events.get("Energy", lastFapTime));
+      p.push($sql_events.get("Libido", lastFapTime));
+    
+      $q.all(p).then(function(resArray) {
+        valuesArr = [];
+        for (var i = 0; i < resArray.length; i++) {
+          valuesArr[i] = prepareMEL(resArray[i]);
+        }
+        console.log(JSON.stringify(valuesArr[0]));
+        $scope.moodSinceLastFap = [{"values": valuesArr[0]}];
+        $scope.energySinceLastFap = [{"values": valuesArr[1]}];
+        $scope.libidoSinceLastFap = [{"values": valuesArr[2]}];
+        console.log(JSON.stringify($scope.moodSinceLastFap));
+      });
+    });
+  };
+  
+  $rootScope.$on('datasetChanged', function() {
+    updateStats();
+  });
+  if (!$firstRunCheck.isFirstRun()) {
+    updateStats();
+  };
+  
   $scope.exampleData = [
                   {
                       "key": "Series 1",

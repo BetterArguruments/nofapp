@@ -316,15 +316,16 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return q.promise;
   }
   
-  self.get = function(eventType) {
+  self.get = function(eventType, since) {
     var q = $q.defer();
+    var timeSince = (typeof since === "undefined") ? 0 : since;
     
     $sql_event_types.getId(eventType)
       .then(function(eventTypeId) {
-        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? ORDER BY time DESC", [eventTypeId])
+        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? AND time >= ? ORDER BY id ASC", [eventTypeId, timeSince])
           .then(function(res) {
             q.resolve($sqlite.getAll(res));
-            console.log(JSON.stringify($sqlite.getFirst(res)));
+            console.log(JSON.stringify($sqlite.getAll(res)));
           });
       }, function(error) {
         q.reject(error);

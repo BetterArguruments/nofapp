@@ -4,12 +4,37 @@
       Mood
     </div>
     <nvd3-line-chart
-        data="exampleData"
+        data="moodSinceLastFap"
         showXAxis="true"
         showYAxis="true"
         tooltips="false"
-        interactive="false">
+        interactive="false"
+        width="{{ linePlotWidth }}"
+        height="{{ linePlotHeight }}">
     </nvd3-line-chart>
-    
+    <div class="item item-divider">
+      Energy
+    </div>
+    <nvd3-line-chart
+        data="energySinceLastFap"
+        showXAxis="true"
+        showYAxis="true"
+        tooltips="false"
+        interactive="false"
+        width="{{ linePlotWidth }}"
+        height="{{ linePlotHeight }}">
+    </nvd3-line-chart>
+    <div class="item item-divider">
+      Libido
+    </div>
+    <nvd3-line-chart
+        data="libidoSinceLastFap"
+        showXAxis="true"
+        showYAxis="true"
+        tooltips="false"
+        interactive="false"
+        width="{{ linePlotWidth }}"
+        height="{{ linePlotHeight }}">
+    </nvd3-line-chart>
   </ion-content>
 </ion-view>

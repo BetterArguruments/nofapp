@@ -13,6 +13,7 @@ angular.module('nofApp')
       this.mood = 0;
       this.energy = 0;
       this.libido = 0;
+      $scope.selectedMood = $scope.selectedEnergy = $scope.selectedLibido = null;
     }
   };
   
