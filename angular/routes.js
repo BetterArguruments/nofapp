@@ -15,34 +15,61 @@ angular.module('nofApp')
     .state('menu.home', {
       url: '/home',
       views: {
-        'menuContent': {
+        'view-content': {
           templateUrl: "templates/home.html",
           controller: "HomeCtrl"
-        }
-      }
-    })
-    .state('menu.stats', {
-      url: '/stats',
-      views: {
-        'menuContent': {
-          templateUrl: "templates/stats.html",
-          controller: "StatsCtrl"
         }
       }
     })
     .state('menu.enterdata', {
       url: '/enterdata',
       views: {
-        'menuContent': {
+        'view-content': {
           templateUrl: "templates/enterdata.html",
           controller: "EnterDataCtrl"
+        }
+      }
+    })
+    .state('menu.tabs_stats', {
+      url : '/tabs_stats',
+      abstract : true,
+      views: {
+        'view-content': {
+          templateUrl: "templates/sub/stats/tabs.html",
+        }
+      }
+    })
+    .state('menu.tabs_stats.stats_lastfap', {
+      url: '/stats_lastfap',
+      views: {
+        'stats_lastfap': {
+          templateUrl: "templates/sub/stats/page_lastfap.html",
+          controller: "StatsCtrl"
+        }
+      }
+    })
+    .state('menu.tabs_stats.stats_overall', {
+      url: '/stats_overall',
+      views: {
+        'stats_overall': {
+          templateUrl: "templates/sub/stats/page_overall.html",
+          controller: "StatsCtrl"
+        }
+      }
+    })
+    .state('menu.tabs_stats.stats_web', {
+      url: '/stats_web',
+      views: {
+        'stats_web': {
+          templateUrl: "templates/sub/stats/page_web.html",
+          controller: "StatsCtrl"
         }
       }
     })
     .state('menu.history', {
       url: '/history',
       views: {
-        'menuContent': {
+        'view-content': {
           templateUrl: "templates/history.html",
           controller: "HistoryCtrl"
         }
@@ -51,7 +78,7 @@ angular.module('nofApp')
     .state('menu.settings', {
       url: '/settings',
       views: {
-        'menuContent': {
+        'view-content': {
           templateUrl: "templates/settings.html",
           controller: "SettingsCtrl"
         }
@@ -60,7 +87,7 @@ angular.module('nofApp')
     .state('menu.settings_about', {
       url: '/settings_about',
       views: {
-        'menuContent': {
+        'view-content': {
           templateUrl: "templates/sub/settings/page_about.html",
           controller: "SettingsCtrl"
         }
@@ -69,7 +96,7 @@ angular.module('nofApp')
     .state('menu.settings_beer', {
       url: '/settings_beer',
       views: {
-        'menuContent': {
+        'view-content': {
           templateUrl: "templates/sub/settings/page_beer.html",
           controller: "SettingsCtrl"
         }
@@ -78,7 +105,7 @@ angular.module('nofApp')
     .state('menu.settings_fapsperiment', {
       url: '/settings_fapsperiment',
       views: {
-        'menuContent': {
+        'view-content': {
           templateUrl: "templates/sub/settings/page_fapsperiment.html",
           controller: "SettingsCtrl"
         }

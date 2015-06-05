@@ -1,0 +1,24 @@
+<!--
+Create tabs with an icon and label, using the tabs-positive style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-icon-top tabs-royal">
+
+  <!-- Dashboard Tab -->
+  <ion-tab title="Last Fap" icon-off="ion-ios-pulse" icon-on="ion-ios-pulse-strong" href="#/menu/tabs_stats/stats_lastfap">
+    <ion-nav-view name="stats_lastfap"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Chats Tab -->
+  <ion-tab title="Overall" icon-off="ion-ios-infinite-outline" icon-on="ion-ios-infinite" href="#/menu/tabs_stats/stats_overall">
+    <ion-nav-view name="stats_overall"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Account Tab -->
+  <ion-tab title="Fapsperiment" icon-off="ion-ios-cloud-outline" icon-on="ion-ios-cloud" href="#/menu/tabs_stats/stats_web">
+    <ion-nav-view name="stats_web"></ion-nav-view>
+  </ion-tab>
+
+
+</ion-tabs>
