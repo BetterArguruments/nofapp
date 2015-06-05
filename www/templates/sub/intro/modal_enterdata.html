@@ -16,12 +16,19 @@
         <a class="button button-small button-assertive" ng-click="explanation_enterbelow()">1: Very Bad</a>
         <a class="button button-small button-balanced" ng-click="explanation_enterbelow()">5: Awesome</a>
       </div>-->
-      <p>Track Your Mood, Energy and Libido while doing Nofap. Values are entered on a scale from 1 (very bad) to 5 (awesome).</p>
+      <p>Enter Your current Mood, Energy and Libido.</p>
     </div>
   
     <div class="item item-divider">
-      <i class="icon ion-shuffle"></i>
-      Mood
+      <div class="row" style="padding: 0px">
+        <div class="col col-50 no-left-padding no-top-padding no-bottom-padding">
+          <i class="icon ion-shuffle"></i>
+          Mood
+        </div>
+        <div class="col col-50 no-right-padding no-top-padding no-bottom-padding">
+          {{ selectedMood }}
+        </div>
+      </div>
     </div>
     
     <div class="item item-text-wrap">
@@ -35,8 +42,16 @@
     </div>
     
     <div class="item item-divider" ng-if="step > 0">
-      <i class="icon ion-flash"></i>
-      Energy
+
+      <div class="row" style="padding: 0px">
+        <div class="col col-50 no-left-padding no-top-padding no-bottom-padding">
+          <i class="icon ion-flash"></i>
+          Energy
+        </div>
+        <div class="col col-50 no-right-padding no-top-padding no-bottom-padding">
+          {{ selectedEnergy }}
+        </div>
+      </div>
     </div>
     <div class="item item-text-wrap" ng-if="step > 0">
       <div class="button-bar">
@@ -48,8 +63,16 @@
       </div>
     </div>
     <div class="item item-divider" ng-if="step > 1">
-      <i class="icon ion-flame"></i>
-      Libido
+
+      <div class="row" style="padding: 0px">
+        <div class="col col-50 no-left-padding no-top-padding no-bottom-padding">
+          <i class="icon ion-flame"></i>
+          Libido
+        </div>
+        <div class="col col-50 no-right-padding no-top-padding no-bottom-padding">
+          {{ selectedLibido }}
+        </div>
+      </div>
     </div>
     <div class="item item-text-wrap" ng-if="step > 1">
       <div class="button-bar">

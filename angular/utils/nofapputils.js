@@ -2,6 +2,36 @@
 // The most awesome DB Manager!
 angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 
+.factory('$valuesToString', function($localstorage) {
+  var self = this;
+  
+  self.toString = function(type, value) {
+    if (type === "Mood") {
+      switch(value) {
+        case 1: return "very bad"; break;
+        case 2: return "bad"; break;
+        case 3: return "okay"; break;
+        case 4: return "good"; break;
+        case 5: return "very good"; break;
+        default: return null;
+      }
+    }
+    else if (type === "Energy" || type === "Libido") {
+      switch(value) {
+        case 1: return "very low"; break;
+        case 2: return "low"; break;
+        case 3: return "okay"; break;
+        case 4: return "high"; break;
+        case 5: return "very high"; break;
+        default: return null;
+      }
+    }
+    
+  };
+  
+  return self;
+})
+
 .factory('$firstRunCheck', function($localstorage) {
   this.isFirstRun = function () {
     var firstRun = $localstorage.get("firstRun", "true");
