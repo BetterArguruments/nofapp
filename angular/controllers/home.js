@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('MainCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events, $sql_debug, $firstRunCheck) {
+.controller('HomeCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events, $sql_debug, $firstRunCheck) {
 
   // Debug: Insert Sample Data
   $scope.insertMoarData = function() {
@@ -41,8 +41,6 @@ angular.module('nofApp')
         }
       }
     });
-
-    
   };
 
   if (!$firstRunCheck.isFirstRun()) {

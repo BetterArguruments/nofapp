@@ -12,15 +12,26 @@
     </div>
     
     <ion-toggle toggle-class="toggle-balanced">Enable</ion-toggle>
-    <a class="item item-icon-right" href="#">
-      Sync Status
-      <i class="icon ion-ios-arrow-right"></i>
-    </a>
-    <a class="item item-icon-right" href="#/tab/settings_fapsperiment">
-      About
+    <a class="item item-icon-right" href="#/menu/settings_fapsperiment">
+      More
       <i class="icon ion-ios-arrow-right"></i>
     </a>
 
+    <div class="item item-divider">
+      About
+    </div>
+
+    <a class="item item-icon-left item-icon-right" href="#/menu/settings_about">
+      <i class="icon ion-information-circled"></i>
+      About NofAPP
+      <i class="icon ion-ios-arrow-right"></i>
+    </a>
+    <a class="item item-icon-left item-icon-right" href="#/menu/settings_beer">
+      <i class="icon ion-beer"></i>
+      Buy us beer!
+      <i class="icon ion-ios-arrow-right"></i>
+    </a>
+    
     <div class="item item-divider">
       Reset
     </div>
@@ -28,19 +39,6 @@
     <a class="item item-icon-left" href="#" ng-click="showConfirmResetApp()">
       <i class="icon ion-trash-a"></i>
       Reset App (Delete Everything)
-    </a>
-
-    <div class="item item-divider">
-      About
-    </div>
-
-    <a class="item item-icon-left" href="#/tab/settings_about">
-      <i class="icon ion-information-circled"></i>
-      About NofAPP
-    </a>
-    <a class="item item-icon-left" href="#/tab/settings_beer">
-      <i class="icon ion-beer"></i>
-      Buy us beer!
     </a>
 
   </div>

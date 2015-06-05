@@ -1,26 +1,25 @@
 angular.module('nofApp')
 
 // Enter Data Controller
-.controller('EnterDataCtrl', function($scope, $state, $q, $ionicPopup, $sqlite, $sql_events, $sql_notes) {
+.controller('EnterDataCtrl', function($scope, $state, $q, $ionicPopup, $ionicLoading, $sqlite, $sql_events, $sql_notes, $valuesToString) {
 
   // set initial values for a new state
   // TODO: read values from db if last dataset < x minutes ago
   $scope.userState = {
-    mood: 3,
-    energy: 3,
-    libido: 3,
-    note: "",
+    mood: 0,
+    energy: 0,
+    libido: 0,
     reset: function() {
-      this.mood = 3;
-      this.energy = 3;
-      this.libido = 3;
-      this.note = "";
+      this.mood = 0;
+      this.energy = 0;
+      this.libido = 0;
     }
   };
   
   $scope.setMood = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.mood = i;
+      $scope.selectedMood = $valuesToString.toString("Mood", i);
     };
   };
   
@@ -33,6 +32,7 @@ angular.module('nofApp')
   $scope.setEnergy = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.energy = i;
+      $scope.selectedEnergy = $valuesToString.toString("Energy", i);
     };
   };
   
@@ -45,6 +45,7 @@ angular.module('nofApp')
   $scope.setLibido = function(i) {
     if (1 <= i && i <= 5) {
       $scope.userState.libido = i;
+      $scope.selectedLibido = $valuesToString.toString("Libido", i);
     };
   };
   
@@ -56,27 +57,31 @@ angular.module('nofApp')
   
   
   // Submit the mood/energy form and write new entries
-  $scope.addDataset = function() {
+  $scope.submitForm = function() {
+    if ($scope.userState.mood === 0 || $scope.userState.energy === 0 || $scope.userState.libido === 0) {
+      console.log("User has not interacted completely!");
+      var alertPopup = $ionicPopup.alert({
+        title: "Not so fast, Fapstronaut!",
+        template: "Make sure you enter values for Mood, Energy and Libido",
+        okType: "button-royal"
+      });
+      return false;
+    }
+    
     console.log(JSON.stringify($scope.userState));
     var promises = [];
     promises.push($sql_events.add("Mood", $scope.userState.mood));
     promises.push($sql_events.add("Energy", $scope.userState.energy));
     promises.push($sql_events.add("Libido", $scope.userState.libido));
     
-    // Check for Note and enter it into DB
-    if ($scope.userState.note != "") {
-        $sql_notes.add($scope.userState.note).then(function() {
-          console.log("Note added to DB");
-          $scope.$emit('datasetChanged');
-          $state.go('tabs.history');
-        });
-    }
-    
     $q.all(promises).then(function() {
       $scope.userState.reset();
       $scope.$emit('datasetChanged');
-      $state.go('tabs.history');
-      
+      $state.go('menu.history');
+      $ionicLoading.show({
+        template: 'Data Saved.',
+        duration: 2500
+          });
     });
   
   };

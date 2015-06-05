@@ -10,7 +10,7 @@ angular.module('nofApp')
     $firstRunCheck.setFirstRun("false");
     $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
-    $state.go('tabs.main');
+    $state.go('menu.home');
   };
 
   // Title Control, gets called on slide changed
@@ -24,6 +24,7 @@ angular.module('nofApp')
   }
 
   // Called each time the slide changes
+  $scope.slideIndex = 0;
   $scope.slideChanged = function(index) {
     $scope.slideIndex = index;
     $scope.introViewTitle = getNewTitle(index);
@@ -32,6 +33,14 @@ angular.module('nofApp')
   // Slide Box Control
   $scope.nextSlide = function() {
     $ionicSlideBoxDelegate.next();
+  };
+  
+  // Footer Click
+  $scope.footerClick = function() {
+    switch($scope.slideIndex) {
+      case 0: $ionicSlideBoxDelegate.next(); break;
+      default: $scope.modal_enterdata.show();
+    }
   };
 
   // Modals
@@ -183,7 +192,7 @@ angular.module('nofApp')
       console.log("User has not interacted completely!");
       var alertPopup = $ionicPopup.alert({
         title: "Not so fast, Fapstronaut!",
-        template: "Make sure to enter your data, including last sex and last fap.",
+        template: "Make sure you enter all data, including last sex and last fap.",
         okType: "button-royal"
       });
       return false;
@@ -223,10 +232,6 @@ angular.module('nofApp')
           duration: 4500
             });
       })
-      
-
-      
-
       
     }
   }

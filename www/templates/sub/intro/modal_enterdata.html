@@ -1,9 +1,6 @@
 <ion-modal-view>
 
   <ion-header-bar class="bar bar-header bar-royal">
-    <!-- Back Button, we probably don't need this
-    <button class="button button-icon ion-android-arrow-back" ng-click="modal_enterdata.hide()">
-    </button> -->
     <h1 class="title">Getting started</h1>
     <button class="button button-icon ion-help-circled" ng-click="modal_enterdata_help.show()">
     </button>
@@ -12,11 +9,7 @@
   <ion-content class="padding">
   
     <div class="item item-text-wrap">
-      <!--<div class="button-bar">
-        <a class="button button-small button-assertive" ng-click="explanation_enterbelow()">1: Very Bad</a>
-        <a class="button button-small button-balanced" ng-click="explanation_enterbelow()">5: Awesome</a>
-      </div>-->
-      <p>Enter Your current Mood, Energy and Libido.</p>
+      <p>Enter your current Mood, Energy and Libido.</p>
     </div>
   
     <div class="item item-divider">
@@ -98,13 +91,10 @@
       </div>
     </div>
     
-    <p>&nbsp;</p>
-    <p>&nbsp;</p>
-    
   </ion-content>
   
-  <div class="bar bar-footer bar-royal" ng-click="submitForm()" ng-if="step > 4">
-    <div class="title">Continue</div>
-  </div>
+  <ion-footer-bar class="bar-royal" ng-click="submitForm()" ng-if="step > 4">
+    <h1 class="title">Continue</h1>
+  </ion-footer-bar>
   
 </ion-modal-view>

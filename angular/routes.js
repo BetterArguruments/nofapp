@@ -2,86 +2,89 @@ angular.module('nofApp')
 .config(function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
-  .state('intro', {
-    url: '/intro',
-    templateUrl: 'templates/intro.html',
-    controller: 'IntroCtrl'
-  })
-  .state('tabs', {
-    url: "/tab",
-    abstract: true,
-    templateUrl: "templates/tabs.html"
-  })
-  .state('tabs.main', {
-    url: '/main',
-    views: {
-      'main-tab': {
-        templateUrl: 'templates/main.html',
-        controller: 'MainCtrl'
+    .state('intro', {
+      url: '/intro',
+      templateUrl: 'templates/intro.html',
+      controller: 'IntroCtrl'
+    })
+    .state('menu', {
+      url : '/menu',
+      templateUrl : 'templates/menu.html',
+      abstract : true,
+    })
+    .state('menu.home', {
+      url: '/home',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/home.html",
+          controller: "HomeCtrl"
+        }
       }
-    }
-  })
-  .state('tabs.stats', {
-    url: '/stats',
-    views: {
-      'stats-tab': {
-        templateUrl: 'templates/stats.html',
-        controller: 'StatsCtrl'
+    })
+    .state('menu.stats', {
+      url: '/stats',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/stats.html",
+          controller: "StatsCtrl"
+        }
       }
-    }
-  })
-  .state('tabs.enterdata', {
-    url: '/enterdata',
-    views: {
-      'enterdata-tab': {
-        templateUrl: 'templates/enterdata.html',
-        controller: 'EnterDataCtrl'
+    })
+    .state('menu.enterdata', {
+      url: '/enterdata',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/enterdata.html",
+          controller: "EnterDataCtrl"
+        }
       }
-    }
-  })
-  .state('tabs.history', {
-    url: '/history',
-    views: {
-      'history-tab': {
-        templateUrl: 'templates/history.html',
-        controller: 'HistoryCtrl'
+    })
+    .state('menu.history', {
+      url: '/history',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/history.html",
+          controller: "HistoryCtrl"
+        }
       }
-    }
-  })
-  .state('tabs.settings', {
-    url: '/settings',
-    views: {
-      'settings-tab': {
-        templateUrl: 'templates/settings.html',
-        controller: 'SettingsCtrl'
+    })
+    .state('menu.settings', {
+      url: '/settings',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/settings.html",
+          controller: "SettingsCtrl"
+        }
       }
-    }
-  })
-  .state('tabs.settings_about', {
-    url: '/settings_about',
-    views: {
-      'settings-tab': {
-        templateUrl: 'templates/sub/settings/page_about.html'
+    })
+    .state('menu.settings_about', {
+      url: '/settings_about',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/sub/settings/page_about.html",
+          controller: "SettingsCtrl"
+        }
       }
-    }
-  })
-  .state('tabs.settings_beer', {
-    url: '/settings_beer',
-    views: {
-      'settings-tab': {
-        templateUrl: 'templates/sub/settings/page_beer.html'
+    })
+    .state('menu.settings_beer', {
+      url: '/settings_beer',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/sub/settings/page_beer.html",
+          controller: "SettingsCtrl"
+        }
       }
-    }
-  })
-  .state('tabs.settings_fapsperiment', {
-    url: '/settings_fapsperiment',
-    views: {
-      'settings-tab': {
-        templateUrl: 'templates/sub/settings/page_fapsperiment.html'
+    })
+    .state('menu.settings_fapsperiment', {
+      url: '/settings_fapsperiment',
+      views: {
+        'menuContent': {
+          templateUrl: "templates/sub/settings/page_fapsperiment.html",
+          controller: "SettingsCtrl"
+        }
       }
-    }
-  });
+    });
 
-  $urlRouterProvider.otherwise("/tab/main");
+  $urlRouterProvider.otherwise("/menu/home");
 
 });

@@ -1,7 +1,8 @@
-<ion-view view-title="{{introViewTitle}}">
+<ion-header-bar class="bar-royal">
+  <h1 class="title">{{introViewTitle}}</h1>
+</ion-header-bar>
 
-<ion-nav-buttons side="right">
-</ion-nav-buttons>
+<ion-view>
 
   <ion-slide-box show-pager="false" on-slide-changed="slideChanged($index)">
     <ion-slide class="padding">
@@ -14,8 +15,7 @@
       </p>
         
        <div class="bar bar-footer bar-royal" ng-click="nextSlide()">
-         <div class="title">Swipe right to begin</div>
-         <button class="button button-icon ion-ios-arrow-right"></button>
+
        </div>
     </ion-slide>
 
@@ -50,9 +50,6 @@
           </a>
         </div>
       </ion-content>
-      <div class="bar bar-footer bar-royal" ng-click="modal_enterdata.show()">
-        <div class="title">Get Started!</div>
-      </div>
     </ion-slide>
 
     <ion-slide class="padding">
@@ -83,12 +80,18 @@
           <p><b>Improved attitude:</b> Many Fapstronauts describe increased happiness throughout their lives, especially in their attitudes toward sex.</p>
         </div>
       
-      <p>&nbsp;</p>
-      <p>&nbsp;</p>
       </ion-content>
-      <div class="bar bar-footer bar-royal" ng-click="modal_enterdata.show()">
-        <div class="title">Get Started!</div>
-      </div>
     </ion-slide>
   </ion-slide-box>
+  
+  <ion-footer-bar class="bar-royal" ng-click="footerClick()">
+    <!-- First Slide -->
+    <div ng-if="slideIndex == 0">
+      <h1 class="title">Swipe right to begin</h1>
+      <button class="button button-icon ion-ios-arrow-right"></button>
+    </div>
+    <!-- Other Slides -->
+    <h1 class="title" ng-if="slideIndex > 0">Get Started!</h1>
+  </ion-footer-bar>
+  
 </ion-view>
