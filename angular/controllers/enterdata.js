@@ -1,7 +1,7 @@
 angular.module('nofApp')
 
 // Enter Data Controller
-.controller('EnterDataCtrl', function($scope, $state, $q, $ionicPopup, $ionicLoading, $sqlite, $sql_events, $sql_notes, $valuesToString) {
+.controller('EnterDataCtrl', function($scope, $state, $ionicHistory, $q, $ionicPopup, $ionicLoading, $sqlite, $sql_events, $sql_notes, $valuesToString) {
 
   // set initial values for a new state
   // TODO: read values from db if last dataset < x minutes ago
@@ -77,6 +77,11 @@ angular.module('nofApp')
     $q.all(promises).then(function() {
       $scope.userState.reset();
       $scope.$emit('datasetChanged');
+      
+      // Super Hacky Fix to prevent missing Menu and Back Button after submitting form
+      // https://github.com/driftyco/ionic/issues/1287
+      $ionicHistory.currentView($ionicHistory.backView());
+      
       $state.go('menu.history');
       $ionicLoading.show({
         template: 'Data Saved.',
