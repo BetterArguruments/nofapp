@@ -3,7 +3,7 @@ Awesomeness.
 
 ## Dev Roadmap
 - [x] Switch from LocalStorage to Cordova SQLite
-- [ ] Chart Backend (Chart.js + Scatter?)
+- [ ] Chart Backend (Chart.js + Scatter? NVD3.js?)
 - [ ] Global Database Backend (Firebase?) See this as example: https://github.com/mappmechanic/ionic-firebase
 
 ## Build
