@@ -16,10 +16,10 @@
         </span>
       </div>
     </div>
-    <div id="milestones">
+    <!--<div id="milestones">
       <div class="center">Awesome! Keep going!</div>
-      <div class="center"><a href="#" ng-click="insertMoarData()">Insert Moar Data!</a></div>
-  <!--
+      
+  
       <div class="row">
         <div class="col col-25">13%</div>
         <div class="col">Track your progress and get anal...</div>
@@ -28,8 +28,36 @@
         <div class="col col-25">23%</div>
         <div class="col">Enter card information</div>
       </div>
-	  -->
     </div>
+    -->
+    
+    <button class="button button-full button-royal icon-left ion-ios-arrow-left" ng-click="toggleLeftSideMenu()" ng-if="sideMenuHintButton === true">
+      Swipe to open menu
+    </button>
+    
+    <div class="item item-text-wrap">
+      <div class="row">
+        <div class="col col-20">
+          <h2>13%</h2>
+        </div>
+        <div class="col col-80">
+          This is some Dummy Data. Lorem Ipsum! Lorem Ipsum! Lorem Ipsum!
+        </div>
+      </div>
+    </div>
+    
+    <div class="item item-text-wrap">
+      <div class="row">
+        <div class="col col-20">
+          <h2>99%</h2>
+        </div>
+        <div class="col col-80">
+          Moar Dummy Data
+        </div>
+      </div>
+    </div>
+
+    <div class="center"><a href="#" ng-click="insertMoarData()">Insert Moar Data!</a></div>
 
   </ion-content>
 

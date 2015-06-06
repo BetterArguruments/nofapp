@@ -1,13 +1,13 @@
 angular.module('nofApp')
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $ionicHistory, $ionicLoading,
-  $firstRunCheck, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite, $valuesToString) {
+  $lsSettings, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite, $valuesToString) {
   
   // Clear History, so Android Back Button doesn't go to Main Screen
   $ionicHistory.clearHistory();
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
-    $firstRunCheck.setFirstRun("false");
+    $lsSettings.setFirst("run", "false");
     $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('menu.home');

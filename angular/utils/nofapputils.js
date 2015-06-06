@@ -32,24 +32,26 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   return self;
 })
 
-.factory('$firstRunCheck', function($localstorage) {
-  this.isFirstRun = function () {
-    var firstRun = $localstorage.get("firstRun", "true");
-    if (firstRun === "false") {
-      return false;
-    } else {
-      return true;
-    };
+.factory('$lsSettings', function($localstorage) {
+  var self = this;  
+  
+  self.isFirst = function(val) {
+    var stor = $localstorage.get(val, "true");
+    return (stor === "false") ? false : true;
   };
   
-  this.setFirstRun = function(val) {
-    // val = boolean, well not really, actually it's a string which is
-    // either true or false, DUH
-    $localstorage.set("firstRun", val)
-    console.log("firstRun set to " + $localstorage.get("firstRun"));
-  };
-  
-  return this;
+  self.setFirst = function(stor, val) {
+    $localstorage.set(stor, val);
+    console.log("lsSettings: " + stor + " set to " + val);
+  }
+   
+  self.reset = function() {
+    $localstorage.set("run", "");
+    $localstorage.set("tut_home_sideMenuHintButton", "");
+    console.log("lsSettings: Reset");
+  }
+
+  return self;
 })
 
 .factory('$sqlite', function($cordovaSQLite, $q, $ionicPlatform) {
@@ -244,6 +246,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     
     // Delete localstorage
     $localstorage.set("struct","");
+    $localstorage.set("firstRun", ""); // Variable is now named "run"
     
     console.log("Migrating " + structDb.length + " localstorage Entries to " + promises.length + " SQLite Entries");
     return $q.all(promises);

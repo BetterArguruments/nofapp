@@ -1,6 +1,6 @@
 // Stats Controller
 angular.module('nofApp')
-.controller('StatsCtrl', function($scope, $state, $window, $rootScope, $ionicHistory, $q, $firstRunCheck, $sql_events) {
+.controller('StatsCtrl', function($scope, $state, $window, $rootScope, $ionicHistory, $q, $lsSettings, $sql_events) {
   $scope.$watch(function(){
          return $window.innerWidth;
       }, function(value) {
@@ -51,7 +51,7 @@ angular.module('nofApp')
   $rootScope.$on('datasetChanged', function() {
     updateStats();
   });
-  if (!$firstRunCheck.isFirstRun()) {
+  if (!$lsSettings.isFirst("run")) {
     updateStats();
   };
   

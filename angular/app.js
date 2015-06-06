@@ -4,7 +4,7 @@
 angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAnimate','angularMoment','ngSanitize','ui.router','nvd3ChartDirectives'])
 
 .run(function($ionicPlatform, $q, $state, $cordovaSQLite, $cordovaAppVersion, $cordovaInAppBrowser, 
-  $firstRunCheck, $sqlite, $sql_init, $sql_debug, $rootScope, amMoment, $cordovaKeyboard, $cordovaSplashscreen) {
+  $lsSettings, $sqlite, $sql_init, $sql_debug, $rootScope, amMoment, $cordovaKeyboard, $cordovaSplashscreen) {
   // Initialize Angular Moment
   //amMoment.changeLocale('en-gb');
 
@@ -20,7 +20,7 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     }
     
     // Go to intro if first run
-    if ($firstRunCheck.isFirstRun()) {
+    if ($lsSettings.isFirst("run")) {
       //$location.path('/intro');
       $state.go('intro').then(function() {
         $cordovaSplashscreen.hide();

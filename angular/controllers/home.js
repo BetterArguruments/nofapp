@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('HomeCtrl', function($scope, $state, $ionicHistory, $rootScope, $sqlite, $sql_events, $sql_debug, $firstRunCheck) {
+.controller('HomeCtrl', function($scope, $state, $ionicHistory, $ionicSideMenuDelegate, $rootScope, $sqlite, $sql_events, $sql_debug, $lsSettings) {
 
   // Debug: Insert Sample Data
   $scope.insertMoarData = function() {
@@ -9,9 +9,48 @@ angular.module('nofApp')
     });
   };
   
+  // $scope.$watch(function() {
+  //   return $lsSettings.isFirst("run");
+  // }, function(value) {
+  //   $scope.$watch(function() {
+  //     return $ionicSideMenuDelegate.isOpenLeft();
+  //   }, function(value2) {
+  //     $scope.hide_tut_home_sideMenuHintButton = true;
+  //     $lsSettings.setFirst("tut_home_sideMenuHintButton", "false");
+  //   });
+  // });
+  
+  var showTut = function() {
+    if (!$lsSettings.isFirst("run") && $lsSettings.isFirst("tut_home_sideMenuHintButton")) {
+      var menuWatcher = $scope.$watch(function() {
+        return $ionicSideMenuDelegate.isOpenLeft();
+      }, function(value) {
+        if (value) {
+          $lsSettings.setFirst("tut_home_sideMenuHintButton", "false");
+          refreshTutButtons();
+          menuWatcher();
+        }
+      });
+    }
+  }
+  showTut();
+
+  // Chceck whether to hide Button
+  var refreshTutButtons = function() {
+    $scope.sideMenuHintButton = $lsSettings.isFirst("tut_home_sideMenuHintButton");
+  };
+  refreshTutButtons();
+
+  // Open Menu
+  $scope.toggleLeftSideMenu = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+  
   // Check for Updates
   $rootScope.$on('datasetChanged', function() {
     updateLastFap();
+    showTut();
+    refreshTutButtons();
   });
 
   // "Update" Function
@@ -43,7 +82,7 @@ angular.module('nofApp')
     });
   };
 
-  if (!$firstRunCheck.isFirstRun()) {
+  if (!$lsSettings.isFirst("run")) {
     updateLastFap();
   };
 });

@@ -1,10 +1,10 @@
 // Settings Controller
 angular.module('nofApp')
-.controller('SettingsCtrl', function($scope, $state, $sql_init, $firstRunCheck, $ionicHistory, $ionicPopup) {
+.controller('SettingsCtrl', function($scope, $state, $sql_init, $lsSettings, $ionicHistory, $ionicPopup) {
   // Reset App
   $scope.resetApp = function() {
     $sql_init.reset();
-    $firstRunCheck.setFirstRun("true");
+    $lsSettings.reset();
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('intro');
   }
