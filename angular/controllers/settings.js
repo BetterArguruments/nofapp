@@ -7,7 +7,6 @@ angular.module('nofApp')
     notifications: $lsSettings.is("notifications"),
     fapsperiment: $lsSettings.is("fapsperiment")
   };
-  console.log(JSON.stringify($scope.settings));
   
   // Even more Voodoo, even more serious
   $scope.settingsToggle = function(setting) {

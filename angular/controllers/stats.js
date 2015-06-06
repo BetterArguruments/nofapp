@@ -48,9 +48,42 @@ angular.module('nofApp')
         $scope.libidoSinceLastFap = [{"values": valuesArr[2]}];
         $scope.numDataPointsSinceLastFap = valuesArr[0].length;
         
+        //formatPlots();
       });
     });
   };
+
+  // var deltaX = values[values.length][0] - values[0][0];
+  // if (deltaX < triggerFormat[0]) {
+  //   // minutes
+  // }
+  // else if (deltaX < triggerFormat[1]) {
+  //   // hours
+  // }
+  // else {
+  //   // days
+  // }
+
+  var maxLabels = Math.floor($window.innerWidth / 5);
+  var triggerFormat = [3600, 84000];
+  $scope.xAxisTickValuesFunction = function(){
+    return function(d){
+      var tickVals = [];
+      var values = d[0].values;
+      var interestedTimeValuesArray = [0, 00, 15, 30, 45];
+
+      
+      for(var i in values){
+        if(interestedTimeValuesArray.indexOf(moment.unix(values[i][0]).minute()) >= 0){
+          tickVals.push(values[i][0]);
+        }
+      }
+      
+      console.log('xAxisTickValuesFunction', d);
+      return tickVals;
+    };
+  };
+
 
   $rootScope.$on('datasetChanged', function() {
     updateStats();

@@ -539,4 +539,30 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   };
   
   return self;
+})
+
+.factory('$statsParser', function() {
+  var self = this;
+  
+  self.parseXAxisLinePlot = function(xdata, windowWidth) {
+    // Settings
+    var maxLabels = Math.floor(windowWidth / 5);
+    var triggerFormat = [3600, 84000];
+    var formats = ["minutes", "hours", "days"];
+    
+    // Action
+    var xDelta = xdata[0] - xdata[xdata.length-1];
+    if (xDelta < triggerFormat[0]) {
+      // minutes
+      
+    }
+    else if (xDelta < triggerFormat[1]) {
+      // hours
+    }
+    else {
+      // days
+    }
+  };
+  
+  return self;
 });
