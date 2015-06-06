@@ -33,7 +33,41 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 })
 
 .factory('$lsSettings', function($localstorage) {
+  var initSettings = function() {
+    var struct = { "firstRun": "true",
+      "tut_home_showHintButtonSideMenu": "true",
+      "notifications": "true",
+      "fapsperiment": "false"
+      };
+    $localstorage.setObject("settings", struct);
+  };
+  
+  var getSettings = function() {
+    var struct = $localstorage.getObject("settings");
+    if (typeof struct === undefined || NofappHelpers.isEmpty(struct)) {
+      initSettings();
+      var struct = $localstorage.getObject("settings");
+    }
+    return struct;
+  }
+  
+  var setSettings = function(struct) {
+    $localstorage.setObject("settings", struct);
+  };
+  
   var self = this;  
+  
+  self.is = function(setting) {
+    console.log("lsSettings read: " + setting + " : " + getSettings()[setting]);
+    return (getSettings()[setting] === "true" || getSettings()[setting] === true) ? true : false;
+  }
+  
+  self.set = function(setting, val) {
+    console.log("lsSettings write: " + setting + " = " + val);
+    var struct = getSettings();
+    struct[setting] = val;
+    setSettings(struct);
+  };
   
   self.isFirst = function(val) {
     var stor = $localstorage.get(val, "true");
@@ -43,13 +77,12 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   self.setFirst = function(stor, val) {
     $localstorage.set(stor, val);
     console.log("lsSettings: " + stor + " set to " + val);
-  }
+  };
    
   self.reset = function() {
-    $localstorage.set("run", "");
-    $localstorage.set("tut_home_sideMenuHintButton", "");
     console.log("lsSettings: Reset");
-  }
+    initSettings();
+  };
 
   return self;
 })
@@ -328,7 +361,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
         return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? AND time >= ? ORDER BY id ASC", [eventTypeId, timeSince])
           .then(function(res) {
             q.resolve($sqlite.getAll(res));
-            console.log(JSON.stringify($sqlite.getAll(res)));
+            //console.log(JSON.stringify($sqlite.getAll(res)));
           });
       }, function(error) {
         q.reject(error);
@@ -357,7 +390,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     var q = $q.defer();
 
     $sql_event_types.getAll().then(function(eventTypes) {
-      console.log(JSON.stringify(eventTypes));
+      //console.log(JSON.stringify(eventTypes));
       $sqlite.query("SELECT id, time, type, value FROM events ORDER BY id ASC").then(function(res) {
         var events = $sqlite.getAll(res);
         // Resolve Event TypeIds to Names

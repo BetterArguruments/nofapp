@@ -1,17 +1,18 @@
 <ion-view hide-back-button="true" view-title="Settings">
   <ion-content class="padding">
   <div class="list">
+    
     <div class="item item-divider">
       General
     </div>
-    <ion-toggle toggle-class="toggle-balanced">Notifications</ion-toggle>
     
+    <ion-toggle toggle-class="toggle-balanced" ng-model="settings.notifications" ng-change="settingsToggle('notifications')">Notifications</ion-toggle>
 
     <div class="item item-divider">
       Global Fapsperiment
     </div>
     
-    <ion-toggle toggle-class="toggle-balanced">Enable</ion-toggle>
+    <ion-toggle toggle-class="toggle-balanced" ng-model="settings.fapsperiment" ng-change="settingsToggle('fapsperiment')">Enable</ion-toggle>
     <a class="item item-icon-right" href="#/menu/settings_fapsperiment">
       More
       <i class="icon ion-ios-arrow-right"></i>

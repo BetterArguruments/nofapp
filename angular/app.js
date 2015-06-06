@@ -20,7 +20,7 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
     }
     
     // Go to intro if first run
-    if ($lsSettings.isFirst("run")) {
+    if ($lsSettings.is("firstRun")) {
       //$location.path('/intro');
       $state.go('intro').then(function() {
         $cordovaSplashscreen.hide();

@@ -1,6 +1,19 @@
 // Settings Controller
 angular.module('nofApp')
 .controller('SettingsCtrl', function($scope, $state, $sql_init, $lsSettings, $ionicHistory, $ionicPopup) {
+  
+  // Some serious Settings Voodoo
+  $scope.settings = {
+    notifications: $lsSettings.is("notifications"),
+    fapsperiment: $lsSettings.is("fapsperiment")
+  };
+  console.log(JSON.stringify($scope.settings));
+  
+  // Even more Voodoo, even more serious
+  $scope.settingsToggle = function(setting) {
+    $lsSettings.set(setting, $scope.settings[setting]);
+  };
+  
   // Reset App
   $scope.resetApp = function() {
     $sql_init.reset();
@@ -9,6 +22,7 @@ angular.module('nofApp')
     $state.go('intro');
   }
   
+  // Reset App Confirm Dialog
   $scope.showConfirmResetApp = function() {
     var confirmPopup = $ionicPopup.confirm({
       title: 'Are You Sure, Fapstronaut?',

@@ -7,7 +7,7 @@ angular.module('nofApp')
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
-    $lsSettings.setFirst("run", "false");
+    $lsSettings.set("firstRun", "false");
     $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('menu.home');

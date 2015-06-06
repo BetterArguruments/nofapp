@@ -1,20 +1,24 @@
 // Stats Controller
 angular.module('nofApp')
 .controller('StatsCtrl', function($scope, $state, $window, $rootScope, $ionicHistory, $q, $lsSettings, $sql_events) {
-  $scope.$watch(function(){
-         return $window.innerWidth;
-      }, function(value) {
-         console.log("Window Width: " + value);
-         updatePlotSizes(value);
-         //$state.go($state.currentState, {}, {reload:true});
-         $ionicHistory.clearCache();
-         $state.go($ionicHistory.currentStateName());
-     });
+  // $scope.$watch(function(){
+//          return $window.innerWidth;
+//       }, function(value) {
+//          console.log("Window Width: " + value);
+//          updatePlotSizes(value);
+//          //$state.go($state.currentState, {}, {reload:true});
+//          $ionicHistory.clearCache();
+//          $state.go($ionicHistory.currentStateName(), {}, {reload: true});
+//      });
+  $scope.numDataPointsSinceLastFap = 0;
+  console.log($scope.numDataPointsSinceLastFap);   
      
-   var updatePlotSizes = function(windowWidth) {
+  var updatePlotSizes = function(windowWidth) {
      $scope.linePlotWidth = windowWidth;
      $scope.linePlotHeight = 0.618 * windowWidth;
-   };
+  };
+  updatePlotSizes($window.innerWidth);
+  console.log("Window Width: " + $window.innerWidth);
   
   var prepareMEL = function(sql_res) {
     preparedArr = [];
@@ -39,19 +43,19 @@ angular.module('nofApp')
         for (var i = 0; i < resArray.length; i++) {
           valuesArr[i] = prepareMEL(resArray[i]);
         }
-        console.log(JSON.stringify(valuesArr[0]));
         $scope.moodSinceLastFap = [{"values": valuesArr[0]}];
         $scope.energySinceLastFap = [{"values": valuesArr[1]}];
         $scope.libidoSinceLastFap = [{"values": valuesArr[2]}];
-        console.log(JSON.stringify($scope.moodSinceLastFap));
+        $scope.numDataPointsSinceLastFap = valuesArr[0].length;
+        
       });
     });
   };
-  
+
   $rootScope.$on('datasetChanged', function() {
     updateStats();
   });
-  if (!$lsSettings.isFirst("run")) {
+  if (!$lsSettings.is("firstRun")) {
     updateStats();
   };
   

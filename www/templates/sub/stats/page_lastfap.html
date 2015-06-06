@@ -1,5 +1,11 @@
 <ion-view view-title="Since last Fap">
   <ion-content>
+  <div class="item item-divider" ng-if="numDataPointsSinceLastFap < 3">
+    We need more data!
+  </div>
+  <div class="item item-text-wrap" ng-if="numDataPointsSinceLastFap < 3">
+    Once you enter more Data we will be able to plot more stuff, Fapstronaut!
+  </div>
     <div class="item item-divider">
       Mood
     </div>
@@ -10,7 +16,9 @@
         tooltips="false"
         interactive="false"
         width="{{ linePlotWidth }}"
-        height="{{ linePlotHeight }}">
+        height="{{ linePlotHeight }}"
+        yAxisTickValues="[1, 2, 3, 4, 5]"
+        forcey="[1,5]">
     </nvd3-line-chart>
     <div class="item item-divider">
       Energy
@@ -22,7 +30,9 @@
         tooltips="false"
         interactive="false"
         width="{{ linePlotWidth }}"
-        height="{{ linePlotHeight }}">
+        height="{{ linePlotHeight }}"
+        yAxisTickValues="[1, 2, 3, 4, 5]"
+        forcey="[1,5]">
     </nvd3-line-chart>
     <div class="item item-divider">
       Libido
@@ -34,7 +44,9 @@
         tooltips="false"
         interactive="false"
         width="{{ linePlotWidth }}"
-        height="{{ linePlotHeight }}">
+        height="{{ linePlotHeight }}"
+        yAxisTickValues="[1, 2, 3, 4, 5]"
+        forcey="[1,5]">
     </nvd3-line-chart>
   </ion-content>
 </ion-view>

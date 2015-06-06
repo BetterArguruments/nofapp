@@ -21,12 +21,12 @@ angular.module('nofApp')
   // });
   
   var showTut = function() {
-    if (!$lsSettings.isFirst("run") && $lsSettings.isFirst("tut_home_sideMenuHintButton")) {
+    if (!$lsSettings.is("firstRun") && $lsSettings.is("tut_home_showHintButtonSideMenu")) {
       var menuWatcher = $scope.$watch(function() {
         return $ionicSideMenuDelegate.isOpenLeft();
       }, function(value) {
         if (value) {
-          $lsSettings.setFirst("tut_home_sideMenuHintButton", "false");
+          $lsSettings.set("tut_home_showHintButtonSideMenu", "false");
           refreshTutButtons();
           menuWatcher();
         }
@@ -37,7 +37,7 @@ angular.module('nofApp')
 
   // Chceck whether to hide Button
   var refreshTutButtons = function() {
-    $scope.sideMenuHintButton = $lsSettings.isFirst("tut_home_sideMenuHintButton");
+    $scope.sideMenuHintButton = $lsSettings.is("tut_home_showHintButtonSideMenu");
   };
   refreshTutButtons();
 
@@ -82,7 +82,7 @@ angular.module('nofApp')
     });
   };
 
-  if (!$lsSettings.isFirst("run")) {
+  if (!$lsSettings.is("firstRun")) {
     updateLastFap();
   };
 });
