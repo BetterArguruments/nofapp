@@ -1,0 +1,34 @@
+<ion-view view-title="Relapse">
+  <ion-content class="padding">
+    <div class="item item-divider">
+      You just relapsed?
+    </div>
+  
+    <div class="item item-text-wrap">
+      <p><b>Alfred:</b> Why do we fall, sir? So that we can learn to pick ourselves up.</p>
+    </div>
+    
+    <div class="item item-divider">
+      Note
+    </div>
+  
+    <div class="item item-text-wrap">
+      <p>You may create a note (optional).</p>
+    </div>
+    
+    <div class="item item-text-wrap">
+      <label class="item item-input">
+        <textarea placeholder="Some motivational thoughts to avoid relapsing the next time" ng-model="userState.note"></textarea>
+      </label>
+    </div>
+    
+    <p>&nbsp;</p>
+  
+    <div class="item item-text-wrap">
+      <ion-footer-bar class="bar-assertive" ng-click="submitFap()">
+        <h1 class="title">I just relapsed</h1>
+        <button class="button button-icon ion-ios-arrow-right"></button>
+      </ion-footer-bar>
+    </div>
+  </ion-content>
+</ion-view>

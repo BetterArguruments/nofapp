@@ -1,6 +1,6 @@
 angular.module('nofApp')
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $ionicHistory, $ionicLoading,
-  $lsSettings, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite, $valuesToString, $cordovaDatePicker, $window) {
+  $lsSettings, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite, $valuesToString) {
   
   // Clear History, so Android Back Button doesn't go to Main Screen
   $ionicHistory.clearHistory();
@@ -46,19 +46,22 @@ angular.module('nofApp')
   // Modals
   $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata_user.html', {
       scope: $scope,
+      backdropClickToClose: false
     }).then(function(modal) {
       $scope.modal_enterdata_user = modal;
   });
   
   $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata.html', {
       scope: $scope,
+      backdropClickToClose: false,
       animation: 'slide-in-right'
     }).then(function(modal) {
       $scope.modal_enterdata = modal;
   });
   
   $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata_help.html', {
-      scope: $scope
+      scope: $scope,
+      backdropClickToClose: false
     }).then(function(modal) {
       $scope.modal_enterdata_help = modal;
   });
@@ -108,11 +111,9 @@ angular.module('nofApp')
     switch (whatHasHeDone) {
       case "clicked_sex":
         clicked_sex = true;
-        setStep(4);
         break;
       case "clicked_fap":
         clicked_fap = true;
-        setStep(5);
         break;
     };
 
@@ -141,8 +142,17 @@ angular.module('nofApp')
   });
   
   $scope.continue = function() {
-    $scope.step = 0;
-    $scope.modal_enterdata.show();
+    if ($scope.userState.values.sex && $scope.userState.values.birthday) {
+      $scope.step = 0;
+      $scope.modal_enterdata.show();
+    }
+    else {
+      $ionicPopup.alert({
+        title: "Not so fast, Fapstronaut!",
+        template: "Make sure you enter your Sex and Birthday.",
+        okType: "button-royal"
+      });
+    }
   };
   
   $scope.back = function() {
@@ -206,6 +216,7 @@ angular.module('nofApp')
       ]
     }).then(function() {
       $scope.userHasInteractedCompletely("clicked_fap");
+      setStep(5);
     });
   };
 
@@ -223,6 +234,7 @@ angular.module('nofApp')
       ]
     }).then(function() {
       $scope.userHasInteractedCompletely("clicked_sex");
+      setStep(4);
     });
   };
 
@@ -238,13 +250,16 @@ angular.module('nofApp')
     } else {
       console.log("Writing first Dataset to DB.");
 
+      // Write Sex and Birthdate to localstorage
+      $lsSettings.set("sex", $scope.userState.values.sex);
+      $lsSettings.set("birthday", $scope.userState.values.birthday);
+
       // Calculate Timestamp (Past) for last fap and last sex
       var timestamp = Math.floor(Date.now() / 1000);
       var timestamp_lastSex = timestamp - (60*60*24*$scope.userState.values.sexDaysAgo);
       var timestamp_lastFap = timestamp - (60*60*24*$scope.userState.values.fapDaysAgo);
 
       console.log("Mood: " + $scope.userState.values.mood + " Energy: " + $scope.userState.values.energy + " Libido: " + $scope.userState.values.libido + " FapDaysAgo: " + $scope.userState.values.fapDaysAgo + " SexDaysAgo: " + $scope.userState.values.sexDaysAgo + " Fap Timestamp: " + timestamp_lastFap + " Sex Timestamp: " + timestamp_lastSex);
-
 
       // Write Mood and Energy to DB, Timestamp is added automatically (now)
       var promises = [];
@@ -266,6 +281,7 @@ angular.module('nofApp')
         $scope.firstRunDone();
         $scope.$emit('datasetChanged');
         $scope.modal_enterdata.hide();
+        $scope.modal_enterdata_user.hide();
         $ionicLoading.show({
           template: 'Awesome! Good Luck, Fapstronaut!',
           duration: 4500

@@ -1,0 +1,24 @@
+<!--
+Create tabs with an icon and label, using the tabs-positive style.
+Each tab's child <ion-nav-view> directive will have its own
+navigation history that also transitions its views in and out.
+-->
+<ion-tabs class="tabs-icon-top tabs-royal">
+
+  <!-- Mood Tab -->
+  <ion-tab title="Mood" icon-off="ion-ios-shuffle" icon-on="ion-ios-shuffle-strong" href="#/menu/tabs_enterdata/enterdata_mood">
+    <ion-nav-view name="enterdata_mood"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Sex Tab -->
+  <ion-tab title="Sex" icon-off="ion-ios-heart-outline" icon-on="ion-ios-heart" href="#/menu/tabs_enterdata/enterdata_sex">
+    <ion-nav-view name="enterdata_sex"></ion-nav-view>
+  </ion-tab>
+
+  <!-- Fap / Relapse Tab -->
+  <ion-tab title="Relapse" icon-off="ion-ios-refresh-outline" icon-on="ion-ios-refresh" href="#/menu/tabs_enterdata/enterdata_fap">
+    <ion-nav-view name="enterdata_fap"></ion-nav-view>
+  </ion-tab>
+
+
+</ion-tabs>

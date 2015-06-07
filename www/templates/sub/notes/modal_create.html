@@ -1,0 +1,30 @@
+<ion-modal-view>
+  <ion-header-bar class="bar bar-header bar-royal">
+    <button class="button button-icon ion-close" ng-click="modal_notes_create.hide()">
+    </button>
+    <h1 class="title">New Note</h1>
+    <!--<button class="button button-icon ion-checkmark" ng-click="noteSubmit()">
+    </button>-->
+  </ion-header-bar>
+  
+  <ion-content class="padding">
+    <form ng-submit="createNote(note)">
+      <label class="item item-input">
+        <textarea style="height: {{ textareaHeight }}px" placeholder="Your Note" ng-model="note.content"></textarea>
+      </label>
+      
+      <button type="submit" class="button button-full icon-right ion-ios-arrow-right button-royal">Save Note</button>
+      
+    </form>
+
+    
+    <p>&nbsp;</p>
+  
+    <!-- <div class="item item-text-wrap">
+      <ion-footer-bar class="bar-royal" ng-click="submitNote()">
+        <h1 class="title"></h1>
+        <button class="button button-icon ion-ios-arrow-right"></button>
+      </ion-footer-bar>
+    </div> -->
+  </ion-content>
+</ion-modal-view>

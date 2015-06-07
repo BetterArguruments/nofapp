@@ -1,8 +1,18 @@
-<ion-view view-title="Enter Data">
+<ion-view view-title="Enter some Data">
+
+  <!-- Add Help Button -->
+  <ion-nav-buttons side="right">
+    <button class="button button-clear" ng-click="modal_enterdata_help.show()">
+      Help
+    </button>
+  </ion-nav-buttons>
+  
+  <!-- Content -->
   <ion-content class="padding">
-    <div class="item item-text-wrap">
+  
+    <!--<div class="item item-text-wrap">
       <p>Enter your current Mood, Energy and Libido.</p>
-    </div>
+    </div>-->
   
     <div class="item item-divider">
       <div class="row" style="padding: 0px">
@@ -68,10 +78,24 @@
         <a class="button button-small button-balanced" ng-class="isCurrentLibido(5)" ng-click="setLibido(5)">5</a>
       </div>
     </div>
+    
+    <div class="item item-divider">
+      Note
+    </div>
+    
+    <div class="item item-text-wrap">
+      <label class="item item-input">
+        <textarea placeholder="Create a Note (optional)" ng-model="userState.note"></textarea>
+      </label>
+    </div>
+    
+    <p>&nbsp;</p>
+    <div class="item item-text-wrap">
+      <ion-footer-bar class="bar-royal" ng-click="submitForm()">
+        <h1 class="title">Save</h1>
+        <button class="button button-icon ion-ios-arrow-right"></button>
+      </ion-footer-bar>
+    </div>
   
   </ion-content>
-    <ion-footer-bar class="bar-royal" ng-click="submitForm()">
-      <h1 class="title">Save</h1>
-    </ion-footer-bar>
-
 </ion-view>

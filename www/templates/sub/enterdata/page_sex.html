@@ -1,0 +1,46 @@
+<ion-view view-title="Sex!">
+  <ion-content class="padding">
+    <div class="item item-divider">
+      You just had {{ selectedSex }} Sex?
+    </div>
+  
+    <div class="item item-text-wrap">
+      <p>Awesome! Please rate your Sex Quality below.</p>
+    </div>
+    
+    <div class="item item-text-wrap">
+      <div class="button-bar">
+        <a class="button button-small button-assertive" ng-class="isCurrentSex(1)" ng-click="setSex(1)">1</a>
+        <a class="button button-small button-royal" ng-class="isCurrentSex(2)" ng-click="setSex(2)">2</a>
+        <a class="button button-small button-royal" ng-class="isCurrentSex(3)" ng-click="setSex(3)">3</a>
+        <a class="button button-small button-royal" ng-class="isCurrentSex(4)" ng-click="setSex(4)">4</a>
+        <a class="button button-small button-balanced" ng-class="isCurrentSex(5)" ng-click="setSex(5)">5</a>
+      </div>
+    </div>
+    
+    <div class="item item-divider">
+      Note
+    </div>
+  
+    <div class="item item-text-wrap">
+      <p>You may create a note (optional).</p>
+    </div>
+    
+    <div class="item item-text-wrap">
+      <label class="item item-input">
+        <textarea placeholder="Write an awesome note to yourself" ng-model="userState.note"></textarea>
+      </label>
+    </div>
+    
+    <p>&nbsp;</p>
+  
+  
+  
+    <div class="item item-text-wrap">
+      <ion-footer-bar class="bar-balanced" ng-click="submitSex()">
+        <h1 class="title">I just had Sex!</h1>
+        <button class="button button-icon ion-ios-arrow-right"></button>
+      </ion-footer-bar>
+    </div>
+  </ion-content>
+</ion-view>

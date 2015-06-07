@@ -49,7 +49,7 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
 .config(function($ionicConfigProvider) {
   // Native Scrolling for Android
   // TODO: Native Scrolling for iOS once Ionic supports it
-  $ionicConfigProvider.platform.android.scrolling.jsScrolling(false);
+  //$ionicConfigProvider.platform.android.scrolling.jsScrolling(false);
 }) 
 
 // Setting for Angular Moment.js to treat

@@ -2,8 +2,6 @@
 
   <ion-header-bar class="bar bar-header bar-royal">
     <h1 class="title">Getting started</h1>
-    <button class="button button-icon ion-help-circled" ng-click="modal_enterdata_help.show()">
-    </button>
   </ion-header-bar>
   
   <ion-content class="padding">
@@ -34,15 +32,18 @@
       </label>
     </div>
     
-    <div class="item item-text-wrap">
+    <!--<div class="item item-text-wrap" ng-if="step > 1">
       {{ userState.values.birthday | json }}
-    </div>
+    </div>-->
     
+    <p>&nbsp;</p>
     
-    <ion-footer-bar class="bar-royal" ng-click="continue()" ng-if="step > 1">
+    <div class="item item-text-wrap" ng-if="step > 1">
+    <ion-footer-bar class="bar-royal" ng-click="continue()">
       <h1 class="title">Continue</h1>
       <button class="button button-icon ion-ios-arrow-right"></button>
     </ion-footer-bar>
+    </div>
   </ion-content>
   
 

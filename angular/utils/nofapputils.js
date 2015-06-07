@@ -26,6 +26,16 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
         default: return null;
       }
     }
+    else if (type === "Sex") {
+      switch(value) {
+        case 1: return "bad"; break;
+        case 2: return "below average"; break;
+        case 3: return "average"; break;
+        case 4: return "really good"; break;
+        case 5: return "mind-boggling"; break;
+        default: return null;
+      }
+    }
     
   };
   
@@ -60,7 +70,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   var self = this;  
   
   self.is = function(setting) {
-    console.log("lsSettings read: " + setting + " : " + getSettings()[setting]);
+    console.log("lsSettings read (is): " + setting + " : " + getSettings()[setting]);
     return (getSettings()[setting] === "true" || getSettings()[setting] === true) ? true : false;
   }
   
@@ -71,15 +81,10 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     setSettings(struct);
   };
   
-  self.isFirst = function(val) {
-    var stor = $localstorage.get(val, "true");
-    return (stor === "false") ? false : true;
-  };
-  
-  self.setFirst = function(stor, val) {
-    $localstorage.set(stor, val);
-    console.log("lsSettings: " + stor + " set to " + val);
-  };
+  self.get = function(setting) {
+    console.log("lsSettings read (get): " + setting + " : " + getSettings()[setting]);
+    return getSettings()[setting];
+  }
    
   self.reset = function() {
     console.log("lsSettings: Reset");
@@ -434,6 +439,30 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
       }, function(error) {
         q.reject(error);
       });
+    
+    return q.promise;
+  }
+  
+  self.get = function(noteID) {
+    var q = $q.defer();
+    
+    $sqlite.query("SELECT * FROM notes WHERE id=?", [noteID]).then(function(res){
+      q.resolve($sqlite.getFirst(res));
+    }, function(err) {
+      q.reject(err);
+    });
+    
+    return q.promise;
+  };
+  
+  self.getAll = function() {
+    var q = $q.defer();
+    
+    $sqlite.query("SELECT * FROM notes ORDER BY time DESC").then(function(res){
+      q.resolve($sqlite.getAll(res));
+    }, function(err) {
+      q.reject(err);
+    });
     
     return q.promise;
   }

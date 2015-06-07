@@ -1,8 +1,12 @@
-<ion-view hide-back-button="true" view-title="Home">
+<ion-view view-title="Home">
 
   <ion-content class="padding">
     
-    <div id="progress" class="round-button center">
+    <button class="button button-full button-royal icon-left ion-ios-arrow-up" ng-click="toggleLeftSideMenu()" ng-if="sideMenuHintButton === true">
+      Tap here to open Menu
+    </button>
+    
+    <div id="progress" class="round-button center" ng-click="toggleLeftSideMenu()">
       <span class="round-dummy"></span>
       <div class="vertical-middle">
         <span class="first-value">
@@ -32,10 +36,10 @@
     -->
     
     <button class="button button-full button-royal icon-left ion-ios-arrow-left" ng-click="toggleLeftSideMenu()" ng-if="sideMenuHintButton === true">
-      Swipe to open menu
+      Or, Swipe to open menu
     </button>
     
-    <div class="item item-text-wrap">
+    <!--<div class="item item-text-wrap">
       <div class="row">
         <div class="col col-20">
           <h2>13%</h2>
@@ -55,9 +59,11 @@
           Moar Dummy Data
         </div>
       </div>
-    </div>
+    </div>-->
 
+    <!--
     <div class="center"><a href="#" ng-click="insertMoarData()">Insert Moar Data!</a></div>
+    -->
 
   </ion-content>
 

@@ -21,12 +21,64 @@ angular.module('nofApp')
         }
       }
     })
-    .state('menu.enterdata', {
-      url: '/enterdata',
+    .state('menu.tabs_enterdata', {
+      url : '/tabs_enterdata',
+      abstract : true,
       views: {
         'view-content': {
-          templateUrl: "templates/enterdata.html",
-          controller: "EnterDataCtrl"
+          templateUrl: "templates/sub/enterdata/tabs.html",
+        }
+      }
+    })
+    .state('menu.tabs_enterdata.enterdata_mood', {
+      url: '/enterdata_mood',
+      views: {
+        'enterdata_mood': {
+          templateUrl: "templates/sub/enterdata/page_mood.html",
+          controller: "EnterdataCtrl"
+        }
+      }
+    })
+    .state('menu.tabs_enterdata.enterdata_sex', {
+      url: '/enterdata_sex',
+      views: {
+        'enterdata_sex': {
+          templateUrl: "templates/sub/enterdata/page_sex.html",
+          controller: "EnterdataCtrl"
+        }
+      }
+    })
+    .state('menu.tabs_enterdata.enterdata_fap', {
+      url: '/enterdata_fap',
+      views: {
+        'enterdata_fap': {
+          templateUrl: "templates/sub/enterdata/page_fap.html",
+          controller: "EnterdataCtrl"
+        }
+      }
+    })
+    .state('menu.notes', {
+      url: '/notes',
+      views: {
+        'view-content': {
+          templateUrl: "templates/notes.html",
+          controller: "NotesCtrl"
+        }
+      }
+    })
+    .state('menu.notes_single', {
+      url: '/notes_single/:noteID',
+      views: {
+        'view-content': {
+          templateUrl: "templates/sub/notes/notes_single.html",
+          controller: "NotesSingleCtrl"
+        }
+      },
+      resolve: {
+        noteData: function($stateParams, $sql_notes) {
+          return $sql_notes.get($stateParams.noteID).then(function(res) {
+            return res;
+          });
         }
       }
     })

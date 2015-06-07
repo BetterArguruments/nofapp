@@ -1,0 +1,17 @@
+<ion-view view-title="Notes">
+
+  <!-- Add Create Note Button -->
+  <ion-nav-buttons side="right">
+    <button class="button button-icon ion-compose" ng-click="modal_notes_create.show()">
+    </button>
+  </ion-nav-buttons>
+  
+  <ion-content class="padding">
+  
+    <a class="item item-icon-right" href="#/menu/notes_single/{{ note.id }}" ng-repeat="note in noteList">
+      {{ note.value }}
+      <i class="icon ion-ios-arrow-right"></i>
+    </a>
+    
+  </ion-content>
+</ion-view>
