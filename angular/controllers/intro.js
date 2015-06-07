@@ -45,13 +45,14 @@ angular.module('nofApp')
 
   // Modals
   $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata_user.html', {
-      scope: $scope
+      scope: $scope,
     }).then(function(modal) {
       $scope.modal_enterdata_user = modal;
   });
   
   $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata.html', {
-      scope: $scope
+      scope: $scope,
+      animation: 'slide-in-right'
     }).then(function(modal) {
       $scope.modal_enterdata = modal;
   });
@@ -117,6 +118,36 @@ angular.module('nofApp')
 
     // Return true if all fields have been clicked
     return clicked_sex && clicked_fap;
+  }
+
+  $scope.isSex = function(i) {
+    if ($scope.userState.values.sex === i) {
+      return 'active';
+    };
+  };
+  
+  $scope.setSex = function(i) {
+    if (i === "m" || i === "f")  {
+      $scope.userState.values.sex = i;
+      setStep(1);
+      $scope.selectedMood = $valuesToString.toString("Mood", i);
+    };
+  };
+  
+  $scope.$watch(function() {
+    return $scope.userState.values.birthday;
+  }, function(res) {
+    if (typeof res !== undefined && $scope.step > 0) { setStep(2); }
+  });
+  
+  $scope.continue = function() {
+    $scope.step = 0;
+    $scope.modal_enterdata.show();
+  };
+  
+  $scope.back = function() {
+    $scope.modal_enterdata.hide();
+    $scope.step = 2;
   }
 
   $scope.setMood = function(i) {

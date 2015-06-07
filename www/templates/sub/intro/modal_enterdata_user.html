@@ -18,29 +18,33 @@
     
     <div class="item item-text-wrap">
       <div class="button-bar">
-        <a class="button button-small button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">male</a>
-        <a class="button button-small button-royal" ng-class="isCurrentMood(3)" ng-click="setMood(3)">female</a>
+        <a class="button button-small button-royal" ng-class="isSex('m')" ng-click="setSex('m')">male</a>
+        <a class="button button-small button-royal" ng-class="isSex('f')" ng-click="setSex('f')">female</a>
       </div>
     </div>
     
-    <div class="item item-divider">
+    <div class="item item-divider" ng-if="step > 0">
     Your Age
     </div>
     
-    <div class="item item-text-wrap">
-      <button class="button button-full button-royal" ng-click="showDatePicker()">
-        Tap here to set Birthday
-      </button>
+    <div class="item item-text-wrap" ng-if="step > 0">
+      <label class="item item-input item-royal">
+          <span class="input-label" style="width: 50%; font-size: 12px; color: #fff">Tap to enter Birthday</span>
+          <input type="date" ng-model="userState.values.birthday" style="color: #fff; font-size: 12px">
+      </label>
     </div>
     
     <div class="item item-text-wrap">
-      {{ birthday }}
+      {{ userState.values.birthday | json }}
     </div>
     
+    
+    <ion-footer-bar class="bar-royal" ng-click="continue()" ng-if="step > 1">
+      <h1 class="title">Continue</h1>
+      <button class="button button-icon ion-ios-arrow-right"></button>
+    </ion-footer-bar>
   </ion-content>
   
-  <ion-footer-bar class="bar-royal" ng-click="submitForm()" ng-if="step > 4">
-    <h1 class="title">Continue</h1>
-  </ion-footer-bar>
+
   
 </ion-modal-view>

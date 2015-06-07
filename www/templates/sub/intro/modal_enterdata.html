@@ -1,6 +1,8 @@
 <ion-modal-view>
 
   <ion-header-bar class="bar bar-header bar-royal">
+    <button class="button button-icon ion-ios-arrow-back" ng-click="back()">
+    </button>
     <h1 class="title">How's it going?</h1>
     <button class="button button-icon ion-help-circled" ng-click="modal_enterdata_help.show()">
     </button>
@@ -94,7 +96,8 @@
   </ion-content>
   
   <ion-footer-bar class="bar-royal" ng-click="submitForm()" ng-if="step > 4">
-    <h1 class="title">Continue</h1>
+    <h1 class="title">Finish</h1>
+    <button class="button button-icon ion-ios-arrow-right"></button>
   </ion-footer-bar>
   
 </ion-modal-view>
