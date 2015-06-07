@@ -1,6 +1,6 @@
 angular.module('nofApp')
 .controller('IntroCtrl', function($scope, $state, $ionicSlideBoxDelegate, $ionicPopup, $ionicHistory, $ionicLoading,
-  $lsSettings, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite, $valuesToString) {
+  $lsSettings, $ionicHistory, $location, $ionicModal, $sql_events, $q, $sqlite, $valuesToString, $cordovaDatePicker, $window) {
   
   // Clear History, so Android Back Button doesn't go to Main Screen
   $ionicHistory.clearHistory();
@@ -39,11 +39,17 @@ angular.module('nofApp')
   $scope.footerClick = function() {
     switch($scope.slideIndex) {
       case 0: $ionicSlideBoxDelegate.next(); break;
-      default: $scope.modal_enterdata.show();
+      default: $scope.modal_enterdata_user.show();
     }
   };
 
   // Modals
+  $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata_user.html', {
+      scope: $scope
+    }).then(function(modal) {
+      $scope.modal_enterdata_user = modal;
+  });
+  
   $ionicModal.fromTemplateUrl('templates/sub/intro/modal_enterdata.html', {
       scope: $scope
     }).then(function(modal) {
@@ -61,6 +67,34 @@ angular.module('nofApp')
   var setStep = function(step) {
     var lastStep = $scope.step;
     $scope.step = (step > lastStep) ? step : lastStep;
+  };
+  
+  // Date Picker Options
+  var dp_options = {
+    date: new Date(),
+    mode: 'date', // or 'time'
+    minDate: new Date() - 10000,
+    allowOldDates: true,
+    allowFutureDates: false,
+    doneButtonLabel: 'DONE',
+    doneButtonColor: '#F2F3F4',
+    cancelButtonLabel: 'CANCEL',
+    cancelButtonColor: '#000000'
+  };
+  
+  $scope.showDatePicker = function() {
+    console.log("DP Button Pushed");
+    // $window.datePicker.show(dp_options).then(
+    //   function(date) {
+    //     console.log("date result " + date);
+    //   }
+    // );
+    
+    $cordovaDatePicker.show(dp_options).then(function(date){
+      console.log(date);
+      $scope.birthday = date;
+    });
+    
   };
 
   // User State

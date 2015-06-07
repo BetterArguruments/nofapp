@@ -26,7 +26,11 @@
       "locator": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
       "id": "uk.co.whiteoctober.cordova.appversion"
     },
-    "org.apache.cordova.splashscreen"
+    "org.apache.cordova.splashscreen",
+    {
+      "locator": "https://github.com/VitaliiBlagodir/cordova-plugin-datepicker",
+      "id": "cordova-plugin-datepicker"
+    }
   ],
   "cordovaPlatforms": [
     "android",

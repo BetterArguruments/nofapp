@@ -35,6 +35,8 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 .factory('$lsSettings', function($localstorage) {
   var initSettings = function() {
     var struct = { "firstRun": "true",
+      "user_age": 0,
+      "user_birthday": "",
       "tut_home_showHintButtonSideMenu": "true",
       "notifications": "true",
       "fapsperiment": "false"

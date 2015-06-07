@@ -1,0 +1,46 @@
+<ion-modal-view>
+
+  <ion-header-bar class="bar bar-header bar-royal">
+    <h1 class="title">Getting started</h1>
+    <button class="button button-icon ion-help-circled" ng-click="modal_enterdata_help.show()">
+    </button>
+  </ion-header-bar>
+  
+  <ion-content class="padding">
+  
+    <div class="item item-text-wrap">
+      <p>Enter some Data about yourself.</p>
+    </div>
+  
+    <div class="item item-divider">
+    Your Sex
+    </div>
+    
+    <div class="item item-text-wrap">
+      <div class="button-bar">
+        <a class="button button-small button-royal" ng-class="isCurrentMood(2)" ng-click="setMood(2)">male</a>
+        <a class="button button-small button-royal" ng-class="isCurrentMood(3)" ng-click="setMood(3)">female</a>
+      </div>
+    </div>
+    
+    <div class="item item-divider">
+    Your Age
+    </div>
+    
+    <div class="item item-text-wrap">
+      <button class="button button-full button-royal" ng-click="showDatePicker()">
+        Tap here to set Birthday
+      </button>
+    </div>
+    
+    <div class="item item-text-wrap">
+      {{ birthday }}
+    </div>
+    
+  </ion-content>
+  
+  <ion-footer-bar class="bar-royal" ng-click="submitForm()" ng-if="step > 4">
+    <h1 class="title">Continue</h1>
+  </ion-footer-bar>
+  
+</ion-modal-view>
