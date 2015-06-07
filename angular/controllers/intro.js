@@ -69,33 +69,7 @@ angular.module('nofApp')
     $scope.step = (step > lastStep) ? step : lastStep;
   };
   
-  // Date Picker Options
-  var dp_options = {
-    date: new Date(),
-    mode: 'date', // or 'time'
-    minDate: new Date() - 10000,
-    allowOldDates: true,
-    allowFutureDates: false,
-    doneButtonLabel: 'DONE',
-    doneButtonColor: '#F2F3F4',
-    cancelButtonLabel: 'CANCEL',
-    cancelButtonColor: '#000000'
-  };
-  
-  $scope.showDatePicker = function() {
-    console.log("DP Button Pushed");
-    // $window.datePicker.show(dp_options).then(
-    //   function(date) {
-    //     console.log("date result " + date);
-    //   }
-    // );
-    
-    $cordovaDatePicker.show(dp_options).then(function(date){
-      console.log(date);
-      $scope.birthday = date;
-    });
-    
-  };
+
 
   // User State
   $scope.userState = {
