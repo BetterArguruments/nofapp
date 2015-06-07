@@ -43,46 +43,63 @@ angular.module('nofApp')
         for (var i = 0; i < resArray.length; i++) {
           valuesArr[i] = prepareMEL(resArray[i]);
         }
-        $scope.moodSinceLastFap = [{"values": valuesArr[0]}];
-        $scope.energySinceLastFap = [{"values": valuesArr[1]}];
-        $scope.libidoSinceLastFap = [{"values": valuesArr[2]}];
+        $scope.moodSinceLastFap = [{"key": "Mood", "values": valuesArr[0]}];
+        $scope.energySinceLastFap = [{"key": "Energy", "values": valuesArr[1]}];
+        $scope.libidoSinceLastFap = [{"key": "Libido", "values": valuesArr[2]}];
         $scope.numDataPointsSinceLastFap = valuesArr[0].length;
-        
+        $scope.deltaX = valuesArr[0][valuesArr[0].length-1][0] - valuesArr[0][0][0];
+        console.log("deltaX: " + $scope.deltaX);
         //formatPlots();
       });
     });
   };
 
-  // var deltaX = values[values.length][0] - values[0][0];
-  // if (deltaX < triggerFormat[0]) {
-  //   // minutes
-  // }
-  // else if (deltaX < triggerFormat[1]) {
-  //   // hours
-  // }
-  // else {
-  //   // days
-  // }
-
-  var maxLabels = Math.floor($window.innerWidth / 5);
+  var maxLabels = Math.floor($window.innerWidth / 72);
   var triggerFormat = [3600, 84000];
-  $scope.xAxisTickValuesFunction = function(){
+  
+  $scope.xAxisTickValuesFunction = function() {
     return function(d){
       var tickVals = [];
       var values = d[0].values;
-      var interestedTimeValuesArray = [0, 00, 15, 30, 45];
-
+      console.log("maxLabels: " + maxLabels);
+      console.log(JSON.stringify(values));
+      var deltaX = values[values.length-1][0] - values[0][0];
+      var tickNum = (values.length < maxLabels) ? values.length : maxLabels;
+      var lastTick = 0;
       
-      for(var i in values){
-        if(interestedTimeValuesArray.indexOf(moment.unix(values[i][0]).minute()) >= 0){
+      for (var i in values) {
+        if ((values[i][0] - lastTick) > (deltaX / tickNum)) {
           tickVals.push(values[i][0]);
+          lastTick = values[i][0];
         }
       }
       
-      console.log('xAxisTickValuesFunction', d);
+      console.log(JSON.stringify(tickVals));
       return tickVals;
     };
   };
+  
+  $scope.xAxisTickFormatFunction = function(){
+    return function(d){
+      console.log(JSON.stringify(d));
+      if ($scope.deltaX < triggerFormat[0]) {
+        return d3.time.format('%H:%M')(moment.unix(d).toDate());
+      }
+      else if ($scope.deltaX < triggerFormat[1]) {
+        return d3.time.format('%H:%M')(moment.unix(d).toDate());
+      }
+      else {
+        return d3.time.format('%d/%m')(moment.unix(d).toDate());
+      }
+      
+    }
+  };
+  
+  $scope.colorFunction = function() {
+  	return function(d, i) {
+      return "#886aea";
+      };
+  }
 
 
   $rootScope.$on('datasetChanged', function() {

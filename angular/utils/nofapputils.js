@@ -358,7 +358,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     
     $sql_event_types.getId(eventType)
       .then(function(eventTypeId) {
-        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? AND time >= ? ORDER BY id ASC", [eventTypeId, timeSince])
+        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? AND time >= ? ORDER BY time ASC", [eventTypeId, timeSince])
           .then(function(res) {
             q.resolve($sqlite.getAll(res));
             //console.log(JSON.stringify($sqlite.getAll(res)));
@@ -391,7 +391,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 
     $sql_event_types.getAll().then(function(eventTypes) {
       //console.log(JSON.stringify(eventTypes));
-      $sqlite.query("SELECT id, time, type, value FROM events ORDER BY id ASC").then(function(res) {
+      $sqlite.query("SELECT id, time, type, value FROM events ORDER BY time ASC").then(function(res) {
         var events = $sqlite.getAll(res);
         // Resolve Event TypeIds to Names
         for (var i = 0; i < events.length; i++) {

@@ -10,43 +10,61 @@
       Mood
     </div>
     <nvd3-line-chart
+        id="mood"
         data="moodSinceLastFap"
         showXAxis="true"
         showYAxis="true"
-        tooltips="false"
-        interactive="false"
+        tooltips="true"
+        interactive="true"
         width="{{ linePlotWidth }}"
         height="{{ linePlotHeight }}"
+        xAxisTickValues="xAxisTickValuesFunction()"
+        xAxisTickFormat="xAxisTickFormatFunction()"
         yAxisTickValues="[1, 2, 3, 4, 5]"
-        forcey="[1,5]">
+        forcey="[1,5]"
+        interpolate="basis"
+        color="colorFunction()">
+      <svg></svg>
     </nvd3-line-chart>
     <div class="item item-divider">
       Energy
     </div>
     <nvd3-line-chart
+        id="energy"
         data="energySinceLastFap"
         showXAxis="true"
         showYAxis="true"
-        tooltips="false"
-        interactive="false"
+        tooltips="true"
+        interactive="true"
         width="{{ linePlotWidth }}"
         height="{{ linePlotHeight }}"
+        xAxisTickValues="xAxisTickValuesFunction()"
+        xAxisTickFormat="xAxisTickFormatFunction()"
         yAxisTickValues="[1, 2, 3, 4, 5]"
-        forcey="[1,5]">
+        forcey="[1,5]"
+        interpolate="basis"
+        color="colorFunction()">
+      <svg></svg>
     </nvd3-line-chart>
     <div class="item item-divider">
       Libido
     </div>
     <nvd3-line-chart
+        id="libido"
         data="libidoSinceLastFap"
         showXAxis="true"
         showYAxis="true"
-        tooltips="false"
-        interactive="false"
+        tooltips="true"
+        interactive="true"
         width="{{ linePlotWidth }}"
         height="{{ linePlotHeight }}"
+        xAxisTickValues="xAxisTickValuesFunction()"
+        xAxisTickFormat="xAxisTickFormatFunction()"
         yAxisTickValues="[1, 2, 3, 4, 5]"
-        forcey="[1,5]">
+        forcey="[1,5]"
+        interpolate="basis"
+        color="colorFunction()">
+      <svg></svg>
     </nvd3-line-chart>
   </ion-content>
 </ion-view>
