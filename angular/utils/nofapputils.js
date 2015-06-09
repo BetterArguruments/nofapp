@@ -467,6 +467,18 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return q.promise;
   }
   
+  self.edit = function(noteID, value) {
+    var q = $q.defer();
+    
+    $sqlite.query("UPDATE notes SET value=? WHERE id=?", [value, noteID]).then(function(res) {
+      q.resolve(true);
+    }, function(err) {
+      q.reject(err);
+    });
+    
+    return q.promise;
+  }
+  
   return self;
 })
 

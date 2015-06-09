@@ -1,5 +1,5 @@
 angular.module('nofApp')
-.controller('NotesCtrl', function($scope, $state, $rootScope, $window, $ionicModal, $sql_notes, $ionicHistory) {
+.controller('NotesCtrl', function($scope, $state, $rootScope, $window, $ionicModal, $ionicLoading, $ionicHistory, $sql_notes) {
   $rootScope.$on('datasetChanged', function() {
     updateNoteList();
   });
@@ -32,13 +32,13 @@ angular.module('nofApp')
       
         // Super Hacky Fix to prevent missing Menu and Back Button after submitting form
         // https://github.com/driftyco/ionic/issues/1287
-        $ionicHistory.currentView($ionicHistory.backView());
+        //$ionicHistory.currentView($ionicHistory.backView());
         
         $scope.modal_notes_create.hide();
-        $ionicLoading.show({
-          template: 'Note Saved.',
-          duration: 2500
-            });
+        // $ionicLoading.show({
+        //   template: 'Note Saved.',
+        //   duration: 2500
+        //     });
       });
     };
   };

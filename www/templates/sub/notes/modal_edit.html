@@ -1,0 +1,22 @@
+<ion-modal-view>
+  <form ng-submit="editNote(note)">
+  <ion-header-bar class="bar bar-header bar-royal">
+    <button class="button button-icon ion-close" ng-click="modal_notes_edit.hide()">
+    </button>
+    <h1 class="title">Edit Note</h1>
+    <button type="submit" class="button button-icon ion-checkmark">
+    </button>
+    <!--<button class="button button-icon ion-checkmark" ng-click="noteSubmit()">
+    </button>-->
+  </ion-header-bar>
+  
+  <ion-content class="padding">
+  
+    
+      <label class="item item-input">
+        <textarea style="height: {{ textareaHeight }}px" ng-model="note.content"></textarea>
+      </label>
+      
+  </ion-content>
+  </form>
+</ion-modal-view>

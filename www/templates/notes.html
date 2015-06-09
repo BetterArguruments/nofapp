@@ -6,10 +6,13 @@
     </button>
   </ion-nav-buttons>
   
-  <ion-content class="padding">
+  <ion-content>
   
     <a class="item item-icon-right" href="#/menu/notes_single/{{ note.id }}" ng-repeat="note in noteList">
       {{ note.value }}
+      <span class="item-note">
+        <span am-time-ago="note.time"></span>
+      </span>
       <i class="icon ion-ios-arrow-right"></i>
     </a>
     
