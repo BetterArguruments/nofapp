@@ -359,16 +359,20 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return q.promise;
   }
   
-  self.get = function(eventType, since) {
+  self.get = function(eventType, since, until) {
     var q = $q.defer();
-    var timeSince = (typeof since === "undefined") ? 0 : since;
+    var timeSince = (typeof since === "undefined" || since === null) ? 0 : since;
+    var timeUntil = (typeof until === "undefined" || until === null) ? 9992147483647 : until;
     
     $sql_event_types.getId(eventType)
       .then(function(eventTypeId) {
-        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? AND time >= ? ORDER BY time ASC", [eventTypeId, timeSince])
+        return $sqlite.query("SELECT * FROM events WHERE type = ? AND time BETWEEN ? AND ? ORDER BY id ASC", [eventTypeId, timeSince, timeUntil-1])
           .then(function(res) {
-            q.resolve($sqlite.getAll(res));
-            //console.log(JSON.stringify($sqlite.getAll(res)));
+            var events = $sqlite.getAll(res);
+            for (i = 0; i < events.length; i++) {
+              events[i].type = eventType;
+            }
+            q.resolve(events);
           });
       }, function(error) {
         q.reject(error);
@@ -382,7 +386,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     
     $sql_event_types.getId(eventType)
       .then(function(eventTypeId) {
-        return $sqlite.query("SELECT time, type, value FROM events WHERE type = ? ORDER BY time DESC LIMIT 1", [eventTypeId])
+        return $sqlite.query("SELECT * FROM events WHERE type = ? ORDER BY id DESC LIMIT 1", [eventTypeId])
           .then(function(res) {
             q.resolve($sqlite.getFirst(res));
           });
@@ -393,12 +397,13 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return q.promise;
   }
  
-  self.getAll = function(eventType) {
+  self.getAll = function(since, until) {
     var q = $q.defer();
+    var timeSince = (typeof since === "undefined" || since === null) ? 0 : since;
+    var timeUntil = (typeof until === "undefined" || until === null) ? 9992147483647 : until;
 
     $sql_event_types.getAll().then(function(eventTypes) {
-      //console.log(JSON.stringify(eventTypes));
-      $sqlite.query("SELECT id, time, type, value FROM events ORDER BY time ASC").then(function(res) {
+      $sqlite.query("SELECT * FROM events WHERE time BETWEEN ? AND ? ORDER BY id ASC", [timeSince, timeUntil-1]).then(function(res) {
         var events = $sqlite.getAll(res);
         // Resolve Event TypeIds to Names
         for (var i = 0; i < events.length; i++) {
@@ -406,11 +411,6 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
           if (type === null) {
             q.reject("Something fishy is going down in the Database!");
           }
-          // console.log(JSON.stringify(events));
-          // console.log(JSON.stringify(events[i]));
-          // console.log(type);
-          // console.log(eventTypes[type]);
-          // console.log(JSON.stringify(eventTypes[type]));
           events[i].type = eventTypes[type].name;
         };
         q.resolve(events);
@@ -420,7 +420,66 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     };
     
     return q.promise;
-  }
+  };
+
+  self.getSeries = function(eventType) {
+    var q = $q.defer();
+    var promises = [];
+    var eventSeries = [];
+    
+    self.get(eventType).then(function(res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log("i1: " +i);
+        eventSeries[i] = [];
+        eventSeries[i][0] = res[i];
+        var until = (typeof res[i+1] === "undefined") ? null : res[i+1].time;
+        promises.push(self.getAll(res[i].time, until));
+      }
+      $q.all(promises).then(function(resArr) {
+        console.log(JSON.stringify(resArr));
+        for (var i = 0; i < resArr.length; i++) {
+          for (var j = 0; j < resArr[i].length; j++) {
+            if (resArr[i][j].type !== eventType) { eventSeries[i].push(resArr[i][j]) }
+          }
+        }
+        console.log(JSON.stringify(eventSeries));
+        q.resolve(eventSeries);
+      });
+    });
+    
+    return q.promise;
+  };
+  
+  // self.getSeries = function(eventType) {
+  //   var q = $q.defer();
+  //
+  //   self.getAll().then(function(res) {
+  //     var eventSeries = [][];
+  //     for (var i, eventCount = -1; i < res.length; i++) {
+  //       if (res[i].type === eventType) {
+  //         eventCount++;
+  //         // Go back and cut and paste some stuff
+  //         j = i-1;
+  //         while (res[j].time === res[i].time && j >= 0 && eventCount > 0) {
+  //           eventSeries[eventCount].push(res[j]);
+  //           eventSeries[eventCount-1]
+  //           j--;
+  //         }
+  //       }
+  //
+  //       if (eventCount >= 0) {
+  //         eventSeries[eventCount].push(res[i]);
+  //       }
+  //       else {
+  //         continue;
+  //       }
+  //     }
+  //     if (eventCount < 2) { q.reject("Less Than 2 Events, not getting Series!"); }
+  //     else { q.resolve(eventSeries); };
+  //   });
+  //
+  //   return q.promise;
+  // };
  
   return self;
 })
