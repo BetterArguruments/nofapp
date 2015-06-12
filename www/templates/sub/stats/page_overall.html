@@ -1,24 +1,25 @@
 <ion-view view-title="Overall">
   <ion-content>
-    <div class="item item-divider" ng-if="numRelapses <= 1">
+    <div class="item item-divider" ng-if="numRelapses < 2">
       Relapse Statistics
     </div>
-    <div class="item item-text-wrap" ng-if="numRelapses <= 1">
+    <div class="item item-text-wrap" ng-if="numRelapses < 2">
       Your Relapse Statistics will be displayed once you relapse more often.
       For now: Good on you, Fapstronaut!
     </div>
-    <div class="item item-divider" ng-if="numRelapses > 1">
-      Relapses: {{ numRelapses }}
+    <div class="item item-divider" ng-if="numRelapses >= 2">
+      Mean Endurance: {{ meanNofapDays }} Days
     </div>
-    <div class="item item-text-wrap">
-      {{ getSeries | json }}
-    </div>
-    <nvd3-line-chart
-        data="exampleData"
+  	<nvd3-discrete-bar-chart
+    	  data="fapSeriesDurations"
+        id="fapSeriesDurations"
         showXAxis="true"
         showYAxis="true"
-        tooltips="false"
-        interactive="false">
-    </nvd3-line-chart>
+        width="{{ plotWidth }}"
+        height="{{ plotHeight }}"
+        color="colorFunction()"
+        tooltips="true">
+      <svg></svg>
+    </nvd3-discrete-bar-chart>
   </ion-content>
 </ion-view>

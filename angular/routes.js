@@ -105,7 +105,7 @@ angular.module('nofApp')
       views: {
         'stats_overall': {
           templateUrl: "templates/sub/stats/page_overall.html",
-          controller: "StatsCtrl"
+          controller: "StatsOverallCtrl"
         }
       }
     })

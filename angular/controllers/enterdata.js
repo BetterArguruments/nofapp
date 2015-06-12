@@ -145,7 +145,7 @@ angular.module('nofApp')
       // https://github.com/driftyco/ionic/issues/1287
       $ionicHistory.currentView($ionicHistory.backView());
       
-      $state.go('menu.history');
+      $state.go('menu.tabs_stats.stats_lastfap');
       $ionicLoading.show({
         template: 'Sex Saved. Nice!',
         duration: 2500

@@ -23,7 +23,8 @@
         yAxisTickValues="[1, 2, 3, 4, 5]"
         forcey="[1,5]"
         interpolate="basis"
-        color="colorFunction()">
+        color="colorFunction()"
+        noData="We need more Data!">
       <svg></svg>
     </nvd3-line-chart>
     <div class="item item-divider">
@@ -43,7 +44,8 @@
         yAxisTickValues="[1, 2, 3, 4, 5]"
         forcey="[1,5]"
         interpolate="basis"
-        color="colorFunction()">
+        color="colorFunction()"
+        noData="We need more Data!">
       <svg></svg>
     </nvd3-line-chart>
     <div class="item item-divider">
@@ -63,7 +65,29 @@
         yAxisTickValues="[1, 2, 3, 4, 5]"
         forcey="[1,5]"
         interpolate="basis"
-        color="colorFunction()">
+        color="colorFunction()"
+        noData="We need more Data!">
+      <svg></svg>
+    </nvd3-line-chart>
+    <div class="item item-divider">
+      Sex Quality
+    </div>
+    <nvd3-line-chart
+        id="sexQuality"
+        data="sexQualitySinceLastFap"
+        showXAxis="true"
+        showYAxis="true"
+        tooltips="true"
+        interactive="true"
+        width="{{ linePlotWidth }}"
+        height="{{ linePlotHeight }}"
+        xAxisTickValues="xAxisTickValuesFunction()"
+        xAxisTickFormat="xAxisTickFormatFunction()"
+        yAxisTickValues="[1, 2, 3, 4, 5]"
+        forcey="[1,5]"
+        interpolate="basis"
+        color="colorFunction()"
+        noData="Not enough Sex yet :)">
       <svg></svg>
     </nvd3-line-chart>
   </ion-content>

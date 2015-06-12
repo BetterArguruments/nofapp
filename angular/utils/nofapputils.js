@@ -429,20 +429,17 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     
     self.get(eventType).then(function(res) {
       for (var i = 0; i < res.length; i++) {
-        console.log("i1: " +i);
         eventSeries[i] = [];
         eventSeries[i][0] = res[i];
         var until = (typeof res[i+1] === "undefined") ? null : res[i+1].time;
         promises.push(self.getAll(res[i].time, until));
       }
       $q.all(promises).then(function(resArr) {
-        console.log(JSON.stringify(resArr));
         for (var i = 0; i < resArr.length; i++) {
           for (var j = 0; j < resArr[i].length; j++) {
             if (resArr[i][j].type !== eventType) { eventSeries[i].push(resArr[i][j]) }
           }
         }
-        console.log(JSON.stringify(eventSeries));
         q.resolve(eventSeries);
       });
     });
