@@ -1,7 +1,8 @@
 angular.module('nofApp')
 
 // Enter Data Controller
-.controller('EnterdataCtrl', function($scope, $state, $ionicHistory, $q, $ionicPopup, $ionicLoading, $ionicModal, $sqlite, $sql_events, $sql_notes, $valuesToString) {
+.controller('EnterdataCtrl', function($scope, $state, $ionicHistory, $q, $ionicPopup, $ionicLoading, $ionicModal, $sqlite,
+  $sql_events, $sql_notes, $valuesToString, $fapsperiment) {
 
   // Modals
   $ionicModal.fromTemplateUrl('templates/sub/enterdata/modal_enterdata_help.html', {
@@ -102,6 +103,7 @@ angular.module('nofApp')
     }
     
     $q.all(promises).then(function() {
+      $fapsperiment.sync();
       $scope.userState.reset();
       $scope.$emit('datasetChanged');
       
@@ -138,6 +140,8 @@ angular.module('nofApp')
     }
     
     $q.all(promises).then(function() {
+      $fapsperiment.sync();
+      
       $scope.userState.reset();
       $scope.$emit('datasetChanged');
       

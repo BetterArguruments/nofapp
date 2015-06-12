@@ -9,12 +9,28 @@
     <ion-toggle toggle-class="toggle-balanced" ng-model="settings.notifications" ng-change="settingsToggle('notifications')">Notifications</ion-toggle> -->
 
     <div class="item item-divider">
-      Global Fapsperiment
+      The Fapsperiment
     </div>
     
     <ion-toggle toggle-class="toggle-balanced" ng-model="settings.fapsperiment" ng-change="settingsToggle('fapsperiment')">Enable</ion-toggle>
+    <a class="item" href="#" ng-if="settings.fapsperiment">
+        Last Sync
+      <span class="item-note">
+        <span am-time-ago="fapsperimentLastSync"></span>
+      </span>
+    </a>
+    <a class="item item-icon-left" href="#" ng-if="settings.fapsperiment">
+      <i class="icon ion-ios-loop"></i>
+        Synced Events
+      <span class="badge badge-royal">{{ numEventsSynced }}</span>
+    </a>
+    <a class="item item-icon-left" href="#" ng-if="settings.fapsperiment">
+      <i class="icon ion-ios-timer-outline"></i>
+        Events to Sync
+      <span class="badge badge-royal">{{ numEventsNotSynced }}</span>
+    </a>
     <a class="item item-icon-right" href="#/menu/settings_fapsperiment">
-      More
+      About The Fapsperiment
       <i class="icon ion-ios-arrow-right"></i>
     </a>
 

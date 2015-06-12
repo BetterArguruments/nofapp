@@ -44,12 +44,16 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
 
 .factory('$lsSettings', function($localstorage) {
   var initSettings = function() {
-    var struct = { "firstRun": "true",
-      "user_age": 0,
+    var struct = { "firstRun": true,
+      "user_sex": "",
       "user_birthday": "",
-      "tut_home_showHintButtonSideMenu": "true",
-      "notifications": "true",
-      "fapsperiment": "false"
+      "tut_home_showHintButtonSideMenu": true,
+      "notifications": true,
+      "fapsperiment": false,
+      "fapsperiment_user": "",
+      "fapsperiment_since": "",
+      "fapsperiment_events_synced": 0,
+      "fapsperiment_lastSync": 0
       };
     $localstorage.setObject("settings", struct);
   };
@@ -447,6 +451,33 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return q.promise;
   };
   
+  self.getSync = function(status) {
+    var q = $q.defer();
+    var querySync = (status === 1) ? 1 : 0;
+
+    $sqlite.query("SELECT * FROM events WHERE synced=? ORDER BY id ASC", [querySync]).then(function(res) {
+        var events = $sqlite.getAll(res);
+        q.resolve(events);
+      }, function(err) {
+        q.reject(err);
+      });
+    
+    return q.promise;
+  };
+  
+  self.setSync = function(id, syncStatus) {
+    var q = $q.defer();
+    var setStatus = (syncStatus === 1) ? 1 : 0;
+
+    $sqlite.query("UPDATE events SET synced=? WHERE id=?", [setStatus, id]).then(function(res) {
+        q.resolve(true);
+      }, function(err) {
+        q.reject(err);
+      });
+    
+    return q.promise;
+  };
+  
   // self.getSeries = function(eventType) {
   //   var q = $q.defer();
   //
@@ -686,6 +717,89 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     else {
       $cordovaLocalNotification.cancelAll();
     };
+  };
+  
+  return self;
+})
+
+.factory('$fapsperiment', function($q, $lsSettings, $firebaseObject, $sql_events) {
+  var self = this;
+
+  self.getUID = function() {
+    var localUID = $lsSettings.get("fapsperiment_user");
+    if (localUID === "") {
+      // No User, first Setup
+      // Create User @ Firebase and get UID
+      var now = Math.floor(Date.now() / 1000);
+      var refUsers = new Firebase("https://nofapp.firebaseio.com/users");
+      var newUserRef = refUsers.push({
+        "sex": $lsSettings.get("user_sex"),
+        "since": now,
+        "dob": $lsSettings.get("user_birthday")
+      }, function(error) {
+        if(error) {
+          throw error;
+        }
+        else {
+          var localUID = newUserRef.key();
+          $lsSettings.set("fapsperiment_user", localUID);
+          $lsSettings.set("fapsperiment_since", now);
+          return localUID;
+        }
+      });
+    }
+    else {
+      // We have a User!
+      return localUID;
+    }
+  };
+  
+  self.sync = function() {
+    var q = $q.defer();
+    console.log("Fapsperiment Sync: Started");
+    
+    if ($lsSettings.is("fapsperiment")) {
+      var localUID = self.getUID();
+      var refEvents = new Firebase("https://nofapp.firebaseio.com/events");
+      var syncStatus = [];
+      // Get Events to push and push the shit put of them
+      $sql_events.getSync(0).then(function(res) {
+        console.log("Fapsperiment Sync: Events to Sync: " + res.length);
+        for (i = 0; i < res.length; i++) {
+          syncStatus.push({
+            id: res[i].id,
+            key: refEvents.push({
+              "debug_id": res[i].id,
+              "uid": localUID,
+              "time": res[i].time,
+              "type": res[i].type,
+              "value": res[i].value
+              }).key()
+          });
+        }
+        // Update Local Database with Sync Status
+        var syncPromises = [];
+        for (i = 0; i < syncStatus.length; i++) {
+          if (syncStatus[i].key) {
+            syncPromises.push($sql_events.setSync(syncStatus[i].id, 1));
+            console.log("Fapsperiment Sync: Event Synced. Local ID: " + syncStatus[i].id + " Firebase Key: " + syncStatus[i].key);
+          }
+        }
+        $q.all(syncPromises).then(function() {
+          if (syncStatus.length > 0) {
+            $lsSettings.set("fapsperiment_lastSync", Math.floor(Date.now() / 1000));
+          }
+          q.resolve(true);
+        });
+      }, function(err) {
+        q.reject(err);
+      });
+    }
+    else {
+      q.reject("Fapsperiment Sync: User is not taking part, not syncing");
+    }
+    
+    return q.promise;
   };
   
   return self;

@@ -7,7 +7,7 @@ angular.module('nofApp')
   
   // Buttons click when intro is done
   $scope.firstRunDone = function() {
-    $lsSettings.set("firstRun", "false");
+    $lsSettings.set("firstRun", false);
     $scope.$emit('datasetChanged');
     $ionicHistory.currentView($ionicHistory.backView());
     $state.go('menu.home');
@@ -73,8 +73,6 @@ angular.module('nofApp')
     $scope.step = (step > lastStep) ? step : lastStep;
   };
   
-
-
   // User State
   $scope.userState = {
     values: {
@@ -131,7 +129,6 @@ angular.module('nofApp')
     if (i === "m" || i === "f")  {
       $scope.userState.values.sex = i;
       setStep(1);
-      $scope.selectedMood = $valuesToString.toString("Mood", i);
     };
   };
   
@@ -251,8 +248,8 @@ angular.module('nofApp')
       console.log("Writing first Dataset to DB.");
 
       // Write Sex and Birthdate to localstorage
-      $lsSettings.set("sex", $scope.userState.values.sex);
-      $lsSettings.set("birthday", $scope.userState.values.birthday);
+      $lsSettings.set("user_birthday", Math.floor((new Date($scope.userState.values.birthday).getTime()) / 1000));
+      $lsSettings.set("user_sex", $scope.userState.values.sex);
 
       // Calculate Timestamp (Past) for last fap and last sex
       var timestamp = Math.floor(Date.now() / 1000);

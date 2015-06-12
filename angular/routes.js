@@ -129,6 +129,7 @@ angular.module('nofApp')
     })
     .state('menu.settings', {
       url: '/settings',
+      cache: false,     // Disable Caching to display accurate Sync Statistics
       views: {
         'view-content': {
           templateUrl: "templates/settings.html",
