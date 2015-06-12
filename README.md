@@ -4,7 +4,7 @@ Awesomeness.
 ## Dev Roadmap
 - [x] Switch from LocalStorage to Cordova SQLite
 - [x] Chart Backend (Angular-NVD3)
-- [x] Global Database Backend (Firebase) See this as example: https://github.com/mappmechanic/ionic-firebase
+- [x] Global Database Backend (Firebase)
 - [ ] WebApp at nofapp.com
 
 ## Build
