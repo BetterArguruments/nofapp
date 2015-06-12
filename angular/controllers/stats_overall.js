@@ -20,7 +20,7 @@ angular.module('nofApp')
     var values = {x: [], y: []};
     var deltaValues = [];
     for (var i = 0; i < $scope.fapSeries.length-1; i++) {
-      dayDiff = moment.unix($scope.fapSeries[i+1][0].time).diff(moment.unix($scope.fapSeries[i][0].time), "days");
+      var dayDiff = moment.unix($scope.fapSeries[i+1][0].time).diff(moment.unix($scope.fapSeries[i][0].time), "days");
       if (values.x.indexOf(dayDiff) >= 0) {
         values.y[values.x.indexOf(dayDiff)] += 1;
       }
