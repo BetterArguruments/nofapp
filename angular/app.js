@@ -4,7 +4,8 @@
 angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAnimate','angularMoment','ngSanitize','ui.router','nvd3ChartDirectives'])
 
 .run(function($ionicPlatform, $q, $state, $cordovaSQLite, $cordovaAppVersion, $cordovaInAppBrowser, 
-  $lsSettings, $sqlite, $sql_init, $sql_debug, $rootScope, amMoment, $cordovaKeyboard, $cordovaSplashscreen) {
+  $lsSettings, $sqlite, $sql_init, $sql_debug, $rootScope, amMoment, $cordovaKeyboard, $cordovaSplashscreen,
+  $localNotifications) {
   // Initialize Angular Moment
   //amMoment.changeLocale('en-gb');
 
@@ -41,6 +42,15 @@ angular.module('nofApp', ['ionic','ionic.utils','ngCordova','nofapp.utils','ngAn
       console.log("SQLite Init complete");
       //$sql_debug.createSampleDataset(8, 7)
     });
+
+    // Check whether Notifications should be set up
+    // $scope.$watch(function() {
+    //   return $lsSettings.is("notifications");
+    // }, function(value) {
+    //     $localNotifications.setDailyReminder(value);
+    //     console.log("localNotifications: Update: Daily Reminder set to " + value)
+    //   });
+    // });
 
   });
   

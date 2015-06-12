@@ -664,4 +664,29 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   };
   
   return self;
+})
+
+.factory('$localNotifications', function($cordovaLocalNotification) {
+  var self = this;
+  
+  self.setDailyReminder = function(setTo) {
+    if (setTo === true) {
+      return $cordovaLocalNotification.schedule({
+        id: 1,
+        title: 'How are you today?',
+        text: 'Enter some Data to track your progress',
+        every: 'day',
+        led: '886aea' // LED Color for Android. NICE!
+      }).then(function(result) {
+        return result;
+      }, function(error) {
+        return error;
+      });
+    }
+    else {
+      $cordovaLocalNotification.cancelAll();
+    };
+  };
+  
+  return self;
 });
