@@ -6,6 +6,7 @@ Awesomeness.
 - [x] Chart Backend (Angular-NVD3)
 - [x] Global Database Backend (Firebase)
 - [x] WebApp at nofapp.com
+- [ ] native Android widget
 
 ## Build
 If you haven't installed Cordova and Ionic yet, do it:
