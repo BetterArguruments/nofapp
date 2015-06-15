@@ -73,7 +73,7 @@ angular.module('nofApp')
   };
   
   $scope.isCurrentSex= function(i) {
-    if ($scope.userState.libido === i) {
+    if ($scope.userState.sex === i) {
       return 'active';
     };
   };
@@ -141,7 +141,6 @@ angular.module('nofApp')
     
     $q.all(promises).then(function() {
       $fapsperiment.sync();
-      
       $scope.userState.reset();
       $scope.$emit('datasetChanged');
       
@@ -166,13 +165,14 @@ angular.module('nofApp')
       if(res) {
         var now = Math.floor(Date.now() / 1000);
         var promises = [];
-        promises.push($sql_events.add("Fap", now));
+        promises.push($sql_events.add("Fap", null, now));
     
         if($scope.userState.note !== null) {
           promises.push($sql_notes.add($scope.userState.note, now));
         }
     
         $q.all(promises).then(function() {
+          $fapsperiment.sync();
           $scope.userState.reset();
           $scope.$emit('datasetChanged');
       

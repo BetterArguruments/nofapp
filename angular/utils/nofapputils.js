@@ -726,32 +726,41 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
   var self = this;
 
   self.getUID = function() {
-    var localUID = $lsSettings.get("fapsperiment_user");
-    if (localUID === "") {
+    var q = $q.defer();
+    
+    if ($lsSettings.get("fapsperiment_user") === "") {
       // No User, first Setup
       // Create User @ Firebase and get UID
       var now = Math.floor(Date.now() / 1000);
       var refUsers = new Firebase("https://nofapp.firebaseio.com/users");
+      var refStats = new Firebase("https://nofapp.firebaseio.com/stats/users");
       var newUserRef = refUsers.push({
         "sex": $lsSettings.get("user_sex"),
         "since": now,
         "dob": $lsSettings.get("user_birthday")
       }, function(error) {
         if(error) {
-          throw error;
+          q.reject(error);
         }
         else {
-          var localUID = newUserRef.key();
-          $lsSettings.set("fapsperiment_user", localUID);
+          refStats.child("count").transaction(function (current_value) {
+            return (current_value || 0) + 1;
+          });
+          refStats.child("count_sex_" + $lsSettings.get("user_sex")).transaction(function (current_value) {
+            return (current_value || 0) + 1;
+          });
+          $lsSettings.set("fapsperiment_user", newUserRef.key());
           $lsSettings.set("fapsperiment_since", now);
-          return localUID;
+          q.resolve(newUserRef.key());
         }
       });
     }
     else {
       // We have a User!
-      return localUID;
+      q.resolve($lsSettings.get("fapsperiment_user"));
     }
+    
+    return q.promise;
   };
   
   self.sync = function() {
@@ -759,40 +768,48 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     console.log("Fapsperiment Sync: Started");
     
     if ($lsSettings.is("fapsperiment")) {
-      var localUID = self.getUID();
       var refEvents = new Firebase("https://nofapp.firebaseio.com/events");
+      var refStats = new Firebase("https://nofapp.firebaseio.com/stats/events");
       var syncStatus = [];
       // Get Events to push and push the shit put of them
-      $sql_events.getSync(0).then(function(res) {
-        console.log("Fapsperiment Sync: Events to Sync: " + res.length);
-        for (i = 0; i < res.length; i++) {
-          syncStatus.push({
-            id: res[i].id,
-            key: refEvents.push({
-              "debug_id": res[i].id,
-              "uid": localUID,
-              "time": res[i].time,
-              "type": res[i].type,
-              "value": res[i].value
-              }).key()
+      self.getUID().then(function(localUID) {
+        $sql_events.getSync(0).then(function(res) {
+          console.log("Fapsperiment Sync: Events to Sync: " + res.length);
+          for (i = 0; i < res.length; i++) {
+            syncStatus.push({
+              id: res[i].id,
+              key: refEvents.push({
+                "debug_id": res[i].id,
+                "uid": localUID,
+                "time": res[i].time,
+                "type": res[i].type,
+                "value": res[i].value
+                }).key()
+            });
+            refStats.child("count").transaction(function (current_value) {
+              return (current_value || 0) + 1;
+            });
+            refStats.child("count_" + res[i].type).transaction(function (current_value) {
+              return (current_value || 0) + 1;
+            });
+          }
+          // Update Local Database with Sync Status
+          var syncPromises = [];
+          for (i = 0; i < syncStatus.length; i++) {
+            if (syncStatus[i].key) {
+              syncPromises.push($sql_events.setSync(syncStatus[i].id, 1));
+              console.log("Fapsperiment Sync: Event Synced. Local ID: " + syncStatus[i].id + " Firebase Key: " + syncStatus[i].key);
+            }
+          }
+          $q.all(syncPromises).then(function() {
+            if (syncStatus.length > 0) {
+              $lsSettings.set("fapsperiment_lastSync", Math.floor(Date.now() / 1000));
+            }
+            q.resolve(true);
           });
-        }
-        // Update Local Database with Sync Status
-        var syncPromises = [];
-        for (i = 0; i < syncStatus.length; i++) {
-          if (syncStatus[i].key) {
-            syncPromises.push($sql_events.setSync(syncStatus[i].id, 1));
-            console.log("Fapsperiment Sync: Event Synced. Local ID: " + syncStatus[i].id + " Firebase Key: " + syncStatus[i].key);
-          }
-        }
-        $q.all(syncPromises).then(function() {
-          if (syncStatus.length > 0) {
-            $lsSettings.set("fapsperiment_lastSync", Math.floor(Date.now() / 1000));
-          }
-          q.resolve(true);
+        }, function(err) {
+          q.reject(err);
         });
-      }, function(err) {
-        q.reject(err);
       });
     }
     else {
