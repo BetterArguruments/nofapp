@@ -18,11 +18,13 @@ angular.module('nofApp')
     energy: 0,
     libido: 0,
     sex: 0,
+    pornCheckbox: false,
     note: null,
     reset: function() {
       this.mood = this.energy = this.libido = 0;
       this.note = null;
-      $scope.selectedMood = $scope.selectedEnergy = $scope.selectedLibido = null;
+      this.pornCheckbox = false;
+      $scope.selectedMood = $scope.selectedEnergy = $scope.selectedLibido = $scope.selectedSex = null;
     }
   };
   
@@ -164,8 +166,9 @@ angular.module('nofApp')
     }).then(function(res) {
       if(res) {
         var now = Math.floor(Date.now() / 1000);
+        var watchedPorn = ($scope.userState.pornCheckbox === true) ? 1 : 0;
         var promises = [];
-        promises.push($sql_events.add("Fap", null, now));
+        promises.push($sql_events.add("Fap", watchedPorn, now));
     
         if($scope.userState.note !== null) {
           promises.push($sql_notes.add($scope.userState.note, now));
@@ -180,7 +183,7 @@ angular.module('nofApp')
           // https://github.com/driftyco/ionic/issues/1287
           $ionicHistory.currentView($ionicHistory.backView());
       
-          $state.go('menu.notes');
+          $state.go('menu.home');
           $ionicLoading.show({
             template: 'Relapse Saved.',
             duration: 2500

@@ -8,14 +8,21 @@
       <p><b>Alfred:</b> Why do we fall, sir? So that we can learn to pick ourselves up.</p>
     </div>
     
-    <div class="item item-divider">
-      Note
-    </div>
-  
-    <div class="item item-text-wrap">
-      <p>You may create a note (optional).</p>
-    </div>
+    <ul class="list">
+
+      <li class="item item-checkbox">
+         <label class="checkbox checkbox-royal">
+           <input type="checkbox" ng-model="userState.pornCheckbox">
+         </label>
+         I also watched Porn
+      </li>
+
+    </ul>
     
+    <div class="item item-divider">
+      Note (optional)
+    </div>
+
     <div class="item item-text-wrap">
       <label class="item item-input">
         <textarea placeholder="Some motivational thoughts to avoid relapsing the next time" ng-model="userState.note"></textarea>

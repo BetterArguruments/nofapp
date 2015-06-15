@@ -2,7 +2,7 @@
 
   <ion-content class="padding">
     
-    <button class="button button-full button-royal icon-left ion-ios-arrow-up" ng-click="toggleLeftSideMenu()" ng-if="sideMenuHintButton === true">
+    <button class="button button-full button-royal icon-left ion-ios-arrow-up" ng-click="toggleLeftSideMenu()" ng-if="sideMenuHintButton">
       Tap here to open Menu
     </button>
     
@@ -35,8 +35,12 @@
     </div>
     -->
     
-    <button class="button button-full button-royal icon-left ion-ios-arrow-left" ng-click="toggleLeftSideMenu()" ng-if="sideMenuHintButton === true">
+    <button class="button button-full button-royal icon-left ion-ios-arrow-left" ng-click="toggleLeftSideMenu()" ng-if="sideMenuHintButton">
       Or, Swipe to open menu
+    </button>
+    
+    <button class="button button-full button-royal icon-right ion-ios-arrow-right" ng-click="toggleFapsperiment()" ng-if="fapsperimentHintButton && !sideMenuHintButton">
+      Take Part in the Fapsperiment!
     </button>
     
     <!--<div class="item item-text-wrap">

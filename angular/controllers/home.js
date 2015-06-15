@@ -38,8 +38,13 @@ angular.module('nofApp')
   // Chceck whether to hide Button
   var refreshTutButtons = function() {
     $scope.sideMenuHintButton = $lsSettings.is("tut_home_showHintButtonSideMenu");
+    $scope.fapsperimentHintButton = !$lsSettings.is("fapsperiment");
   };
   refreshTutButtons();
+
+  $scope.toggleFapsperiment = function() {
+    $state.go("menu.home_fapsperiment");
+  };
 
   // Open Menu
   $scope.toggleLeftSideMenu = function() {

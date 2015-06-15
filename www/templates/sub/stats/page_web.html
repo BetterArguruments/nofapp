@@ -1,15 +1,62 @@
 <ion-view view-title="The Fapsperiment">
   <ion-content>
-    <div class="item item-divider">
-      Here comes teh Fapsperiment!
+    <div class="item item-divider" ng-if="!settings_fapsperiment">
+      Fapsperiment Statistics
     </div>
-    <nvd3-line-chart
-        data="exampleData"
-        showXAxis="true"
-        showYAxis="true"
-        tooltips="false"
-        interactive="false">
-    </nvd3-line-chart>
+    <div class="item item-text-wrap" ng-if="!settings_fapsperiment">
+      Fapsperiment Statistics will be displayed if you take part in the Fapsperiment.
+      Head over to Settings to get started!
+    </div>
+  
+    <div class="list" ng-if="settings_fapsperiment">
+      
+      <div class="item item-divider">
+        Your Contribution
+      </div>
+      
+      <a class="item" href="#">
+          Last Sync
+        <span class="item-note">
+          <span am-time-ago="fapsperimentLastSync"></span>
+        </span>
+      </a>
+      
+      <a class="item item-icon-left" href="#">
+        <i class="icon ion-ios-loop"></i>
+          Synced Events
+        <span class="badge badge-royal">{{ numEventsSynced }}</span>
+      </a>
+      
+      <a class="item item-icon-left" href="#">
+        <i class="icon ion-ios-timer-outline"></i>
+          Events to Sync
+        <span class="badge badge-royal">{{ numEventsNotSynced }}</span>
+      </a>
+      
+      <div class="item item-divider">
+        Fapsperiment Stats
+      </div>
+      
+      <a class="item" href="#">
+          Fapstronauts
+        <span class="badge badge-royal">{{ stats.users.count }}</span>
+      </a>
+      
+      <a class="item" href="#">
+          Events logged
+        <span class="badge badge-royal">{{ stats.events.count }}</span>
+      </a>
+        
+      <a class="item" href="#">
+          Sex had
+        <span class="badge badge-royal">{{ stats.events.count_4 }}</span>
+      </a>
     
+      <a class="item" href="#">
+          Relapses
+        <span class="badge badge-royal">{{ stats.events.count_5 }}</span>
+      </a>
+      
+    </div>
   </ion-content>
 </ion-view>

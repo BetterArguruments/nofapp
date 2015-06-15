@@ -14,10 +14,20 @@ angular.module('nofApp')
     })
     .state('menu.home', {
       url: '/home',
+      cache: false,     // Disable Caching due to Fapsperiment Hint Button
       views: {
         'view-content': {
           templateUrl: "templates/home.html",
           controller: "HomeCtrl"
+        }
+      }
+    })
+    .state('menu.home_fapsperiment', {
+      url: '/home_fapsperiment',
+      views: {
+        'view-content': {
+          templateUrl: "templates/sub/home/page_fapsperiment.html",
+          controller: "SettingsCtrl"
         }
       }
     })
@@ -114,7 +124,7 @@ angular.module('nofApp')
       views: {
         'stats_web': {
           templateUrl: "templates/sub/stats/page_web.html",
-          controller: "StatsCtrl"
+          controller: "StatsWebCtrl"
         }
       }
     })

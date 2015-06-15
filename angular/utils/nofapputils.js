@@ -29,7 +29,7 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     else if (type === "Sex") {
       switch(value) {
         case 1: return "bad"; break;
-        case 2: return "below average"; break;
+        case 2: return "very mediocre"; break;
         case 3: return "average"; break;
         case 4: return "really good"; break;
         case 5: return "mind-boggling"; break;

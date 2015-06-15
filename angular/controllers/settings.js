@@ -21,6 +21,7 @@ angular.module('nofApp')
           });
         }
     }
+    $scope.$emit('settingsChanged');
   };
   
   // Fapsperiment
