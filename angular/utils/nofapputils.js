@@ -401,13 +401,18 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     return q.promise;
   }
  
-  self.getAll = function(since, until) {
+  self.getAll = function(since, until, sortBy) {
     var q = $q.defer();
     var timeSince = (typeof since === "undefined" || since === null) ? 0 : since;
     var timeUntil = (typeof until === "undefined" || until === null) ? 9992147483647 : until;
+    var sqlSort = (typeof sortBy === "undefined" || sortBy === null) ? "id" : sortBy;
+    console.log("ordering by " + sqlSort);
 
+   
     $sql_event_types.getAll().then(function(eventTypes) {
-      $sqlite.query("SELECT * FROM events WHERE time BETWEEN ? AND ? ORDER BY id ASC", [timeSince, timeUntil-1]).then(function(res) {
+      // SQLite seemingly doesnt accept sqlSort as a variable implemented via "?",
+      // therefore we use stupid string concatenation
+      $sqlite.query("SELECT * FROM events WHERE time BETWEEN ? AND ? ORDER BY "+ sqlSort +" ASC", [timeSince, timeUntil-1]).then(function(res) {
         var events = $sqlite.getAll(res);
         // Resolve Event TypeIds to Names
         for (var i = 0; i < events.length; i++) {
@@ -626,7 +631,8 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     */
     var q = $q.defer();
     
-    $sql_events.getAll().then(function(events) {
+    $sql_events.getAll(null, null, "time").then(function(events) {
+      console.log(JSON.stringify(events));
       // Preparation
       var awesomeHistory = []; // [type, timestamp, value] OR ["Data", timestamp, values[0-2]]
       var minute = 60; // One Minute is 60s, duh!
