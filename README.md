@@ -7,6 +7,8 @@ Awesomeness.
 - [x] Global Database Backend (Firebase)
 - [x] WebApp at nofapp.com
 
+for future milestones, feature discussion and enhancements specific to the nofapp app see the [filtered issues](https://github.com/BetterArguruments/nofapp/issues?q=is%3Aopen+is%3Aissue+label%3A%22feature+discussion%22)
+
 ## Build
 If you haven't installed Cordova and Ionic yet, do it:
 ```
