@@ -33,12 +33,5 @@ public class MainActivity extends CordovaActivity
         super.onCreate(savedInstanceState);
         // Set by <content src="index.html" /> in config.xml
         loadUrl(launchUrl);
-
-        //Context context = getApplicationContext();
-//        DbReader dbReader = new DbReader(context);
-//        CharSequence text = "Last Fap: " + dbReader.dateOfLast("Fap").toString();
-//
-//        Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
-//        toast.show();
     }
 }

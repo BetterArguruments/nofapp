@@ -1,5 +1,8 @@
 package com.betterarguruments.nofapp;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by chris on 15/06/20.
  */
@@ -21,5 +24,18 @@ public class NofappUtils {
 
     public static String pluralize(String singular, String plural, int count) {
         return pluralize(singular, plural, count, true);
+    }
+
+    public static int daysBetween(Date date1, Date date2) {
+        long timespan = date2.getTime() - date1.getTime();
+        return (int) TimeUnit.DAYS.convert(timespan, TimeUnit.MILLISECONDS);
+    }
+
+    public static int daysSince(Date date) {
+        return daysBetween(date, new Date(System.currentTimeMillis()));
+    }
+
+    public static int daysUntil(Date date) {
+        return daysBetween(new Date(System.currentTimeMillis()), date);
     }
 }
