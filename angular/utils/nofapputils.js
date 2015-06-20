@@ -406,8 +406,6 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     var timeSince = (typeof since === "undefined" || since === null) ? 0 : since;
     var timeUntil = (typeof until === "undefined" || until === null) ? 9992147483647 : until;
     var sqlSort = (typeof sortBy === "undefined" || sortBy === null) ? "id" : sortBy;
-    console.log("ordering by " + sqlSort);
-
    
     $sql_event_types.getAll().then(function(eventTypes) {
       // SQLite seemingly doesnt accept sqlSort as a variable implemented via "?",
@@ -632,7 +630,6 @@ angular.module('nofapp.utils', ['ionic.utils', 'ngCordova'])
     var q = $q.defer();
     
     $sql_events.getAll(null, null, "time").then(function(events) {
-      console.log(JSON.stringify(events));
       // Preparation
       var awesomeHistory = []; // [type, timestamp, value] OR ["Data", timestamp, values[0-2]]
       var minute = 60; // One Minute is 60s, duh!

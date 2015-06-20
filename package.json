@@ -1,6 +1,6 @@
 {
   "name": "nofapp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Track your NoFap Progress and take part in The Fapsperiment",
   "repository": "betterarguruments/nofapp",
   "dependencies": {},
@@ -26,7 +26,8 @@
       "locator": "https://github.com/whiteoctober/cordova-plugin-app-version.git",
       "id": "uk.co.whiteoctober.cordova.appversion"
     },
-    "org.apache.cordova.splashscreen"
+    "org.apache.cordova.splashscreen",
+    "cordova-sqlite-storage"
   ],
   "cordovaPlatforms": [
     "android",
