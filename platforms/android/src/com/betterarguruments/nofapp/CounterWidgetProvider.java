@@ -1,12 +1,12 @@
 package com.betterarguruments.nofapp;
 
-import com.betterarguruments.nofapp.R;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.appwidget.AppWidgetManager;
-import android.content.Intent;
 import android.widget.RemoteViews;
+
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 public class CounterWidgetProvider extends AppWidgetProvider
 {
@@ -18,13 +18,20 @@ public class CounterWidgetProvider extends AppWidgetProvider
         for (int i=0; i<N; i++) {
             int appWidgetId = appWidgetIds[i];
 
-            Intent intent = new Intent(ctx, UpdateWidgetActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
+            //Intent intent = new Intent(ctx, UpdateWidgetActivity.class);
+            //PendingIntent pendingIntent = PendingIntent.getActivity(ctx, 0, intent, 0);
 
             // get the layout id of the widget
             RemoteViews views = new RemoteViews(ctx.getPackageName(), resID);
-            views.setTextViewText(R.id.widgetCounterDays, "Dont fuck with me!");
-            //views.setOnClickPendingIntent(R.id., pendingIntent);
+            // Set date relations
+            Date lastFapDate = new DbReader(ctx).dateOfLast("Fap");
+            Date today = new Date(System.currentTimeMillis());
+
+            long timespan = today.getTime() - lastFapDate.getTime();
+            int fapStreakInDays = (int) TimeUnit.DAYS.convert(timespan, TimeUnit.MILLISECONDS);
+
+            views.setTextViewText(R.id.widgetCounterTimespan, Long.toString(fapStreakInDays));
+            views.setTextViewText(R.id.widgetCounterUnit, NofappUtils.pluralize("DAY", "DAYS", fapStreakInDays));
 
             // Update the current app widget
             appWidgetMgr.updateAppWidget(appWidgetId, views);
