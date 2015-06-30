@@ -18,6 +18,7 @@
         <receiver android:label="Nofapp Widget" android:name=".CounterWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.betterarguruments.nofapp.APPWIDGET_UPDATE_USER" />
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_counter" />
         </receiver>

@@ -7,7 +7,7 @@ import org.apache.cordova.CordovaActivity;
 /**
  * Created by chris on 15/06/21.
  */
-public class EnterDataActivity extends CordovaActivity
+public class EnterDataActivity extends MainActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState) {

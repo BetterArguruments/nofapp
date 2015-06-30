@@ -3,10 +3,10 @@ package com.betterarguruments.nofapp;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -18,6 +18,7 @@ public class DbReader {
     private final String DB_FILE = "nofapp.db";
     protected SQLiteDatabase db;
     protected int SQLITE_ACCESS = SQLiteDatabase.OPEN_READONLY;
+    private Boolean dbAvailable;
     private Context context;
     private File dbPath;
     private final String QUERY_JOIN_EVENTS = "FROM events JOIN event_types ON (event_types.id = events.type)";
@@ -27,7 +28,16 @@ public class DbReader {
         this.context = ctx;
         this.dbPath = context.getDatabasePath(DB_FILE);
         Log.d("NoFapp::DbReader", "DB at: " + this.dbPath.getPath().toString());
-        this.db = SQLiteDatabase.openDatabase(this.dbPath.getPath(), null, SQLITE_ACCESS);
+        try {
+            this.db = SQLiteDatabase.openDatabase(this.dbPath.getPath(), null, SQLITE_ACCESS);
+            this.dbAvailable = true;
+        } catch (SQLiteException e) {
+            this.dbAvailable = false;
+        }
+    }
+
+    public Boolean isDbAvailable() {
+        return this.dbAvailable;
     }
 
     public Date dateOfLast(String event, String time_col) {

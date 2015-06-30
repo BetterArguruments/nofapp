@@ -19,19 +19,36 @@
 
 package com.betterarguruments.nofapp;
 
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.util.Log;
 
 import org.apache.cordova.*;
 
 public class MainActivity extends CordovaActivity
 {
-    @Override
+    public static final String ACTION_USER_UPDATE = "com.betterarguruments.nofapp.APPWIDGET_UPDATE_USER";
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         // Set by <content src="index.html" /> in config.xml
         loadUrl(launchUrl);
+    }
+
+    public void onPause() {
+        super.onPause();
+        Log.d("MainActivity#onPause", "Calling refresh intent");
+        Context ctx = getApplicationContext();
+        Intent updateIntent = new Intent(ctx, CounterWidgetProvider.class);
+        updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        AppWidgetManager widgetMgr = AppWidgetManager.getInstance(ctx);
+        int[] widgetIds = widgetMgr.getAppWidgetIds(new ComponentName(ctx, CounterWidgetProvider.class));
+        Log.d("MainActivity#onPause", "Widget count: " + widgetIds.length);
+        updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
+        sendBroadcast(updateIntent);
     }
 }

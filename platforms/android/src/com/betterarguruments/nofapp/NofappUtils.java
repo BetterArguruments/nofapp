@@ -1,6 +1,8 @@
 package com.betterarguruments.nofapp;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -24,6 +26,16 @@ public class NofappUtils {
 
     public static String pluralize(String singular, String plural, int count) {
         return pluralize(singular, plural, count, true);
+    }
+
+    public static Calendar tomorrow() {
+        Calendar tomorrow = new GregorianCalendar();
+        tomorrow.set(Calendar.HOUR_OF_DAY, 0);
+        tomorrow.set(Calendar.MINUTE, 0);
+        tomorrow.set(Calendar.SECOND, 0);
+        tomorrow.set(Calendar.MILLISECOND, 0);
+        tomorrow.add(Calendar.DAY_OF_MONTH, 1);
+        return tomorrow;
     }
 
     public static int daysBetween(Date date1, Date date2) {
