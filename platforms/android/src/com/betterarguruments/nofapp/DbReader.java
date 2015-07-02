@@ -22,7 +22,7 @@ public class DbReader {
     private Context context;
     private File dbPath;
     private final String QUERY_JOIN_EVENTS = "FROM events JOIN event_types ON (event_types.id = events.type)";
-    private final String QUERY_WHERE_EVENT_NAME = "WHERE event_types.name = ?";
+    private final String QUERY_WHERE_EVENT_TYPE = "WHERE event_types.name = ?";
 
     public DbReader(Context ctx) {
         this.context = ctx;
@@ -40,20 +40,28 @@ public class DbReader {
         return this.dbAvailable;
     }
 
-    public Date dateOfLast(String event, String time_col) {
-        // build the query from templates
-        String query_time_last = "SELECT " + time_col + " " + QUERY_JOIN_EVENTS + " " + QUERY_WHERE_EVENT_NAME +
-                " ORDER BY events.time DESC LIMIT 1";
-        // Query time column
-        Cursor cursor = db.rawQuery(query_time_last, new String[] {event});
+    public Date dateOfLast(String event_type, String time_col) {
+        Cursor cursor = events(event_type, 1);
         // move cursor to first returned column
         cursor.moveToFirst();
         long time = cursor.getLong(cursor.getColumnIndex(time_col)) * 1000;
-        Log.d("NoFapp::DbReader", "#dateOfLast(" + event + ", " + time_col + ") returned (" + time + ")");
         return new Date(time);
     }
 
     public Date dateOfLast(String event) {
         return dateOfLast(event, "time");
+    }
+
+    public Cursor events(String event_type, int limit) {
+        String query_events = "SELECT * " + QUERY_JOIN_EVENTS + " " + QUERY_WHERE_EVENT_TYPE + "ORDER BY events.time DESC";
+        if (limit > 0) {
+            query_events.concat(" LIMIT " + limit);
+        }
+
+        return db.rawQuery(query_events, new String[]{event_type});
+    }
+
+    public Cursor events(String event_type) {
+        return events(event_type, 0);
     }
 }
