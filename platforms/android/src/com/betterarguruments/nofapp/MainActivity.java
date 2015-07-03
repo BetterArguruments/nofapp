@@ -31,7 +31,6 @@ import org.apache.cordova.*;
 
 public class MainActivity extends CordovaActivity
 {
-    public static final String ACTION_USER_UPDATE = "com.betterarguruments.nofapp.APPWIDGET_UPDATE_USER";
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -41,13 +40,14 @@ public class MainActivity extends CordovaActivity
 
     public void onPause() {
         super.onPause();
-        Log.d("MainActivity#onPause", "Calling refresh intent");
+
         Context ctx = getApplicationContext();
         Intent updateIntent = new Intent(ctx, CounterWidgetProvider.class);
         updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
         AppWidgetManager widgetMgr = AppWidgetManager.getInstance(ctx);
         int[] widgetIds = widgetMgr.getAppWidgetIds(new ComponentName(ctx, CounterWidgetProvider.class));
-        Log.d("MainActivity#onPause", "Widget count: " + widgetIds.length);
+
         updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, widgetIds);
         sendBroadcast(updateIntent);
     }

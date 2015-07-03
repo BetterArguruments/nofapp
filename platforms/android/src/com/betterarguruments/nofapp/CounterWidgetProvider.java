@@ -18,11 +18,6 @@ public class CounterWidgetProvider extends AppWidgetProvider
     @Override
     public void onEnabled(Context context) {
         addAlarmManager(context);
-
-        DbReader dbReader = new DbReader(context);
-        if (dbReader.isDbAvailable() && dbReader.events("Fap").getCount() < 1) {
-            // open nofapp main activity and display toast to update.
-        }
     }
 
     // Gets called when the LAST instance of this widget gets removed
@@ -50,7 +45,7 @@ public class CounterWidgetProvider extends AppWidgetProvider
             for (int i=0; i<N; i++) {
                 updateWidget(context, appWidgetManager, appWidgetIds[i], "?", "no data");
             }
-            CharSequence noDataAlert = "Please set up NofApp";
+            CharSequence noDataAlert = "Please open NofApp.";
             Toast.makeText(context, noDataAlert, Toast.LENGTH_LONG).show();
         }
     }
